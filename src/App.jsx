@@ -1,26 +1,22 @@
-import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import React from "react";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
+import Login from "./components/Login";
 import PageNotFound from "./components/PageNotFound";
 import "./App.css";
 
 function App() {
   return (
-    <Router>
+    <BrowserRouter>
       <NavBar />
 
-      <Switch>
-        <Route
-          exact
-          path="/"
-          render={() => <Home APOD={AstronomyPictureOfTheDay} />}
-        />
-        <Route path="/" component={<PageNotFound />} />
-      </Switch>
+      <main>
+        <Routes></Routes>
+      </main>
 
       <Footer />
-    </Router>
+    </BrowserRouter>
   );
 }
 

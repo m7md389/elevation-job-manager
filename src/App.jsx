@@ -6,7 +6,7 @@ import Login from "./components/Login";
 import PageNotFound from "./components/PageNotFound";
 import "./App.css";
 
-function App() {
+export default function App() {
   return (
     <BrowserRouter>
       <NavBar />
@@ -19,5 +19,3 @@ function App() {
     </BrowserRouter>
   );
 }
-
-export default App;

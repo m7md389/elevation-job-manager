@@ -48,11 +48,10 @@ router.post('/jobs', async function (req, res) {
             path: 'jobs'
         })
         .exec(function (err, user) {
-            if(err){
+            if (err) {
                 console.log(err);
             }
-            console.log(user);
-            res.send("1")
+            res.send(user)
         })
 })
 

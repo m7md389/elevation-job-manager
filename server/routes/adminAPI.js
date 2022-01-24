@@ -3,9 +3,7 @@ const router = express.Router()
 // const Transaction = require('../models/transactions')
 
 router.get('/transaction', async (req, res) => {
-
-
-    res.send('heloo')
+    
 })
 
 // router.get('/transactions', async (req, res) => {

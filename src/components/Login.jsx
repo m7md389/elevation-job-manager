@@ -1,5 +1,7 @@
 import React from "react";
 
-export default function Login() {
+const Login = () => {
   return null;
-}
+};
+
+export default Login;

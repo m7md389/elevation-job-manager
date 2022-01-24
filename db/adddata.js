@@ -15,6 +15,7 @@ const Admin = {
     phone: "0599555700 ",
     city: "unknown",
     linkedin:"https://www.linkedin.com/in/ofri-meir-weizman/",
+    status: "",
     role: "admin",
     jobs: []
 }
@@ -26,6 +27,7 @@ const addMockAdmin = function(Admin){
         phone: Admin.phone,
         city: Admin.city,
         linkedin: Admin.linkedin,
+        status: Admin.status,
         role: Admin.role,
         jobs: []
     })
@@ -51,7 +53,6 @@ const addMockData = function(){
         cohortsArray = addCohorts(course.cohorts , usersArray)
         addCourse(course.title , cohortsArray)
     });
-
     addMockAdmin(Admin)
 }
 
@@ -65,6 +66,7 @@ const addUsers = function(userData , jobsArray) {
             phone: userObj.phone,
             city: userObj.city,
             linkedin: userObj.linkedin,
+            status:userObj.status,
             role: userObj.role,
             jobs: jobsArray
         })

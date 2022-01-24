@@ -8,6 +8,7 @@ const userSchema = new Schema({
     phone: String,
     city: String,
     linkedin: String,
+    status: String,
     role: String,
     jobs: [{ type: Schema.Types.ObjectId, ref: 'job' }]
 })

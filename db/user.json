@@ -6,6 +6,7 @@
         "phone": "0502746510",
         "city": "Nazareth",
         "linkedin": "https://www.linkedin.com/in/osama-bayatra-67291a12a/",
+        "status": "searching",
         "role": "user",
         "jobs": [
             {
@@ -70,6 +71,7 @@
         "phone": "0542272001",
         "city": "Yaffa",
         "linkedin": "https://www.linkedin.com/in/shokre-serhan-328517162/",
+        "status": "working",
         "role": "user",
         "jobs": [
             {
@@ -111,6 +113,7 @@
         "phone": "0544801802",
         "city": "Abo-ghosh",
         "linkedin": "https://www.linkedin.com/in/m7md389/",
+        "status": "studying",
         "role": "user",
         "jobs": [
             {
@@ -175,6 +178,7 @@
         "phone": "0599555700 ",
         "city": "unknown",
         "linkedin":"https://www.linkedin.com/in/ofri-meir-weizman/",
+        "status": "",
         "role": "admin",
         "jobs": []
     }

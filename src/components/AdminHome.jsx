@@ -2,6 +2,7 @@ import React from 'react';
 import '../styles/AdminHome.css'
 import Course from './Course';
 import { observer, inject } from 'mobx-react';
+import { Link } from 'react-router-dom';
 
 
 function AdminHome() {
@@ -11,7 +12,9 @@ function AdminHome() {
     return (
         <div className='page-container'>
             {courses.map((c, idx) => {
+                // <Link to="/">
                 return <Course name={c} color={colors[idx]} />
+                // </Link>
             })}
         </div>
     );

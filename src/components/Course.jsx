@@ -2,9 +2,6 @@ import React from 'react';
 import '../styles/Course.css'
 function Course(props) {
 
-
-    console.log(props.color);
-
     return (
         <div className='course' style={{ backgroundColor: `#${props.color}`, borderRadius: "16px" }}>
             {/* data should come from mobx */}

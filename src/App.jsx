@@ -8,17 +8,21 @@ import Register from "./components/Register";
 import PageNotFound from "./components/PageNotFound";
 import "./App.css";
 import AdminHome from './components/AdminHome'
+import Student from "./components/Student";
 export default function App() {
   return (
     <BrowserRouter>
       <NavBar />
-      <AdminHome />
+
+
+
       <Routes>
-        <Route path="*" element={<PageNotFound />} />
-        <Route path="/" element={<h1>Home Page</h1>} />
+        <Route path="/courses" element={<AdminHome />} />
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/student/" element={<Student />} /> {/*/student/:id*/}
+        <Route path="*" element={<PageNotFound />} />
       </Routes>
 
       <Footer />

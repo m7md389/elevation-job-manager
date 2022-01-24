@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-// const Transaction = require('../models/transactions')
+const moment = require('moment')
 const course = require('../models/course')
 const Cohort = require('../models/cohort')
 const users = require('../models/user')
@@ -31,30 +31,28 @@ router.get('/courses', async (req, res) => {
 router.post('/jobs', async function (req, res) {
     let tempJob = req.body
     let myDate = moment(tempJob.date).format('l')
-    let user = await users.find({ _id: tempJob.id })
     let newJob = new jobs({
         title: tempJob.title,
         link: process.link,
         date: myDate,
         company: tempJob.company,
         status: tempJob.status,
-        interviews: [],
+        interviews: []
     })
     newJob.save()
 
-    await Student.findOneAndUpdate({ name: req.params.studentName }, {
-        $push: { Processes: newProcess },
-        $set: { ProcessesCounter: counter }
+    await users.findOneAndUpdate({ _id: tempJob.userId }, {
+        $push: { jobs: newJob },
     }, { new: true })
         .populate({
-            path: 'Processes',
-            populate: {
-                path: 'Interviews'
-            }
+            path: 'jobs'
         })
-        .exec(function (err, students) {
-            res.send(students)
-
+        .exec(function (err, user) {
+            if(err){
+                console.log(err);
+            }
+            console.log(user);
+            res.send("1")
         })
 })
 

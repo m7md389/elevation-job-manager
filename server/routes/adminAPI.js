@@ -20,12 +20,12 @@ router.get('/courses', async (req, res) => {
             }
         }
     })
-    .exec(function (err, courses) {
-        if(err){
-            console.log(err);
-        }
-        res.send(courses)
-    });
+        .exec(function (err, courses) {
+            if (err) {
+                console.log(err);
+            }
+            res.send(courses)
+        });
 })
 
 router.post('/jobs', async function (req, res) {
@@ -56,6 +56,19 @@ router.post('/jobs', async function (req, res) {
             res.send(students)
 
         })
+})
+
+router.get('/jobs', async function (req, res) {
+    let userJobs = await users.find({ _id: req.body.userId }).populate({
+        path: 'jobs',
+        populate: {
+            path: 'interviews'
+        }
+    })
+        .exec(function (err, user) {
+            res.send(user[0].jobs)
+        })
+
 })
 
 // router.get('/transactions', async (req, res) => {

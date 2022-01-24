@@ -1,7 +1,7 @@
 import React from "react";
 import "../styles/PageNotFound.css";
 
-export default function PageNotFound() {
+const PageNotFound = () => {
   return (
     <div className="d-flex justify-content-center align-items-center" id="main">
       <h1 className="me-3 pe-3 border-endalign-top  inline-block align-content-center">
@@ -14,4 +14,6 @@ export default function PageNotFound() {
       </div>
     </div>
   );
-}
+};
+
+export default PageNotFound;

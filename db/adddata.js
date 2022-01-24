@@ -6,11 +6,31 @@ const Cohort = require('../server/models/cohort')
 const Course = require('../server/models/course')
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/elevationJobManager', { useNewUrlParser: true })
 
-// const userData = require("./user.json")
-// const jobData = require("./job.json")
-// const interviewData = require("./interview.json")
 const coursesData = require("./courses.json")
-// const cohortsData = require("./cohort.json")
+
+const Admin = {
+    name: "ofri",
+    email: "ofri@mykcloud.com",
+    password: "ofri123",
+    phone: "0599555700 ",
+    city: "unknown",
+    linkedin:"https://www.linkedin.com/in/ofri-meir-weizman/",
+    role: "admin",
+    jobs: []
+}
+const addMockAdmin = function(Admin){
+    const tempUser = new user({
+        name: Admin.name,
+        email: Admin.email,
+        password: Admin.password,
+        phone: Admin.phone,
+        city: Admin.city,
+        linkedin: Admin.linkedin,
+        role: Admin.role,
+        jobs: []
+    })
+    tempUser.save()
+}
 
 const addMockData = function(){
     let cohortsArray = []
@@ -31,6 +51,8 @@ const addMockData = function(){
         cohortsArray = addCohorts(course.cohorts , usersArray)
         addCourse(course.title , cohortsArray)
     });
+
+    addMockAdmin(Admin)
 }
 
 const addUsers = function(userData , jobsArray) {
@@ -106,11 +128,5 @@ const addCohorts = function(cohortsData , usersArray){
     })
     return tempCohorts
 }
-
-// addUsers()
-// addJobs()
-// addInterviews()
-// addCourses()
-// addCohorts()
 
 addMockData()

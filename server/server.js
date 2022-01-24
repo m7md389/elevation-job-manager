@@ -1,5 +1,5 @@
 const express = require('express')
-const api = require('./routes/api')
+const api = require('./routes/adminAPI')
 const mongoose = require('mongoose')
 var cookieParser = require('cookie-parser');
 

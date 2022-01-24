@@ -7,7 +7,7 @@ const jobSchema = new Schema({
     date: String,
     company: String,
     status: String,
-    interviews: [{ type: Schema.Types.ObjectId, ref: 'interview' }]
+    interviews: [{ type: Schema.Types.ObjectId, ref: 'Interview' }]
 })
 
 const Job = mongoose.model("Job", jobSchema)

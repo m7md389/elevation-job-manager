@@ -10,7 +10,7 @@ const userSchema = new Schema({
     linkedin: String,
     status: String,
     role: String,
-    jobs: [{ type: Schema.Types.ObjectId, ref: 'job' }]
+    jobs: [{ type: Schema.Types.ObjectId, ref: 'Job' }]
 })
 
 const User = mongoose.model("User", userSchema)

@@ -7,12 +7,12 @@ import Logout from "./components/PageNotFound";
 import Regester from "./components/PageNotFound";
 import PageNotFound from "./components/PageNotFound";
 import "./App.css";
-
+import AdminHome from './components/AdminHome'
 export default function App() {
   return (
     <BrowserRouter>
       <NavBar />
-
+      <AdminHome />
       <Routes>
         <Route to="/login" element={<Login />} />
         <Route to="/logout" element={<Logout />} />

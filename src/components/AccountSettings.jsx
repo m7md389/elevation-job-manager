@@ -34,13 +34,13 @@ useEffect(() => {
 
     return (
         <div>
-            name:<input className="name" onChange={handleInputChange} value={updatedDataInputs.name} />
-            email:<input className="email" onChange={handleInputChange} value={updatedDataInputs.email} />
-            phone:<input className="phone" onChange={handleInputChange} value={updatedDataInputs.phone} />
-            city:<input className="city" onChange={handleInputChange} value={updatedDataInputs.city} />
-            linkedin:<input className="linkedin" onChange={handleInputChange} value={updatedDataInputs.linkedin} />
-            status:<input className="status" onChange={handleInputChange} value={updatedDataInputs.status} />
-            <button onClick={handleEditUser} className="AccountSettingSaveButton">Save</button>
+            name:<input id="accountSettingsInputs" className="name" onChange={handleInputChange} value={updatedDataInputs.name} /><br/>
+            email:<input id="accountSettingsInputs" className="email" onChange={handleInputChange} value={updatedDataInputs.email} /><br/>
+            phone:<input id="accountSettingsInputs" className="phone" onChange={handleInputChange} value={updatedDataInputs.phone} /><br/>
+            city:<input id="accountSettingsInputs" className="city" onChange={handleInputChange} value={updatedDataInputs.city} /><br/>
+            linkedin:<input id="accountSettingsInputs" className="linkedin" onChange={handleInputChange} value={updatedDataInputs.linkedin} /><br/>
+            status:<input id="accountSettingsInputs" className="status" onChange={handleInputChange} value={updatedDataInputs.status} /><br/>
+            <button onClick={handleEditUser} className="AccountSettingSaveButton">Save</button><br/>
         </div>
     )
 };

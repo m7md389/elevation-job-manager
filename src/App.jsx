@@ -6,9 +6,10 @@ import Login from "./components/Login";
 import Logout from "./components/Logout";
 import Register from "./components/Register";
 import PageNotFound from "./components/PageNotFound";
-import Course from "./components/Course";
+import DetailedCourse from "./components/DetailedCourse";
 import "./App.css";
-
+import AdminHome from './components/AdminHome'
+import Student from "./components/Student";
 export default function App() {
   return (
     <BrowserRouter>
@@ -16,15 +17,13 @@ export default function App() {
 
       <Routes>
         <Route path="*" element={<PageNotFound />} />
-        <Route path="/" element={<h1>Home Page</h1>} />
-        <Route
-          path="/courses"
-          element={<h3>{"<adminCourses />"} componen here</h3>}
-        />
-        <Route path="/courses/:name" element={<Course />} />
+        <Route path="/courses/:name" element={<DetailedCourse />} />
+        <Route path="/courses" element={<AdminHome />} />
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/student/" element={<Student />} /> {/*/student/:id*/}
+        <Route path="*" element={<PageNotFound />} />
       </Routes>
 
       <Footer />

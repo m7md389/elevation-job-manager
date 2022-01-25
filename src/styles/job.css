@@ -1,6 +1,6 @@
 .job{
     display: grid;
-    grid-template-columns: repeat(5,1fr) ;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 0.5fr ;
     margin: 10px 0;
     align-items: center;
     /* font-weight: bold; */
@@ -14,6 +14,14 @@
 .job:hover{
 
     background-color: rgb(250, 250, 250);
+}
+
+.job-edit-btns{
+    display: grid;
+    color: #2196f3;
+    justify-items: center;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(2,1fr);
 }
 
 .interviews, .interviews-header{

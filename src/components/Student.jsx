@@ -97,7 +97,7 @@ export default function Student() {
                                 onChange={handleChange}>
                                 {companies.map((c, idx) => {
                                     return (
-                                        <MenuItem value={c}>{c}</MenuItem>
+                                        <MenuItem key = {idx} value={c}>{c}</MenuItem>
                                     )
                                 })}
                             </Select>
@@ -114,7 +114,7 @@ export default function Student() {
                                 onChange={handleChange}>
                                 {statuses.map((s, idx) => {
                                     return (
-                                        <MenuItem value={s}>{s}</MenuItem>
+                                        <MenuItem key={idx} value={s}>{s}</MenuItem>
                                     )
                                 })}
                             </Select>
@@ -164,8 +164,8 @@ export default function Student() {
             </div>
             <div className='rows'>
                 {
-                    jobs.map(j => {
-                        return <Job job={j} />
+                    jobs.map((j,idx) => {
+                        return <Job key={idx} job={j} />
                     })
                 }
             </div >

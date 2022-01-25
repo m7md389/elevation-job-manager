@@ -1,3 +1,6 @@
+import AddCircleOutlinedIcon from '@mui/icons-material/AddCircleOutlined';
+import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
+
 import React, { useState } from 'react';
 import '../styles/job.css'
 import InterviewRow from './InterviewRow'
@@ -14,13 +17,17 @@ function Job(props) {
     
     return (
         <div >
+
             <div className='job' onClick={handleToggle} >
                 <p>{job.title}</p>
                 <p>{job.company}</p>
                 <p>{job.date}</p>
                 <p>{job.interviews.length > 0 ? job.interviews[job.interviews.length - 1].type : 'none'}</p>
                 <p>{job.status}</p>
-
+                <div className='job-edit-btns'>
+                    <AddCircleOutlinedIcon />
+                    <ModeEditOutlineOutlinedIcon />
+                </div>
             </div>
 
             <div className={isActive ? 'interviews-container display' : 'interviews-container hide'}>
@@ -34,10 +41,10 @@ function Job(props) {
                 </div>
 
                 <div>
-                    {job.interviews.map(i => {
+                    {job.interviews.map((i,idx) => {
                         return (
-                            <div key={i.id}>
-                                <InterviewRow inter={i} />
+                            <div key={idx}>
+                                <InterviewRow key={idx} inter={i} />
                             </div>
                         )
                     })}

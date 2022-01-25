@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { observer, inject } from "mobx-react";
 import httpService from "../services/httpService";
 import PageNotFound from "./PageNotFound";
@@ -10,25 +10,32 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import Box from "@mui/material/Box";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 import "../styles/detailed-course.css";
 
 const Course = () => {
   const params = useParams();
+  const navigate = useNavigate();
 
   let [course, setCourse] = useState();
+  let [cohort, setCohort] = React.useState("");
 
   useEffect(async () => {
-    const courseData = await httpService.getCourseDetails(params.courseId);
-    // if (!!courseData.error) {
-    //   return <h1>a</h1>;
-    // }
+    const courseData = await httpService.getCourseDetails(params.courseName);
     setCourse(courseData);
   }, []);
 
-  if (!course) return null;
+  const handleRowClick = (studentId) => {
+    console.log(studentId);
+    navigate(`/student/${studentId}`);
+  };
 
-  const handleRowClick = (userId) => {
-    console.log(userId);
+  const handleChange = (event) => {
+    setCohort(event.target.value);
   };
 
   const getTableRows = () => {
@@ -47,13 +54,46 @@ const Course = () => {
     return users;
   };
 
+  const getCohorts = () => {
+    let cohorts = [];
+    course.cohorts.forEach((cohort) => {
+      cohorts.push(cohort);
+    });
+    return cohorts;
+  };
+
   if (!course) return null;
   if (course.error) return <PageNotFound />;
+
+  const cohorts = getCohorts();
 
   return (
     <div className="course-container">
       <div className="course-title">
         <h1>{course.title}</h1>
+      </div>
+
+      <div classNamee="filters-detail box">
+        <Box id="box" sx={{ minWidth: 120 }}>
+          <FormControl fullWidth>
+            <InputLabel id="cohorts">Cohorts</InputLabel>
+            <Select
+              labelId="select-cohort"
+              id="select-cohort"
+              value={cohort.name}
+              label="cohorts"
+              onChange={handleChange}
+            >
+              {cohorts.map((cohort, idx) => {
+                return (
+                  <MenuItem value={cohort.name} key={cohort.name}>
+                    {cohort.name}
+                  </MenuItem>
+                );
+              })}
+            </Select>
+          </FormControl>
+        </Box>
       </div>
 
       <TableContainer

@@ -29,13 +29,44 @@ router.get('/courses', async (req, res) => {
         });
 })
 
-router.get('/courses/:courseId', (req, res) => {
-    const { courseId } = req.params;
-    if (!courseId) {
+router.get('/courses/names', async function (req, res) {
+
+
+    let courses = await Course.find({}).populate({
+        path: 'cohorts',
+        populate: {
+            path: 'users'
+        }
+    })
+
+    console.log(courses);
+    let data = []
+    courses.map(c => {
+        let course = { title: c.title }
+        let studNum = 0, workingStudCount = 0;
+
+        c.cohorts.map(cohort => {
+            studNum += cohort.users.length
+            cohort.users.map(s => {
+                if (s.status == 'working')
+                    workingStudCount++
+            })
+        })
+        course['studNum'] = studNum
+        course['working'] = (workingStudCount / studNum) * 100;
+        data.push(course)
+    })
+
+    res.send(data)
+})
+
+router.get('/courses/:courseName', (req, res) => {
+    const { courseName } = req.params;
+    if (!courseName) {
         res.status(400).send("missed id");
         return null;
     }
-    Course.findById({ _id: courseId }).populate({
+    Course.findOne({ title: courseName }).populate({
         path: 'cohorts',
         populate: {
             path: 'users'
@@ -79,14 +110,14 @@ router.post('/jobs', async function (req, res) {
 })
 
 router.get('/jobs/:userId?', async function (req, res) {
-    await Users.find({ _id: req.params.userId }).populate({
+    await Users.findById({ _id: req.params.userId }).populate({
         path: 'jobs',
         populate: {
             path: 'interviews'
         }
     })
         .exec(function (err, user) {
-            res.send(user[0].jobs)
+            res.send(user.jobs)
         })
 })
 
@@ -110,12 +141,12 @@ router.put('/users/password', async function (req, res) {
             password: updatedPasswordData.newPassword
         }
     }, { new: true })
-    .exec(function (err, updatedUser) {
-        if (err) {
-            res.send({error : "error updating password"});
-        }
-        res.send(updatedUser)
-    })
+        .exec(function (err, updatedUser) {
+            if (err) {
+                res.send({ error: "error updating password" });
+            }
+            res.send(updatedUser)
+        })
 })
 
 router.put('/users', async function (req, res) {

@@ -3,7 +3,6 @@ import '../styles/interview-row.css'
 function processRow(props) {
 
     const interview = props.inter
-    console.log(interview);
     return (
         <div className='interviews'>
             <p>{interview.type}</p>

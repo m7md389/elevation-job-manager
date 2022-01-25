@@ -52,13 +52,14 @@ router.get('/courses/:courseId', (req, res) => {
 
 router.post('/jobs', async function (req, res) {
     let tempJob = req.body
+    console.log(tempJob);
     let myDate = moment(tempJob.date).format('L')
-    let newJob = new jobs({
+    let newJob = new Jobs({
         title: tempJob.title,
         link: process.link,
         date: myDate,
         company: tempJob.company,
-        status: tempJob.status,
+        status: "applied",
         interviews: []
     })
     newJob.save()

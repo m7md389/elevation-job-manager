@@ -8,9 +8,8 @@ import Register from "./components/Register";
 import PageNotFound from "./components/PageNotFound";
 import DetailedCourse from "./components/DetailedCourse";
 import "./App.css";
-import AdminHome from "./components/AdminHome";
+import AdminHome from './components/AdminHome'
 import Student from "./components/Student";
-import AccountSettings from './components/AccountSettings';
 export default function App() {
   return (
     <BrowserRouter>
@@ -18,13 +17,13 @@ export default function App() {
 
       <Routes>
         <Route path="*" element={<PageNotFound />} />
-        <Route path="/courses/:courseId" element={<DetailedCourse />} />
+        <Route path="/courses/:name" element={<DetailedCourse />} />
         <Route path="/courses" element={<AdminHome />} />
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/settings" element={<AccountSettings />} />
         <Route path="/student/" element={<Student />} /> {/*/student/:id*/}
+        <Route path="*" element={<PageNotFound />} />
       </Routes>
 
       <Footer />

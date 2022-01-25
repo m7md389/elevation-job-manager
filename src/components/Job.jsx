@@ -11,7 +11,7 @@ function Job(props) {
     };
 
     const job = props.job
-    console.log(job);
+    
     return (
         <div >
             <div className='job' onClick={handleToggle} >
@@ -25,7 +25,6 @@ function Job(props) {
 
             <div className={isActive ? 'interviews-container display' : 'interviews-container hide'}>
 
-
                 <div className='interviews-header'>
                     <p>type</p>
                     <p>date</p>
@@ -34,21 +33,16 @@ function Job(props) {
                     <p>link</p>
                 </div>
 
-
                 <div>
                     {job.interviews.map(i => {
-                        console.log(i);
                         return (
-                            <div >
+                            <div key={i.id}>
                                 <InterviewRow inter={i} />
                             </div>
                         )
                     })}
                 </div>
-
-
             </div>
-
         </div>
     );
 }

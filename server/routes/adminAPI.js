@@ -29,6 +29,37 @@ router.get('/courses', async (req, res) => {
         });
 })
 
+router.get('/courses/names', async function (req, res) {
+
+
+    let courses = await Course.find({}).populate({
+        path: 'cohorts',
+        populate: {
+            path: 'users'
+        }
+    })
+
+    console.log(courses);
+    let data = []
+    courses.map(c => {
+        let course = { title: c.title }
+        let studNum = 0, workingStudCount = 0;
+
+        c.cohorts.map(cohort => {
+            studNum += cohort.users.length
+            cohort.users.map(s => {
+                if (s.status == 'working')
+                    workingStudCount++
+            })
+        })
+        course['studNum'] = studNum
+        course['working'] = (workingStudCount / studNum) * 100;
+        data.push(course)
+    })
+
+    res.send(data)
+})
+
 router.get('/courses/:courseName', (req, res) => {
     const { courseName } = req.params;
     if (!courseName) {

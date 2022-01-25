@@ -1,23 +1,19 @@
-.page-container{
-    width: 80%;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    justify-items: center;
-    margin: 20px auto;
-
+.page-container {
+  width: 80%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  justify-items: center;
+  margin: 20px auto;
 }
 
-
 @media only screen and (max-width: 1180px) {
-    .page-container{
+  .page-container {
     grid-template-columns: repeat(2, 1fr);
-
-    }
   }
+}
 
-  @media only screen and (max-width: 810px) {
-    .page-container{
+@media only screen and (max-width: 810px) {
+  .page-container {
     grid-template-columns: repeat(1, 1fr);
-
-    }
   }
+}

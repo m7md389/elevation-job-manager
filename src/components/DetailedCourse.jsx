@@ -8,7 +8,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import "../styles/course.css";
+import "../styles/detailed-course.css";
 
 const Course = () => {
   const params = useParams();

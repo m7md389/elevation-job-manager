@@ -30,12 +30,16 @@
     width: 80%;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: repeat(5 ,1fr);
-    border: 1px solid black;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 0.5fr ;
+
+    /* border: 1px solid black; */
     text-align: center;
     padding: 10px;
     font-weight: bold;
     font-size: 17px;
+
+    -webkit-box-shadow: 16px 12px 6px -2px rgba(0,0,0,0.05); 
+    box-shadow: 16px 12px 6px -2px rgba(0,0,0,0.05);
 }
 
 

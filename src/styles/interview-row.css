@@ -1,4 +1,25 @@
 .interviews{
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 0.5fr ;
+
 }
+
+.interviews p{
+    display: grid;
+    align-items: center;
+}
+
+.link{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: center;
+    height: 100%;
+}
+
+/* .link */
+
+/* .buttons{
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(2 , 1fr);
+} */

@@ -107,9 +107,6 @@ export default function Student() {
                 </Stack>
 
 
-
-
-
             </div>
 
             <div className='jobs-title'>

@@ -1,6 +1,9 @@
 
 import * as React from 'react';
-import axios from 'axios';
+import Popup from 'reactjs-popup';
+import 'reactjs-popup/dist/index.css';
+import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -8,23 +11,20 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import '../styles/Student.css'
 import InterviewRow from './InterviewRow'
+import axios from 'axios';
+import Job from './Job';
+
 
 export default function Student() {
 
     const [jobs, setJobs] = React.useState([])
 
-    const userId = '61eefc36e3c80c88d1b46790'
     React.useEffect(async () => {
-        let res = await fetch(`http://localhost:3001/jobs/${userId}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        }).then(data => data.json())
-        setJobs(res)
+        const userId = '61efeb22ed0d90af133e9450'
+        let res = (await axios.get(`http://localhost:3001/jobs/${userId}`)).data
         console.log(res);
+        setJobs(res)
     }, [])
-
 
     const companies = ['All companies', 'Yad2', 'Facebook', 'Twitter', 'Intel']
     const statuses = ['All status', 'Accepted', 'waiting', 'Applied', 'no reply']
@@ -94,7 +94,23 @@ export default function Student() {
                 </div>
             </div>
 
-            <div style={{ width: '80%', margin: '10px auto' }}> <hr /></div>
+            <div style={{ width: '80%', margin: '10px auto' }}> <hr />
+
+
+                <Stack direction="row" spacing={2}>
+
+                    <Popup trigger={
+                        <Button variant="outlined">Add Job</Button>
+                    } position="right center">
+                        <div>Popup content here !!</div>
+                    </Popup>
+                </Stack>
+
+
+
+
+
+            </div>
 
             <div className='jobs-title'>
                 <div>job name</div>
@@ -106,11 +122,13 @@ export default function Student() {
 
             <div className='rows'>
 
-                {jobs.map(j => {
-                    return <InterviewRow />
-                })}
+                {
+                    jobs.map(j => {
+                        return <InterviewRow />
+                    })
+                }
 
-            </div>
+            </div >
 
         </div >
     );

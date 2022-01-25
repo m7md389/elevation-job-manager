@@ -6,7 +6,6 @@
 .filters-detail{
     display: grid;
     grid-template-columns: repeat(2 , 1fr);
-    /* border: 1px solid red; */
 }
 
 .cont{
@@ -35,18 +34,15 @@
     border: 1px solid black;
     text-align: center;
     padding: 10px;
-
+    font-weight: bold;
+    font-size: 17px;
 }
 
 
 .rows{
     width: 80%;
     margin: 0 auto;
-    /* display: grid; */
-    /* grid-template-columns: repeat(5 ,1fr); */
-    /* border: 1px solid black; */
     text-align: center;
-    /* padding: 10px; */
 }
 
 .vLine{

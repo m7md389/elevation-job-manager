@@ -10,6 +10,7 @@ import DetailedCourse from "./components/DetailedCourse";
 import "./App.css";
 import AdminHome from "./components/AdminHome";
 import Student from "./components/Student";
+import AccountSettings from './components/AccountSettings';
 export default function App() {
   return (
     <BrowserRouter>
@@ -22,6 +23,7 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/account-settings" element={<AccountSettings />} />
         <Route path="/student/" element={<Student />} /> {/*/student/:id*/}
       </Routes>
 

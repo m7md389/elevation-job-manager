@@ -8,7 +8,8 @@ const Jobs = require('../models/job')
 const Interviews = require('../models/interview')
 
 router.get('/courses', async (req, res) => {
-    const courses = await Course.find({}).populate({
+
+    const courses = await course.find({}).populate({
         path: 'cohorts',
         populate: {
             path: 'users',
@@ -51,8 +52,8 @@ router.get('/courses/:courseId', (req, res) => {
 
 router.post('/jobs', async function (req, res) {
     let tempJob = req.body
-    let myDate = moment(tempJob.date).format('l')
-    let newJob = new Jobs({
+    let myDate = moment(tempJob.date).format('L')
+    let newJob = new jobs({
         title: tempJob.title,
         link: process.link,
         date: myDate,
@@ -76,8 +77,8 @@ router.post('/jobs', async function (req, res) {
         })
 })
 
-router.get('/jobs', async function (req, res) {
-    let userJobs = await Users.find({ _id: req.body.userId }).populate({
+router.get('/jobs/:userId?', async function (req, res) {
+    await Users.find({ _id: req.params.userId }).populate({
         path: 'jobs',
         populate: {
             path: 'interviews'
@@ -86,54 +87,56 @@ router.get('/jobs', async function (req, res) {
         .exec(function (err, user) {
             res.send(user[0].jobs)
         })
-
 })
 
-// router.get('/transactions', async (req, res) => {
-//     let result = await Transaction.find({})
-//     res.send(result)
-// })
+router.get('/users/:userId', async function (req, res) {
+    let userData = await Users.findById({ _id: req.params.userId })
+        .exec(function (err, user) {
+            if (err) { console.log(err); }
+            res.send(user)
+        })
+})
 
+router.put('/users/password', async function (req, res) {
+    let updatedPasswordData = req.body
+    let user = await Users.findById({ _id: updatedPasswordData.userId })
+    if (user.password != updatedPasswordData.password) {
+        res.send({ err: "Current password not match the current password" })
+        return
+    }
+    await Users.findOneAndUpdate({ _id: updatedPasswordData.userId }, {
+        $set: {
+            password: updatedPasswordData.newPassword
+        }
+    }, { new: true })
+        .exec(function (err, updatedUser) {
+            if (err) {
+                console.log(err);
+            }
+            res.send(updatedUser)
+        })
+})
 
-// router.delete('/transaction', async (req, res) => {
-//     let id = req.body.id
-//     let result = await Transaction.findByIdAndDelete(id)
-//     console.log(result);
-
-//     // res.redirect(307, '/transactions')
-//     res.send(await Transaction.find({}))
-// })
-
-// router.get('/group', async (req, res) => {
-//     let result = await Transaction.aggregate(
-//         [
-//             {
-//                 $group:
-//                 {
-//                     _id: "$category", sum: { $sum: "$amount" }
-//                 }
-//             }
-//         ]
-//     )
-
-//     res.send(result)
-// })
-
-
-// router.get('/sum', async (req, res) => {
-//     let result = await Transaction.aggregate(
-//         [
-//             {
-//                 $group:
-//                 {
-//                     _id: null, balance: { $sum: "$amount" }
-//                 }
-//             }
-//         ]
-//     )
-
-//     res.send(result)
-// })
-
+router.put('/users', async function (req, res) {
+    let updatedUserData = req.body
+    let user = await Users.find({ _id: updatedUserData.userId })
+    console.log(user);
+    await Users.findOneAndUpdate({ _id: updatedUserData.userId }, {
+        $set: {
+            name: updatedUserData.name || user.name,
+            email: updatedUserData.email || user.email,
+            phone: updatedUserData.phone || user.phone,
+            city: updatedUserData.city || user.city,
+            linkedin: updatedUserData.linkedin || user.linkedin,
+            status: updatedUserData.status || user.status
+        }
+    }, { new: true })
+        .exec(function (err, newUser) {
+            if (err) {
+                console.log(err);
+            }
+            res.send(newUser)
+        })
+})
 
 module.exports = router

@@ -1,14 +1,14 @@
 const express = require('express')
 const router = express.Router()
 const moment = require('moment')
-const course = require('../models/course')
+const Course = require('../models/course')
 const Cohort = require('../models/cohort')
-const users = require('../models/user')
-const jobs = require('../models/job')
-const interviews = require('../models/interview')
+const Users = require('../models/user')
+const Jobs = require('../models/job')
+const Interviews = require('../models/interview')
 
 router.get('/courses', async (req, res) => {
-    const courses = await course.find({}).populate({
+    const courses = await Course.find({}).populate({
         path: 'cohorts',
         populate: {
             path: 'users',
@@ -28,10 +28,31 @@ router.get('/courses', async (req, res) => {
         });
 })
 
+router.get('/courses/:courseId', (req, res) => {
+    const { courseId } = req.params;
+    if (!courseId) {
+        res.status(400).send("missed id");
+        return null;
+    }
+    Course.findById({ _id: courseId }).populate({
+        path: 'cohorts',
+        populate: {
+            path: 'users'
+        }
+    })
+        .exec(function (err, course) {
+            if (err) {
+                res.send({ error: err });
+                return null;
+            }
+            res.send(course);
+        });
+})
+
 router.post('/jobs', async function (req, res) {
     let tempJob = req.body
     let myDate = moment(tempJob.date).format('l')
-    let newJob = new jobs({
+    let newJob = new Jobs({
         title: tempJob.title,
         link: process.link,
         date: myDate,
@@ -41,7 +62,7 @@ router.post('/jobs', async function (req, res) {
     })
     newJob.save()
 
-    await users.findOneAndUpdate({ _id: tempJob.userId }, {
+    await Users.findOneAndUpdate({ _id: tempJob.userId }, {
         $push: { jobs: newJob },
     }, { new: true })
         .populate({
@@ -56,7 +77,7 @@ router.post('/jobs', async function (req, res) {
 })
 
 router.get('/jobs', async function (req, res) {
-    let userJobs = await users.find({ _id: req.body.userId }).populate({
+    let userJobs = await Users.find({ _id: req.body.userId }).populate({
         path: 'jobs',
         populate: {
             path: 'interviews'

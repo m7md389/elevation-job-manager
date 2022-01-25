@@ -11,6 +11,7 @@ function Job(props) {
     };
 
     const job = props.job
+    console.log(job);
     return (
         <div >
             <div className='job' onClick={handleToggle} >
@@ -36,6 +37,7 @@ function Job(props) {
 
                 <div>
                     {job.interviews.map(i => {
+                        console.log(i);
                         return (
                             <div >
                                 <InterviewRow inter={i} />

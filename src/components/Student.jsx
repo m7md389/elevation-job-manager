@@ -20,7 +20,7 @@ export default function Student() {
     const [jobs, setJobs] = React.useState([])
 
     React.useEffect(async () => {
-        const userId = '61efeb22ed0d90af133e9450'
+        const userId = '61efeb22ed0d90af133e9460'
         let res = (await axios.get(`http://localhost:3001/jobs/${userId}`)).data
         console.log(res);
         setJobs(res)
@@ -124,7 +124,7 @@ export default function Student() {
 
                 {
                     jobs.map(j => {
-                        return <InterviewRow />
+                        return <Job job={j} />
                     })
                 }
 

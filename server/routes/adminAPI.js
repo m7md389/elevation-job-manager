@@ -78,14 +78,14 @@ router.post('/jobs', async function (req, res) {
 })
 
 router.get('/jobs/:userId?', async function (req, res) {
-    await Users.find({ _id: req.params.userId }).populate({
+    await Users.findById({ _id: req.params.userId }).populate({
         path: 'jobs',
         populate: {
             path: 'interviews'
         }
     })
         .exec(function (err, user) {
-            res.send(user[0].jobs)
+            res.send(user.jobs)
         })
 })
 
@@ -109,12 +109,12 @@ router.put('/users/password', async function (req, res) {
             password: updatedPasswordData.newPassword
         }
     }, { new: true })
-    .exec(function (err, updatedUser) {
-        if (err) {
-            res.send({error : "error updating password"});
-        }
-        res.send(updatedUser)
-    })
+        .exec(function (err, updatedUser) {
+            if (err) {
+                res.send({ error: "error updating password" });
+            }
+            res.send(updatedUser)
+        })
 })
 
 router.put('/users', async function (req, res) {

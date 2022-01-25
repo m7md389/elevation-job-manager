@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { observer, inject } from "mobx-react";
+import httpService from "../services/httpService";
+import PageNotFound from "./PageNotFound";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -13,108 +15,28 @@ import "../styles/detailed-course.css";
 const Course = () => {
   const params = useParams();
 
-  const course = {
-    id: 15234232,
-    name: "Full Stack",
-    cohorts: [
-      {
-        name: "cohort-1",
-        users: [
-          {
-            id: 2201,
-            name: "John",
-            phone: "053123123",
-            status: "working"
-          }
-        ]
-      },
-      {
-        name: "cohort-3",
-        users: [
-          {
-            id: 2203,
-            name: "Eric",
-            phone: "056713098",
-            status: "no-info"
-          }
-        ]
-      },
-      {
-        name: "cohort-3",
-        users: [
-          {
-            id: 2203,
-            name: "Eric",
-            phone: "056713098",
-            status: "no-info"
-          }
-        ]
-      },
-      {
-        name: "cohort-3",
-        users: [
-          {
-            id: 2203,
-            name: "Eric",
-            phone: "056713098",
-            status: "no-info"
-          }
-        ]
-      },
-      {
-        name: "cohort-3",
-        users: [
-          {
-            id: 2203,
-            name: "Eric",
-            phone: "056713098",
-            status: "no-info"
-          }
-        ]
-      },
-      {
-        name: "cohort-3",
-        users: [
-          {
-            id: 2203,
-            name: "Eric",
-            phone: "056713098",
-            status: "no-info"
-          }
-        ]
-      },
-      {
-        name: "cohort-3",
-        users: [
-          {
-            id: 2203,
-            name: "Eric",
-            phone: "056713098",
-            status: "no-info"
-          }
-        ]
-      },
-      {
-        name: "cohort-4",
-        users: [
-          {
-            id: 2204,
-            name: "Dylan",
-            phone: "056050025",
-            status: "studying"
-          }
-        ]
-      }
-    ]
-  };
+  let [course, setCourse] = useState();
 
-  const handleRowClick = () => {};
+  useEffect(async () => {
+    const courseData = await httpService.getCourseDetails(params.courseId);
+    // if (!!courseData.error) {
+    //   return <h1>a</h1>;
+    // }
+    setCourse(courseData);
+  }, []);
+
+  if (!course) return null;
+
+  const handleRowClick = (userId) => {
+    console.log(userId);
+  };
 
   const getTableRows = () => {
     let users = [];
-    course.cohorts.forEach((cohort, i) => {
+    course.cohorts.forEach((cohort) => {
       cohort.users.forEach((user) => {
         users.push({
+          _id: user._id,
           name: user.name,
           phone: user.phone,
           cohort: cohort.name,
@@ -125,38 +47,57 @@ const Course = () => {
     return users;
   };
 
+  if (!course) return null;
+  if (course.error) return <PageNotFound />;
+
   return (
     <div className="course-container">
-      <h1 className="course-title">{course.name}</h1>
+      <div className="course-title">
+        <h1>{course.title}</h1>
+      </div>
 
-      <TableContainer component={Paper} className="table-container2">
-        <div className="table-container">
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell align="center">Name</TableCell>
-                <TableCell align="center">Phone</TableCell>
-                <TableCell align="center">Cohort</TableCell>
-                <TableCell align="center">Status</TableCell>
+      <TableContainer
+        component={Paper}
+        sx={{
+          width: "80%",
+          margin: "0 auto",
+          boxShadow: "rgb(102, 123, 145) 0px 0px 25px -10px"
+        }}
+        className="table-container"
+      >
+        <Table sx={{ minWidth: 350 }} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell align="center">
+                <span className="table-cell">Name</span>
+              </TableCell>
+              <TableCell align="center">
+                <span className="table-cell">Phone</span>
+              </TableCell>
+              <TableCell align="center">
+                <span className="table-cell">Cohort</span>
+              </TableCell>
+              <TableCell align="center">
+                <span className="table-cell">Status</span>
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {getTableRows().map((row, index) => (
+              <TableRow
+                className="table-row"
+                key={index}
+                onClick={() => handleRowClick(row._id)}
+                id="1212121212"
+              >
+                <TableCell align="center">{row.name}</TableCell>
+                <TableCell align="center">{row.phone}</TableCell>
+                <TableCell align="center">{row.cohort}</TableCell>
+                <TableCell align="center">{row.status}</TableCell>
               </TableRow>
-            </TableHead>
-            <TableBody>
-              {getTableRows().map((row, index) => (
-                <TableRow
-                  className="table-row"
-                  key={index}
-                  onClick={handleRowClick}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell align="center">{row.name}</TableCell>
-                  <TableCell align="center">{row.phone}</TableCell>
-                  <TableCell align="center">{row.cohort}</TableCell>
-                  <TableCell align="center">{row.status}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
+            ))}
+          </TableBody>
+        </Table>
       </TableContainer>
     </div>
   );

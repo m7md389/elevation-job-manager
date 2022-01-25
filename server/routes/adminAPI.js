@@ -79,8 +79,8 @@ router.get('/users/:userId', async function (req, res) {
 router.put('/users/password', async function (req, res) {
     let updatedPasswordData = req.body
     let user = await users.findById({ _id: updatedPasswordData.userId })
-    if (user.password != updatedPasswordData.password) {
-        res.send({ err: "Current password not match the current password" })
+    if (user.password != updatedPasswordData.currentPassword) {
+        res.send({ error: "Current password not match the current password" })
         return
     }
     await users.findOneAndUpdate({ _id: updatedPasswordData.userId }, {
@@ -88,12 +88,12 @@ router.put('/users/password', async function (req, res) {
             password: updatedPasswordData.newPassword
         }
     }, { new: true })
-        .exec(function (err, updatedUser) {
-            if (err) {
-                console.log(err);
-            }
-            res.send(updatedUser)
-        })
+    .exec(function (err, updatedUser) {
+        if (err) {
+            res.send({error : "error updating password"});
+        }
+        res.send(updatedUser)
+    })
 })
 
 router.put('/users', async function (req, res) {

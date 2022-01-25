@@ -1,0 +1,18 @@
+.course-container {
+  height: 50vh;
+}
+
+.course-title {
+  text-align: center;
+}
+
+.course-container > div {
+  width: 80%;
+  margin: 0 auto;
+  box-shadow: rgb(102, 123, 145) 0px 0px 25px -10px;
+}
+
+.table-row:hover {
+  cursor: pointer;
+  box-shadow: rgb(102, 123, 145, 0.3) 0px 0px 25px -10px;
+}

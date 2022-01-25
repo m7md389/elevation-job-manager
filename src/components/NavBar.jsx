@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import "../styles/navbar.css";
 
@@ -15,7 +15,6 @@ const NavBar = () => {
           height="30"
           alt=""
         />
-        Elevation Job Manager
       </NavLink>
       <button
         className="navbar-toggler"
@@ -31,8 +30,8 @@ const NavBar = () => {
 
       <div className="collapse navbar-collapse" id="navbarNav">
         <div className="navbar-nav">
-          <NavLink className="nav-item nav-link" to="/">
-            Home
+          <NavLink className="nav-item nav-link" to="/courses">
+            Courses
           </NavLink>
           <NavLink className="nav-item nav-link" to="/charts">
             Charts

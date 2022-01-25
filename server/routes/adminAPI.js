@@ -55,8 +55,8 @@ router.post('/jobs', async function (req, res) {
         })
 })
 
-router.get('/jobs', async function (req, res) {
-    let userJobs = await users.find({ _id: req.body.userId }).populate({
+router.get('/jobs/:userId?', async function (req, res) {
+    await users.find({ _id: req.params.userId }).populate({
         path: 'jobs',
         populate: {
             path: 'interviews'

@@ -1,13 +1,31 @@
 
 import * as React from 'react';
+import axios from 'axios';
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import '../styles/Student.css'
+import InterviewRow from './InterviewRow'
 
 export default function Student() {
+
+    const [jobs, setJobs] = React.useState([])
+
+    const userId = '61eefc36e3c80c88d1b46790'
+    React.useEffect(async () => {
+        let res = await fetch(`http://localhost:3001/jobs/${userId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        }).then(data => data.json())
+        setJobs(res)
+        console.log(res);
+    }, [])
+
+
     const companies = ['All companies', 'Yad2', 'Facebook', 'Twitter', 'Intel']
     const statuses = ['All status', 'Accepted', 'waiting', 'Applied', 'no reply']
     const [company, setCompany] = React.useState('');
@@ -88,9 +106,11 @@ export default function Student() {
 
             <div className='rows'>
 
+                {jobs.map(j => {
+                    return <InterviewRow />
+                })}
+
             </div>
-
-
 
         </div >
     );

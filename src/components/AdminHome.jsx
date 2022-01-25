@@ -10,9 +10,11 @@ function AdminHome() {
   return (
     <div className="page-container">
       {courses.map((c, idx) => {
-        // <Link to="/">
-        return <Course name={c} color={colors[idx]} />;
-        // </Link>
+        return (
+          <Link to={`/courses/${c}`}>
+            <Course name={c} color={colors[idx]} />;
+          </Link>
+        )
       })}
     </div>
   );

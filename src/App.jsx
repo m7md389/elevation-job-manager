@@ -23,8 +23,9 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/account-settings" element={<AccountSettings />} />
-        <Route path="/student/" element={<Student />} /> {/*/student/:id*/}
+        <Route path="/settings" element={<AccountSettings />} />
+        <Route path="/student/:id" element={<Student />} /> {/*/student/:id*/}
+        <Route path="/student" element={<Student />} /> {/*/student/:id*/}
       </Routes>
 
       <Footer />

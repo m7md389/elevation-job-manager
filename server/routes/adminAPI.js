@@ -78,14 +78,14 @@ router.post('/jobs', async function (req, res) {
 })
 
 router.get('/jobs/:userId?', async function (req, res) {
-    await Users.find({ _id: req.params.userId }).populate({
+    await Users.findById({ _id: req.params.userId }).populate({
         path: 'jobs',
         populate: {
             path: 'interviews'
         }
     })
         .exec(function (err, user) {
-            res.send(user[0].jobs)
+            res.send(user.jobs)
         })
 })
 
@@ -99,9 +99,9 @@ router.get('/users/:userId', async function (req, res) {
 
 router.put('/users/password', async function (req, res) {
     let updatedPasswordData = req.body
-    let user = await Users.findById({ _id: updatedPasswordData.userId })
-    if (user.password != updatedPasswordData.password) {
-        res.send({ err: "Current password not match the current password" })
+    let user = await users.findById({ _id: updatedPasswordData.userId })
+    if (user.password != updatedPasswordData.currentPassword) {
+        res.send({ error: "Current password not match the current password" })
         return
     }
     await Users.findOneAndUpdate({ _id: updatedPasswordData.userId }, {
@@ -111,7 +111,7 @@ router.put('/users/password', async function (req, res) {
     }, { new: true })
         .exec(function (err, updatedUser) {
             if (err) {
-                console.log(err);
+                res.send({ error: "error updating password" });
             }
             res.send(updatedUser)
         })

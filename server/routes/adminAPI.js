@@ -1,11 +1,11 @@
 const express = require('express')
 const router = express.Router()
 const moment = require('moment')
-const course = require('../models/course')
+const Course = require('../models/course')
 const Cohort = require('../models/cohort')
-const users = require('../models/user')
-const jobs = require('../models/job')
-const interviews = require('../models/interview')
+const Users = require('../models/user')
+const Jobs = require('../models/job')
+const Interviews = require('../models/interview')
 
 router.get('/courses', async (req, res) => {
 
@@ -29,6 +29,27 @@ router.get('/courses', async (req, res) => {
         });
 })
 
+router.get('/courses/:courseId', (req, res) => {
+    const { courseId } = req.params;
+    if (!courseId) {
+        res.status(400).send("missed id");
+        return null;
+    }
+    Course.findById({ _id: courseId }).populate({
+        path: 'cohorts',
+        populate: {
+            path: 'users'
+        }
+    })
+        .exec(function (err, course) {
+            if (err) {
+                res.send({ error: err });
+                return null;
+            }
+            res.send(course);
+        });
+})
+
 router.post('/jobs', async function (req, res) {
     let tempJob = req.body
     let myDate = moment(tempJob.date).format('L')
@@ -42,7 +63,7 @@ router.post('/jobs', async function (req, res) {
     })
     newJob.save()
 
-    await users.findOneAndUpdate({ _id: tempJob.userId }, {
+    await Users.findOneAndUpdate({ _id: tempJob.userId }, {
         $push: { jobs: newJob },
     }, { new: true })
         .populate({
@@ -57,7 +78,7 @@ router.post('/jobs', async function (req, res) {
 })
 
 router.get('/jobs/:userId?', async function (req, res) {
-    await users.find({ _id: req.params.userId }).populate({
+    await Users.find({ _id: req.params.userId }).populate({
         path: 'jobs',
         populate: {
             path: 'interviews'
@@ -69,7 +90,7 @@ router.get('/jobs/:userId?', async function (req, res) {
 })
 
 router.get('/users/:userId', async function (req, res) {
-    let userData = await users.findById({ _id: req.params.userId })
+    let userData = await Users.findById({ _id: req.params.userId })
         .exec(function (err, user) {
             if (err) { console.log(err); }
             res.send(user)
@@ -79,28 +100,28 @@ router.get('/users/:userId', async function (req, res) {
 router.put('/users/password', async function (req, res) {
     let updatedPasswordData = req.body
     let user = await users.findById({ _id: updatedPasswordData.userId })
-    if (user.password != updatedPasswordData.password) {
-        res.send({ err: "Current password not match the current password" })
+    if (user.password != updatedPasswordData.currentPassword) {
+        res.send({ error: "Current password not match the current password" })
         return
     }
-    await users.findOneAndUpdate({ _id: updatedPasswordData.userId }, {
+    await Users.findOneAndUpdate({ _id: updatedPasswordData.userId }, {
         $set: {
             password: updatedPasswordData.newPassword
         }
     }, { new: true })
-        .exec(function (err, updatedUser) {
-            if (err) {
-                console.log(err);
-            }
-            res.send(updatedUser)
-        })
+    .exec(function (err, updatedUser) {
+        if (err) {
+            res.send({error : "error updating password"});
+        }
+        res.send(updatedUser)
+    })
 })
 
 router.put('/users', async function (req, res) {
     let updatedUserData = req.body
-    let user = await users.find({ _id: updatedUserData.userId })
+    let user = await Users.find({ _id: updatedUserData.userId })
     console.log(user);
-    await users.findOneAndUpdate({ _id: updatedUserData.userId }, {
+    await Users.findOneAndUpdate({ _id: updatedUserData.userId }, {
         $set: {
             name: updatedUserData.name || user.name,
             email: updatedUserData.email || user.email,

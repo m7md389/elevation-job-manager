@@ -29,13 +29,13 @@ router.get('/courses', async (req, res) => {
         });
 })
 
-router.get('/courses/:courseId', (req, res) => {
-    const { courseId } = req.params;
-    if (!courseId) {
+router.get('/courses/:courseName', (req, res) => {
+    const { courseName } = req.params;
+    if (!courseName) {
         res.status(400).send("missed id");
         return null;
     }
-    Course.findById({ _id: courseId }).populate({
+    Course.findOne({ title: courseName }).populate({
         path: 'cohorts',
         populate: {
             path: 'users'

@@ -52,3 +52,13 @@
 .table-cell {
   font-weight: bold;
 }
+
+.box {
+  /* width: 80%; */
+  margin: 2.5rem auto;
+}
+
+#box {
+  width: 40%;
+  margin: 3rem auto 2.5rem;
+}

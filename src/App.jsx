@@ -10,7 +10,7 @@ import DetailedCourse from "./components/DetailedCourse";
 import "./App.css";
 import AdminHome from "./components/AdminHome";
 import Student from "./components/Student";
-import AccountSettings from './components/AccountSettings';
+import AccountSettings from "./components/AccountSettings";
 export default function App() {
   return (
     <BrowserRouter>
@@ -18,7 +18,7 @@ export default function App() {
 
       <Routes>
         <Route path="*" element={<PageNotFound />} />
-        <Route path="/courses/:courseId" element={<DetailedCourse />} />
+        <Route path="/courses/:courseName" element={<DetailedCourse />} />
         <Route path="/courses" element={<AdminHome />} />
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />

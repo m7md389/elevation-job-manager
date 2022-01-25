@@ -8,6 +8,7 @@ const jobs = require('../models/job')
 const interviews = require('../models/interview')
 
 router.get('/courses', async (req, res) => {
+
     const courses = await course.find({}).populate({
         path: 'cohorts',
         populate: {
@@ -30,7 +31,7 @@ router.get('/courses', async (req, res) => {
 
 router.post('/jobs', async function (req, res) {
     let tempJob = req.body
-    let myDate = moment(tempJob.date).format('l')
+    let myDate = moment(tempJob.date).format('L')
     let newJob = new jobs({
         title: tempJob.title,
         link: process.link,
@@ -55,8 +56,8 @@ router.post('/jobs', async function (req, res) {
         })
 })
 
-router.get('/jobs', async function (req, res) {
-    let userJobs = await users.find({ _id: req.body.userId }).populate({
+router.get('/jobs/:userId', async function (req, res) {
+    let userJobs = await users.find({ _id: req.params.userId }).populate({
         path: 'jobs',
         populate: {
             path: 'interviews'
@@ -65,7 +66,6 @@ router.get('/jobs', async function (req, res) {
         .exec(function (err, user) {
             res.send(user[0].jobs)
         })
-
 })
 
 // router.get('/transactions', async (req, res) => {

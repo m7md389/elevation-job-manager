@@ -14,12 +14,12 @@ const Admin = {
     password: "ofri123",
     phone: "0599555700 ",
     city: "unknown",
-    linkedin:"https://www.linkedin.com/in/ofri-meir-weizman/",
+    linkedin: "https://www.linkedin.com/in/ofri-meir-weizman/",
     status: "",
     role: "admin",
     jobs: []
 }
-const addMockAdmin = function(Admin){
+const addMockAdmin = function (Admin) {
     const tempUser = new user({
         name: Admin.name,
         email: Admin.email,
@@ -34,7 +34,7 @@ const addMockAdmin = function(Admin){
     tempUser.save()
 }
 
-const addMockData = function(){
+const addMockData = function () {
     let cohortsArray = []
     let usersArray = []
     let jobsArray = []
@@ -46,17 +46,17 @@ const addMockData = function(){
                 user.jobs.forEach(job => {
                     interviewsArray = addInterviews(job.interviews)
                 })
-                jobsArray = addJobs(user.jobs , interviewsArray)
+                jobsArray = addJobs(user.jobs, interviewsArray)
             })
-            usersArray = addUsers(cohort.users , jobsArray)
+            usersArray = addUsers(cohort.users, jobsArray)
         })
-        cohortsArray = addCohorts(course.cohorts , usersArray)
-        addCourse(course.title , cohortsArray)
+        cohortsArray = addCohorts(course.cohorts, usersArray)
+        addCourse(course.title, cohortsArray)
     });
     addMockAdmin(Admin)
 }
 
-const addUsers = function(userData , jobsArray) {
+const addUsers = function (userData, jobsArray) {
     let tempUsers = []
     userData.forEach(userObj => {
         const tempUser = new user({
@@ -66,7 +66,7 @@ const addUsers = function(userData , jobsArray) {
             phone: userObj.phone,
             city: userObj.city,
             linkedin: userObj.linkedin,
-            status:userObj.status,
+            status: userObj.status,
             role: userObj.role,
             jobs: jobsArray
         })
@@ -76,7 +76,7 @@ const addUsers = function(userData , jobsArray) {
     return tempUsers
 }
 
-const addJobs = function(jobData , interviewsArray){
+const addJobs = function (jobData, interviewsArray) {
     let tempJobs = []
     jobData.forEach(jobObj => {
         const tempJob = new job({
@@ -93,7 +93,7 @@ const addJobs = function(jobData , interviewsArray){
     return tempJobs
 }
 
-const addInterviews = function(interviewData){
+const addInterviews = function (interviewData) {
     let tempArray = []
     interviewData.forEach(interviewObj => {
         const tempInterview = new interview({
@@ -109,7 +109,7 @@ const addInterviews = function(interviewData){
     return tempArray
 }
 
-const addCourse = function(courseTitle , cohortsArray){
+const addCourse = function (courseTitle, cohortsArray) {
     const tempCourse = new Course({
         title: courseTitle,
         cohorts: cohortsArray
@@ -117,7 +117,7 @@ const addCourse = function(courseTitle , cohortsArray){
     tempCourse.save()
 }
 
-const addCohorts = function(cohortsData , usersArray){
+const addCohorts = function (cohortsData, usersArray) {
     let tempCohorts = []
     cohortsData.forEach(cohort => {
         const tempCohort = new Cohort({

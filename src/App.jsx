@@ -6,23 +6,25 @@ import Login from "./components/Login";
 import Logout from "./components/Logout";
 import Register from "./components/Register";
 import PageNotFound from "./components/PageNotFound";
+import DetailedCourse from "./components/DetailedCourse";
 import "./App.css";
 import AdminHome from './components/AdminHome'
 import Student from "./components/Student";
+import AccountSettings from './components/AccountSettings';
 export default function App() {
   return (
     <BrowserRouter>
       <NavBar />
 
-
-
       <Routes>
+        <Route path="*" element={<PageNotFound />} />
+        <Route path="/courses/:name" element={<DetailedCourse />} />
         <Route path="/courses" element={<AdminHome />} />
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/account-settings" element={<AccountSettings />} />
         <Route path="/student/" element={<Student />} /> {/*/student/:id*/}
-        <Route path="*" element={<PageNotFound />} />
       </Routes>
 
       <Footer />

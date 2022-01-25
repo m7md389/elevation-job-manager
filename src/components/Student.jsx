@@ -17,7 +17,7 @@ export default function Student() {
   const [jobs, setJobs] = React.useState([]);
 
   React.useEffect(async () => {
-    const userId = "61efeb22ed0d90af133e9460";
+    const userId = "61eee2cedc8e3b3b16870bc5";
     let res = (await axios.get(`http://localhost:3001/jobs/${userId}`)).data;
     console.log(res);
     setJobs(res);

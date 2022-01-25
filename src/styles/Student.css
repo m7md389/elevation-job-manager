@@ -1,0 +1,56 @@
+.student-page-container{
+    width: 80%;
+    margin: 0 auto;
+}
+
+.filters-detail{
+    display: grid;
+    grid-template-columns: repeat(2 , 1fr);
+    /* border: 1px solid red; */
+}
+
+.cont{
+    margin: 20px 0;
+    width: 60%;
+}
+
+.box{
+    margin: 20px 0;
+}
+
+.right-box-details{
+    margin: 40px 0;
+    text-align: center;
+    display: grid;
+    border: 1px solid black;
+    /* justify-content: end; */
+    grid-template-columns: repeat(2 , 1fr);
+}
+
+.jobs-title{
+    width: 80%;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(5 ,1fr);
+    border: 1px solid black;
+    text-align: center;
+    padding: 10px;
+
+}
+
+
+.rows{
+    width: 80%;
+    margin: 0 auto;
+    /* display: grid; */
+    /* grid-template-columns: repeat(5 ,1fr); */
+    /* border: 1px solid black; */
+    text-align: center;
+    /* padding: 10px; */
+}
+
+.vLine{
+    border-left: 1px solid #ccc;
+    height: 20px;
+
+}

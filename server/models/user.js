@@ -8,7 +8,9 @@ const userSchema = new Schema({
     phone: String,
     city: String,
     linkedin: String,
-    role: String
+    status: String,
+    role: String,
+    jobs: [{ type: Schema.Types.ObjectId, ref: 'Job' }]
 })
 
 const User = mongoose.model("User", userSchema)

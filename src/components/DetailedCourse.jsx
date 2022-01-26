@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { observer, inject } from "mobx-react";
 import httpService from "../services/httpService";
 import PageNotFound from "./PageNotFound";
+import Title from "./common/Title";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -22,15 +23,25 @@ const Course = () => {
   const navigate = useNavigate();
 
   let [course, setCourse] = useState();
-  let [cohort, setCohort] = React.useState("");
+  let [filteredCohorts, setFilteredCohorts] = useState();
+  let [cohort, setCohort] = React.useState("all-cohorts");
 
   useEffect(async () => {
-    const courseData = await httpService.getCourseDetails(params.courseName);
-    setCourse(courseData);
+    let c = await httpService.getCourseDetails(params.courseName);
+    setFilteredCohorts(c.cohorts);
+    setCourse(c);
   }, []);
 
+  useEffect(async () => {
+    if (!course) return null;
+    if (cohort === "all-cohorts") {
+      setFilteredCohorts(course.cohorts);
+    } else {
+      setFilteredCohorts([course.cohorts.find((c) => c.name === cohort)]);
+    }
+  }, [cohort]);
+
   const handleRowClick = (studentId) => {
-    console.log(studentId);
     navigate(`/student/${studentId}`);
   };
 
@@ -40,7 +51,7 @@ const Course = () => {
 
   const getTableRows = () => {
     let users = [];
-    course.cohorts.forEach((cohort) => {
+    filteredCohorts.forEach((cohort) => {
       cohort.users.forEach((user) => {
         users.push({
           _id: user._id,
@@ -69,9 +80,7 @@ const Course = () => {
 
   return (
     <div className="course-container">
-      <div className="course-title">
-        <h1>{course.title}</h1>
-      </div>
+      <Title text={course.title} />
 
       <div classNamee="filters-detail box">
         <Box id="box" sx={{ minWidth: 120 }}>
@@ -84,6 +93,9 @@ const Course = () => {
               label="cohorts"
               onChange={handleChange}
             >
+              <MenuItem value={"all-cohorts"} key={"all-cohorts"}>
+                {"all-cohorts"}
+              </MenuItem>
               {cohorts.map((cohort, idx) => {
                 return (
                   <MenuItem value={cohort.name} key={cohort.name}>

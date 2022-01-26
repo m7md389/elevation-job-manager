@@ -178,10 +178,8 @@ router.post("/jobs/Interviews", async function (req, res) {
       res.send(job);
     });
 });
-// interviewId edit
 router.put("/jobs/Interviews", async function (req, res) {
   let tempInterview = req.body;
-  console.log(tempInterview.interviewId);
   let myDate = moment(tempInterview.date).format("L");
   let interview = await Interviews.findById({ _id: tempInterview.interviewId });
   await Interviews.findOneAndUpdate(
@@ -200,8 +198,7 @@ router.put("/jobs/Interviews", async function (req, res) {
     if (err) {
       console.log(err);
     }
-    console.log(interView);
-    res.send("interView");
+    res.send(interView);
   });
 });
 
@@ -291,7 +288,7 @@ router.put("/users", async function (req, res) {
 router.post("/users", async function (req, res) {
   router.post("/login", async function (req, res) {
     const { name, password } = req.body;
-    const uset = await Users.find({ name, password });
+    const user = await Users.find({ name, password });
   });
 });
 

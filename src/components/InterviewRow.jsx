@@ -66,7 +66,6 @@ function ProcessRow(props) {
     axios.put(`${URL}`,editedInterview)
     .then(() => {
       setOpenAddInterview(false);
-      console.log(props.refresh);
       props.setRefresh(props.refresh+1)
     })
   }
@@ -78,7 +77,6 @@ function ProcessRow(props) {
   }
 
   const handleDeleteInterview = () => {
-    console.log("hello");
     axios.delete(`${URL}`,{ data: { interviewId: interviewId } })
     .then(()=>{
       props.setRefresh(props.refresh+1)

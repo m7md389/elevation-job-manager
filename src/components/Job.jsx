@@ -104,7 +104,6 @@ const handleEditJobStatusChange = e =>{
 
 
 const handleJobInputChange = (event , key) => {
-    console.log(event , key);
     let tempEditJobInputs = {...editJobInputs}
     tempEditJobInputs[key] = event.target.value
     setEditJobInputs(tempEditJobInputs)

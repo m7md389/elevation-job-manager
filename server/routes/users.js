@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { auth } = require("../middleware/auth");
+const auth = require("../middleware/auth");
 const _ = require("lodash");
 const bcrypt = require("bcrypt");
 const User = require("../models/user");
@@ -28,7 +28,7 @@ router.post("/", async function (req, res) {
     linkedin,
     status,
     role: "student",
-    jobs: []
+    jobs: [],
   });
   const salt = await bcrypt.genSalt(10);
   user.password = await bcrypt.hash(password, salt);

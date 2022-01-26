@@ -10,7 +10,7 @@ const NavBar = () => {
       <NavLink className="navbar-brand" to="/">
         <img
           className="ms-4 me-3"
-          src="https://pagoda-sonic.codio.io/.guides/img/symbol_white_bg.jpeg"
+          src="https://elevation.ac/wp-content/uploads/2020/08/cropped-symbol_pink-06-32x32.png"
           width="30"
           height="30"
           alt=""

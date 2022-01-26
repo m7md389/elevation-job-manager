@@ -194,4 +194,11 @@ router.put('/users', async function (req, res) {
     })
 })
 
+router.post("/users", async function (req, res) {
+    router.post("/login", async function (req, res) {
+        const { name, password } = req.body;
+        const uset = await Users.find({ name, password })
+    })
+})
+
 module.exports = router

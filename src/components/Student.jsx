@@ -19,27 +19,24 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DateAdapter from '@mui/lab/AdapterMoment';
 import MobileDatePicker from '@mui/lab/MobileDatePicker';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import { useParams } from 'react-router-dom';
 
 export default function Student() {
     let URL = "http://localhost:3001/jobs"
 
-    const userId = '61eee2cedc8e3b3b16870b6a'
-    
+    const params = useParams()
+    const userId = params.id
     const [date, setDate] = React.useState(new Date(Date.now()));
-
-    const [addedJobFlag,setAddedJobFlag] = React.useState(1)
+    const [refresh,setRefresh] = React.useState(1)
     const [jobs, setJobs] = React.useState([])
-
     const [company, setCompany] = React.useState('');
-    
     const [open, setOpen] = React.useState(false);
-
     const [jobsInputs , setJobsInputs] = React.useState({title: "", link: "", company: ""})
 
     React.useEffect(async () => {
         let res = (await axios.get(`${URL}/${userId}`)).data
         setJobs(res)
-    }, [addedJobFlag])
+    }, [refresh])
 
     const companies = ['All companies', 'Yad2', 'Facebook', 'Twitter', 'Intel']
     const statuses = ['All status', 'Accepted', 'waiting', 'Applied', 'no reply']
@@ -71,9 +68,8 @@ export default function Student() {
         date: date,
         userId: userId
     }
-    // 
     axios.post(`${URL}`,newJob).then(()=>{
-        setAddedJobFlag(addedJobFlag+1)
+        setRefresh(refresh+1)
     })
     setOpen(false);
   };
@@ -143,7 +139,7 @@ export default function Student() {
                     <DialogContent> 
                         <TextField autoFocus margin="dense" onChange= {(e) => {handleInputChange(e,"title")}} value={jobsInputs.title} id="title" label="Job Title" type="text" fullWidth variant="standard" required/>
                         <TextField autoFocus margin="dense" onChange= {(e) => {handleInputChange(e,"link")}} value={jobsInputs.link} id="link" label="Job Link" type="text" fullWidth variant="standard" required/>
-                        <div className='addJob-datePicker'>
+                        <div className='datePicker'>
                             <LocalizationProvider dateAdapter={DateAdapter}><MobileDatePicker label="Date mobile" inputFormat="MM/dd/yyyy" value={date} onChange={handleDateChange} renderInput={(params) => <TextField {...params} />}/></LocalizationProvider>
                         </div>
                         <TextField autoFocus margin="dense" onChange={(e) => {handleInputChange(e,"company")}} value={jobsInputs.company} id="company" label="Company" type="text" fullWidth variant="standard" required/>
@@ -165,7 +161,7 @@ export default function Student() {
             <div className='rows'>
                 {
                     jobs.map((j,idx) => {
-                        return <Job key={idx} job={j} />
+                        return <Job refresh={refresh} setRefresh={setRefresh} key={idx} job={j} />
                     })
                 }
             </div >

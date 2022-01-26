@@ -21,17 +21,15 @@ router.get('/courses', async (req, res) => {
             }
         }
     })
-        .exec(function (err, courses) {
-            if (err) {
-                console.log(err);
-            }
-            res.send(courses)
-        });
+    .exec(function (err, courses) {
+        if (err) {
+            console.log(err);
+        }
+        res.send(courses)
+    });
 })
 
 router.get('/courses/names', async function (req, res) {
-
-
     let courses = await Course.find({}).populate({
         path: 'cohorts',
         populate: {
@@ -56,7 +54,6 @@ router.get('/courses/names', async function (req, res) {
         course['working'] = (workingStudCount / studNum) * 100;
         data.push(course)
     })
-
     res.send(data)
 })
 
@@ -72,18 +69,17 @@ router.get('/courses/:courseName', (req, res) => {
             path: 'users'
         }
     })
-        .exec(function (err, course) {
-            if (err) {
-                res.send({ error: err });
-                return null;
-            }
-            res.send(course);
-        });
+    .exec(function (err, course) {
+        if (err) {
+            res.send({ error: err });
+            return null;
+        }
+        res.send(course);
+    });
 })
 
 router.post('/jobs', async function (req, res) {
     let tempJob = req.body
-    console.log(tempJob);
     let myDate = moment(tempJob.date).format('L')
     let newJob = new Jobs({
         title: tempJob.title,
@@ -98,15 +94,42 @@ router.post('/jobs', async function (req, res) {
     await Users.findOneAndUpdate({ _id: tempJob.userId }, {
         $push: { jobs: newJob },
     }, { new: true })
-        .populate({
-            path: 'jobs'
-        })
-        .exec(function (err, user) {
-            if (err) {
-                console.log(err);
-            }
-            res.send(user)
-        })
+    .populate({
+        path: 'jobs'
+    })
+    .exec(function (err, user) {
+        if (err) {
+            console.log(err);
+        }
+        res.send(user)
+    })
+})
+
+router.post('/jobs/Interviews', async function (req, res) {
+    let tempInterview = req.body
+    console.log(tempInterview);
+    let myDate = moment(tempInterview.date).format('L')
+    let newInterview = new Interviews({
+        description: tempInterview.description,
+        type: tempInterview.type,
+        status: tempInterview.status,
+        date: myDate,
+        link: tempInterview.link
+    })
+    newInterview.save()
+
+    await Jobs.findOneAndUpdate({ _id: tempInterview.jobId }, {
+        $push: { interviews: newInterview },
+    }, { new: true })
+    .populate({
+        path: 'interviews'
+    })
+    .exec(function (err, job) {
+        if (err) {
+            console.log(err);
+        }
+        res.send(job)
+    })
 })
 
 router.get('/jobs/:userId?', async function (req, res) {
@@ -116,17 +139,17 @@ router.get('/jobs/:userId?', async function (req, res) {
             path: 'interviews'
         }
     })
-        .exec(function (err, user) {
-            res.send(user.jobs)
-        })
+    .exec(function (err, user) {
+        res.send(user.jobs)
+    })
 })
 
 router.get('/users/:userId', async function (req, res) {
     let userData = await Users.findById({ _id: req.params.userId })
-        .exec(function (err, user) {
-            if (err) { console.log(err); }
-            res.send(user)
-        })
+    .exec(function (err, user) {
+        if (err) { console.log(err); }
+        res.send(user)
+    })
 })
 
 router.put('/users/password', async function (req, res) {
@@ -141,12 +164,12 @@ router.put('/users/password', async function (req, res) {
             password: updatedPasswordData.newPassword
         }
     }, { new: true })
-        .exec(function (err, updatedUser) {
-            if (err) {
-                res.send({ error: "error updating password" });
-            }
-            res.send(updatedUser)
-        })
+    .exec(function (err, updatedUser) {
+        if (err) {
+            res.send({ error: "error updating password" });
+        }
+        res.send(updatedUser)
+    })
 })
 
 router.put('/users', async function (req, res) {
@@ -163,12 +186,12 @@ router.put('/users', async function (req, res) {
             status: updatedUserData.status || user.status
         }
     }, { new: true })
-        .exec(function (err, newUser) {
-            if (err) {
-                console.log(err);
-            }
-            res.send(newUser)
-        })
+    .exec(function (err, newUser) {
+        if (err) {
+            console.log(err);
+        }
+        res.send(newUser)
+    })
 })
 
 module.exports = router

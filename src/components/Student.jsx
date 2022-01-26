@@ -23,18 +23,18 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 export default function Student() {
     let URL = "http://localhost:3001/jobs"
 
-    const userId = '61eee2cedc8e3b3b16870b6a'
-    
+    const userId = '61efeb22ed0d90af133e9460'
+
     const [date, setDate] = React.useState(new Date(Date.now()));
 
-    const [addedJobFlag,setAddedJobFlag] = React.useState(1)
+    const [addedJobFlag, setAddedJobFlag] = React.useState(1)
     const [jobs, setJobs] = React.useState([])
 
     const [company, setCompany] = React.useState('');
-    
+
     const [open, setOpen] = React.useState(false);
 
-    const [jobsInputs , setJobsInputs] = React.useState({title: "", link: "", company: ""})
+    const [jobsInputs, setJobsInputs] = React.useState({ title: "", link: "", company: "" })
 
     React.useEffect(async () => {
         let res = (await axios.get(`${URL}/${userId}`)).data
@@ -48,39 +48,39 @@ export default function Student() {
         setCompany(event.target.value);
     };
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
 
-  const handleClose = () => {
-    setOpen(false);
-  };
+    const handleClose = () => {
+        setOpen(false);
+    };
 
-  const handleInputChange = (event , key) => {
-    let tempJobsInputs = {...jobsInputs}
-    tempJobsInputs[key] = event.target.value
-    setJobsInputs(tempJobsInputs)
-  }
-
-  const handleAddJob = () => {
-    if(!jobsInputs.title || !jobsInputs.link || !jobsInputs.company || !date ){return}
-    let newJob = {
-        title: jobsInputs.title,
-        link: jobsInputs.link,
-        company: jobsInputs.company,
-        date: date,
-        userId: userId
+    const handleInputChange = (event, key) => {
+        let tempJobsInputs = { ...jobsInputs }
+        tempJobsInputs[key] = event.target.value
+        setJobsInputs(tempJobsInputs)
     }
-    // 
-    axios.post(`${URL}`,newJob).then(()=>{
-        setAddedJobFlag(addedJobFlag+1)
-    })
-    setOpen(false);
-  };
 
-  const handleDateChange = (newValue) => {
-    setDate(newValue);
-  };
+    const handleAddJob = () => {
+        if (!jobsInputs.title || !jobsInputs.link || !jobsInputs.company || !date) { return }
+        let newJob = {
+            title: jobsInputs.title,
+            link: jobsInputs.link,
+            company: jobsInputs.company,
+            date: date,
+            userId: userId
+        }
+        // 
+        axios.post(`${URL}`, newJob).then(() => {
+            setAddedJobFlag(addedJobFlag + 1)
+        })
+        setOpen(false);
+    };
+
+    const handleDateChange = (newValue) => {
+        setDate(newValue);
+    };
 
     return (
         <div className='student-page-container'>
@@ -97,7 +97,7 @@ export default function Student() {
                                 onChange={handleChange}>
                                 {companies.map((c, idx) => {
                                     return (
-                                        <MenuItem key = {idx} value={c}>{c}</MenuItem>
+                                        <MenuItem key={idx} value={c}>{c}</MenuItem>
                                     )
                                 })}
                             </Select>
@@ -134,27 +134,27 @@ export default function Student() {
 
             <div style={{ width: '80%', margin: '10px auto' }}> <hr />
 
-            <div>
-                <Stack direction="row" spacing={2}>
+                <div>
+                    <Stack direction="row" spacing={2}>
                         <Button onClick={handleClickOpen} variant="outlined">Add Job</Button>
-                </Stack>
-                <Dialog open={open} onClose={handleClose}>
-                    <DialogTitle>Add Job :</DialogTitle>
-                    <DialogContent> 
-                        <TextField autoFocus margin="dense" onChange= {(e) => {handleInputChange(e,"title")}} value={jobsInputs.title} id="title" label="Job Title" type="text" fullWidth variant="standard" required/>
-                        <TextField autoFocus margin="dense" onChange= {(e) => {handleInputChange(e,"link")}} value={jobsInputs.link} id="link" label="Job Link" type="text" fullWidth variant="standard" required/>
-                        <div className='addJob-datePicker'>
-                            <LocalizationProvider dateAdapter={DateAdapter}><MobileDatePicker label="Date mobile" inputFormat="MM/dd/yyyy" value={date} onChange={handleDateChange} renderInput={(params) => <TextField {...params} />}/></LocalizationProvider>
-                        </div>
-                        <TextField autoFocus margin="dense" onChange={(e) => {handleInputChange(e,"company")}} value={jobsInputs.company} id="company" label="Company" type="text" fullWidth variant="standard" required/>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleClose}>Cancel</Button>
-                        <Button onClick={handleAddJob}>Add</Button>
-                    </DialogActions>
-                </Dialog>
+                    </Stack>
+                    <Dialog open={open} onClose={handleClose}>
+                        <DialogTitle>Add Job :</DialogTitle>
+                        <DialogContent>
+                            <TextField autoFocus margin="dense" onChange={(e) => { handleInputChange(e, "title") }} value={jobsInputs.title} id="title" label="Job Title" type="text" fullWidth variant="standard" required />
+                            <TextField autoFocus margin="dense" onChange={(e) => { handleInputChange(e, "link") }} value={jobsInputs.link} id="link" label="Job Link" type="text" fullWidth variant="standard" required />
+                            <div className='addJob-datePicker'>
+                                <LocalizationProvider dateAdapter={DateAdapter}><MobileDatePicker label="Date mobile" inputFormat="MM/dd/yyyy" value={date} onChange={handleDateChange} renderInput={(params) => <TextField {...params} />} /></LocalizationProvider>
+                            </div>
+                            <TextField autoFocus margin="dense" onChange={(e) => { handleInputChange(e, "company") }} value={jobsInputs.company} id="company" label="Company" type="text" fullWidth variant="standard" required />
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={handleClose}>Cancel</Button>
+                            <Button onClick={handleAddJob}>Add</Button>
+                        </DialogActions>
+                    </Dialog>
+                </div>
             </div>
-        </div>
             <div className='jobs-title'>
                 <div>job name</div>
                 <div className='vLine'>company</div>
@@ -164,7 +164,7 @@ export default function Student() {
             </div>
             <div className='rows'>
                 {
-                    jobs.map((j,idx) => {
+                    jobs.map((j, idx) => {
                         return <Job key={idx} job={j} />
                     })
                 }

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import 'reactjs-popup/dist/index.css';
+import { useState } from 'react';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
@@ -20,63 +20,74 @@ import DateAdapter from '@mui/lab/AdapterMoment';
 import MobileDatePicker from '@mui/lab/MobileDatePicker';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { useParams } from 'react-router-dom';
+import Dropdown from 'react-dropdown';
+import 'react-dropdown/style.css';
 
 export default function Student() {
     let URL = "http://localhost:3001/jobs"
 
     const params = useParams()
     const userId = params.id
-    const [date, setDate] = React.useState(new Date(Date.now()));
-    const [refresh,setRefresh] = React.useState(1)
-    const [jobs, setJobs] = React.useState([])
-    const [company, setCompany] = React.useState('');
-    const [open, setOpen] = React.useState(false);
-    const [jobsInputs , setJobsInputs] = React.useState({title: "", link: "", company: ""})
+    const [date, setDate] = useState(new Date(Date.now()));
+    const [refresh,setRefresh] = useState(1)
+    const [jobs, setJobs] = useState([])
+    const [company, setCompany] = useState('');
+    const [open, setOpen] = useState(false);
+    const [jobsInputs , setJobsInputs] = useState({title: "", link: "", company: ""})
+    
+    const companies = ['All companies', 'Yad2', 'Facebook', 'Twitter', 'Intel']
+    const statuses = ['All status', 'Accepted', 'waiting', 'Applied', 'no reply']
+    const statusesForAddJob = ['', 'Accepted', 'waiting', 'Applied', 'no reply']
+
+    const [statusOption,setStatusOption] = useState(statusesForAddJob[0])
 
     React.useEffect(async () => {
         let res = (await axios.get(`${URL}/${userId}`)).data
         setJobs(res)
     }, [refresh])
 
-    const companies = ['All companies', 'Yad2', 'Facebook', 'Twitter', 'Intel']
-    const statuses = ['All status', 'Accepted', 'waiting', 'Applied', 'no reply']
-
     const handleChange = (event) => {
         setCompany(event.target.value);
     };
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
 
-  const handleClose = () => {
-    setOpen(false);
-  };
+    const handleClose = () => {
+        setOpen(false);
+    };
+    
+    const handleDateChange = (newValue) => {
+        setDate(newValue);
+    };
 
-  const handleInputChange = (event , key) => {
-    let tempJobsInputs = {...jobsInputs}
-    tempJobsInputs[key] = event.target.value
-    setJobsInputs(tempJobsInputs)
-  }
-
-  const handleAddJob = () => {
-    if(!jobsInputs.title || !jobsInputs.link || !jobsInputs.company || !date ){return}
-    let newJob = {
-        title: jobsInputs.title,
-        link: jobsInputs.link,
-        company: jobsInputs.company,
-        date: date,
-        userId: userId
+    const handleStatusChange = e =>{
+        setStatusOption(e.value)
     }
-    axios.post(`${URL}`,newJob).then(()=>{
-        setRefresh(refresh+1)
-    })
-    setOpen(false);
-  };
 
-  const handleDateChange = (newValue) => {
-    setDate(newValue);
-  };
+    const handleInputChange = (event , key) => {
+        let tempJobsInputs = {...jobsInputs}
+        tempJobsInputs[key] = event.target.value
+        setJobsInputs(tempJobsInputs)
+    }
+    
+    const handleAddJob = () => {
+        if(!jobsInputs.title || !jobsInputs.link || !jobsInputs.company || !date || !statusOption ){return}
+        let newJob = {
+            title: jobsInputs.title,
+            link: jobsInputs.link,
+            company: jobsInputs.company,
+            date: date,
+            status: statusOption,
+            userId: userId
+        }
+        axios.post(`${URL}`,newJob).then(()=>{
+            setRefresh(refresh+1)
+        })
+        setOpen(false);
+    };
+
 
     return (
         <div className='student-page-container'>
@@ -140,8 +151,9 @@ export default function Student() {
                         <TextField autoFocus margin="dense" onChange= {(e) => {handleInputChange(e,"title")}} value={jobsInputs.title} id="title" label="Job Title" type="text" fullWidth variant="standard" required/>
                         <TextField autoFocus margin="dense" onChange= {(e) => {handleInputChange(e,"link")}} value={jobsInputs.link} id="link" label="Job Link" type="text" fullWidth variant="standard" required/>
                         <div className='datePicker'>
-                            <LocalizationProvider dateAdapter={DateAdapter}><MobileDatePicker label="Date mobile" inputFormat="MM/dd/yyyy" value={date} onChange={handleDateChange} renderInput={(params) => <TextField {...params} />}/></LocalizationProvider>
+                            <LocalizationProvider dateAdapter={DateAdapter}><MobileDatePicker label="Date" inputFormat="DD/MM/yyyy" value={date} onChange={handleDateChange} renderInput={(params) => <TextField {...params} />}/></LocalizationProvider>
                         </div>
+                        <Dropdown options={statusesForAddJob} onChange={(e) => {handleStatusChange(e)}} value={statusOption} placeholder="Status" required/><br/>
                         <TextField autoFocus margin="dense" onChange={(e) => {handleInputChange(e,"company")}} value={jobsInputs.company} id="company" label="Company" type="text" fullWidth variant="standard" required/>
                     </DialogContent>
                     <DialogActions>

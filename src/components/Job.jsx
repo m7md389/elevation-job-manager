@@ -20,50 +20,60 @@ import Stack from '@mui/material/Stack';
 import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
 
-
-
 function Job(props) {
     
     let URL = "http://localhost:3001/jobs"
     const jobId = props.job._id
     const [isActive, setActive] = useState(false);
-    const [open, setOpen] = useState(false);
-    const [date, setDate] = useState(new Date(Date.now()));
-    const statusOptions = [
-        '','Waiting', 'Rejected', 'Passed'
-      ];
-    const typeOptions = [
-        '','HR', 'Phone Interview', 'Technical', 'HomeWork' , 'Contract'
-    ];
+    const [openAddInterview, setOpenAddInterview] = useState(false);
+    const [openEditJob, setOpenEditJob] = useState(false);
+    const [interviewDate, setInterviewDate] = useState(new Date(Date.now()));
+    const [jobDate, setJobDate] = React.useState(props.job.date);
+    
+    const statusOptions = ['','Waiting', 'Rejected', 'Passed'];
+    const typeOptions = ['','HR', 'Phone Interview', 'Technical', 'HomeWork' , 'Contract'];
+    const statusesForAddJob = ['', 'Accepted', 'waiting', 'Applied', 'no reply']
+
+    
+    const [editJobInputs , setEditJobInputs] = useState({title: props.job.title, status: props.job.status , link: props.job.link || '', company: props.job.company})
+    const [editJobStatusOption,setEditJobStatusOption] = useState(statusesForAddJob[0])
     const [typeOption,setTypeOption] = useState(typeOptions[0])
     const [statusOption,setStatusOption] = useState(statusOptions[0])
-    const [interviewInputs , setInterviewInputs] = useState({description: "", Type: "", Status: "", date: "", link:""})
+    const [interviewInputs , setInterviewInputs] = useState({description: "", Type: "", Status: "", date: "", link: ""})
     
     const handleToggle = () => {
         setActive(!isActive);
     };
-    
-    const handleClickOpen = () => {
-        setOpen(true);
+
+    const handleEditJobOpen = () => {
+        setOpenEditJob(true);
+    };
+
+    const handleEditJobClose = () => {
+        setOpenEditJob(false)
+    };
+
+    const handleAddInterviewClickOpen = () => {
+        setOpenAddInterview(true);
+    };
+
+    const handleAddInterviewClickClose = () => {
+        setOpenAddInterview(false);
     };
     
-    const handleClose = () => {
-        setOpen(false);
-    };
-    
-    const handleInputChange = (event , key) => {
+    const handleInterviewInputChange = (event , key) => {
         let tempInterviewInputs = {...interviewInputs}
         tempInterviewInputs[key] = event.target.value
         setInterviewInputs(tempInterviewInputs)
     }
 
-    const handleAddInterview = (typeOption , statusOption) => {
-        if(!typeOption || !statusOption || !date ){return}
+    const handleAddInterview = () => {
+        if(!typeOption || !statusOption || !interviewDate ){return}
         let newInterview = {
             description: interviewInputs.description,
             type: typeOption.toLowerCase(),
             status: statusOption.toLowerCase(),
-            date: date,
+            date: interviewDate,
             link: interviewInputs.link,
             jobId: jobId
         }
@@ -71,11 +81,11 @@ function Job(props) {
     axios.post(`${URL}/Interviews`,newInterview).then(()=>{
         props.setRefresh(props.refresh + 1)
     })
-    setOpen(false);
+    setOpenAddInterview(false);
 };
 
 const handleDateChange = (newValue) => {
-    setDate(newValue);
+    setInterviewDate(newValue);
 };
 
 
@@ -86,6 +96,46 @@ const handleStatusChange = e =>{
 
 const handleTypeChange = e =>{
     setTypeOption(e.value)
+}
+
+const handleEditJobStatusChange = e =>{
+    setEditJobStatusOption(e.value)
+}
+
+
+const handleJobInputChange = (event , key) => {
+    console.log(event , key);
+    let tempEditJobInputs = {...editJobInputs}
+    tempEditJobInputs[key] = event.target.value
+    setEditJobInputs(tempEditJobInputs)
+}
+
+
+const handleJobDateChange = (newValue) => {
+    setJobDate(newValue);
+};
+
+const handleEditJob = () => {
+    if(!editJobInputs.title || !editJobInputs.link || !editJobInputs.company || !jobDate || !editJobStatusOption){return}
+    let editedJob = {
+        title: editJobInputs.title,
+        link: editJobInputs.link,
+        company: editJobInputs.company,
+        status: editJobStatusOption,
+        date: jobDate,
+        jobId: jobId
+    }
+    axios.put(`${URL}`,editedJob).then(()=>{
+        props.setRefresh(props.refresh+1)
+        handleEditJobClose(false);
+    })
+}
+
+const handleDeleteJob = () =>{
+    axios.delete(`${URL}`,{ data: { jobId: jobId } }).then(()=>{
+        props.setRefresh(props.refresh+1)
+        handleEditJobClose(false);
+    })
 }
 
 const job = props.job
@@ -100,28 +150,49 @@ const job = props.job
                 <p>{job.interviews.length > 0 ? job.interviews[job.interviews.length - 1].type : 'none'}</p>
                 <p>{job.status}</p>
                 <div className='job-edit-btns'>
-                <div>
-                <Stack direction="row" spacing={2}>
-                    <AddCircleOutlinedIcon onClick={handleClickOpen} variant="outlined"/>
-                </Stack>
-                <Dialog open={open} onClose={handleClose}>
-                    <DialogTitle>Add Interview :</DialogTitle>
-                    <DialogContent> 
-                        <TextField autoFocus margin="dense" onChange= {(e) => {handleInputChange(e,"description")}} value={interviewInputs.description} id="description" label="description" type="text" fullWidth variant="standard" required/><br/>
-                        <Dropdown options={typeOptions} onChange={(e) => {handleTypeChange(e)}} value={typeOption} placeholder="Type" required/> <br/>
-                        <Dropdown options={statusOptions} onChange={(e) => {handleStatusChange(e)}} value={statusOption} placeholder="Status" required/><br/>
-                        <div className='datePicker'>
-                            <LocalizationProvider dateAdapter={DateAdapter}><MobileDatePicker label="Date mobile" inputFormat="MM/dd/yyyy" value={date} onChange={handleDateChange} renderInput={(params) => <TextField {...params} />}/></LocalizationProvider>
-                        </div><br/>
-                        <TextField autoFocus margin="dense" onChange= {(e) => {handleInputChange(e,"link")}} value={interviewInputs.link} id="link" label="Link(Invitation - Zoom)" type="text" fullWidth variant="standard" />
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleClose}>Cancel</Button>
-                        <Button onClick={() => handleAddInterview(typeOption , statusOption)}>Add</Button>
-                    </DialogActions>
-                </Dialog>
-            </div>
-                    <ModeEditOutlineOutlinedIcon />
+                    <div>
+                        <Stack direction="row" spacing={2}>
+                            <AddCircleOutlinedIcon onClick={handleAddInterviewClickOpen} variant="outlined"/>
+                        </Stack>
+                        <Dialog open={openAddInterview} onClose={handleAddInterviewClickClose}>
+                            <DialogTitle>Add Interview :</DialogTitle>
+                            <DialogContent> 
+                                <TextField autoFocus margin="dense" onChange= {(e) => {handleInterviewInputChange(e,"description")}} value={interviewInputs.description} id="description" label="description" type="text" fullWidth variant="standard" required/><br/>
+                                <Dropdown options={typeOptions} onChange={(e) => {handleTypeChange(e)}} value={typeOption} placeholder="Type" required/> <br/>
+                                <Dropdown options={statusOptions} onChange={(e) => {handleStatusChange(e)}} value={statusOption} placeholder="Status" required/><br/>
+                                <div className='datePicker'>
+                                    <LocalizationProvider dateAdapter={DateAdapter}><MobileDatePicker label="Date mobile" inputFormat="DD/MM/yyyy" value={interviewDate} onChange={handleDateChange} renderInput={(params) => <TextField {...params} />}/></LocalizationProvider>
+                                </div><br/>
+                                <TextField autoFocus margin="dense" onChange= {(e) => {handleInterviewInputChange(e,"link")}} value={interviewInputs.link} id="link" label="Link(Invitation - Zoom)" type="text" fullWidth variant="standard" />
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={handleAddInterviewClickClose}>Cancel</Button>
+                                <Button onClick={() => handleAddInterview()}>Add</Button>
+                            </DialogActions>
+                        </Dialog>
+                    </div>
+                    <div>
+                        <Stack direction="row" spacing={2}>
+                            <ModeEditOutlineOutlinedIcon onClick={handleEditJobOpen} variant="outlined"/>
+                        </Stack>
+                        <Dialog open={openEditJob} onClose={handleEditJobClose}>
+                            <DialogTitle>Edit Job :</DialogTitle>
+                        <DialogContent> 
+                            <TextField autoFocus margin="dense" onChange= {(e) => {handleJobInputChange(e,"title")}} value={editJobInputs.title} id="title" label="Job Title" type="text" fullWidth variant="standard" required/>
+                            <TextField autoFocus margin="dense" onChange= {(e) => {handleJobInputChange(e,"link")}} value={editJobInputs.link} id="link" label="Job Link" type="text" fullWidth variant="standard" required/>
+                            <Dropdown options={statusesForAddJob} onChange={(e) => {handleEditJobStatusChange(e)}} value={editJobStatusOption} placeholder="Status" required/><br/>
+                            <div className='datePicker'>
+                                <LocalizationProvider dateAdapter={DateAdapter}><MobileDatePicker label="Date" inputFormat="DD/MM/yyyy" value={jobDate} onChange={handleJobDateChange} renderInput={(params) => <TextField {...params} />}/></LocalizationProvider>
+                            </div>
+                            <TextField autoFocus margin="dense" onChange={(e) => {handleJobInputChange(e,"company")}} value={editJobInputs.company} id="company" label="Company" type="text" fullWidth variant="standard" required/>
+                        </DialogContent>
+                            <DialogActions>
+                                <Button onClick={handleEditJobClose}>Cancel</Button>
+                                <Button onClick={() => handleEditJob()}>Save</Button>
+                                <Button onClick={() => handleDeleteJob()}>Delete</Button>
+                            </DialogActions>
+                        </Dialog>
+                    </div>
                 </div>
             </div>
 
@@ -139,7 +210,7 @@ const job = props.job
                     {job.interviews.map((i,idx) => {
                         return (
                             <div key={idx}>
-                                <InterviewRow key={idx} inter={i} />
+                                <InterviewRow refresh={props.refresh} setRefresh={props.setRefresh} key={idx} inter={i} />
                             </div>
                         )
                     })}

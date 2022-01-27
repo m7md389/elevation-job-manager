@@ -16,7 +16,7 @@ const Login = () => {
 
   return (
     <div className="wrapper fadeInDown ">
-      <div id="formContent">
+      <div id="formContent" className="login-content">
         <div className="title">
           <h4 className="fadeIn first">Login</h4>
         </div>
@@ -28,7 +28,7 @@ const Login = () => {
             value={input.email}
             onChange={handleChange}
             id="email"
-            className="fadeIn second"
+            className="input fadeIn second"
           />
           <input
             type="password"
@@ -36,18 +36,18 @@ const Login = () => {
             value={input.password}
             onChange={handleChange}
             id="password"
-            className="fadeIn third"
+            className="input fadeIn third"
           />
           <input
             type="submit"
             onClick={handleSubmit}
-            className="fadeIn fourth"
+            className="submit fadeIn fourth"
           />
         </div>
 
         <div id="formFooter">
           <span>Dont have account?</span>
-          <Link className="underlineHover" to="/register">
+          <Link className="custom-link underlineHover" to="/register">
             <span className="link-text">Create one</span>
           </Link>
         </div>

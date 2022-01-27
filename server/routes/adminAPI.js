@@ -29,8 +29,8 @@ router.get('/courses', async (req, res) => {
         });
 })
 
-router.get('/courses/names', async function (req, res) {
 
+router.get('/courses/names', async function (req, res) {
 
     let courses = await Course.find({}).populate({
         path: 'cohorts',
@@ -39,7 +39,6 @@ router.get('/courses/names', async function (req, res) {
         }
     })
 
-    console.log(courses);
     let data = []
     courses.map(c => {
         let course = { title: c.title }
@@ -58,6 +57,20 @@ router.get('/courses/names', async function (req, res) {
     })
 
     res.send(data)
+})
+
+router.post('/courses', async (req, res) => {
+    let courseName = req.body.title;
+    if (!courseName) {
+        res.status(400).send("missed name");
+        return null;
+    }
+
+    let newCourse = new Course({
+        title: courseName
+    })
+    await newCourse.save()
+    res.redirect('/courses/names')
 })
 
 router.get('/courses/:courseName', (req, res) => {

@@ -10,6 +10,20 @@ a {
   margin: 20px auto;
 }
 
+.add-course-container{
+  width: 80%;
+  margin: 0 auto;
+  /* font-size: 22px; */
+  padding: 10px;
+}
+
+.add-course-container .add-icon{
+  border: 1px solid #2196f3;
+  border-radius: 50%;
+  color: #2196f3;
+
+}
+
 @media only screen and (max-width: 1180px) {
   .page-container {
     grid-template-columns: repeat(2, 1fr);
@@ -19,5 +33,10 @@ a {
 @media only screen and (max-width: 810px) {
   .page-container {
     grid-template-columns: repeat(1, 1fr);
+    width: 100%;
+  }
+
+  .course-link{
+    width: 90%;
   }
 }

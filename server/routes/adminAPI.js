@@ -8,7 +8,7 @@ const Jobs = require("../models/job");
 const Interviews = require("../models/interview");
 
 router.get("/courses", async (req, res) => {
-    const courses = await course
+    const courses = await Course
         .find({})
         .populate({
             path: "cohorts",
@@ -29,6 +29,70 @@ router.get("/courses", async (req, res) => {
             res.send(courses);
         });
 });
+
+const findInterviewsInRange = async (sDate, eDate, courses) => {
+
+    let users = []
+    var endDate = moment(eDate);
+    var startDate = moment(sDate);
+
+    endDate.set({ hour: 23, minute: 59, second: 59, millisecond: 59 })
+    startDate.set({ hour: 23, minute: 59, second: 59, millisecond: 59, day: (moment(sDate).day() - 1) })
+
+    await courses.forEach(course => {
+        course.cohorts.forEach(cohort => {
+            cohort.users.forEach(user => {
+                user.jobs.forEach(job => {
+                    job.interviews.forEach(interview => {
+                        if (moment(interview.date).isBetween(startDate, endDate)) {
+                            let selectedUser = {
+                                id: user._id,
+                                name: user.name,
+                                course: course.title,
+                                email: user.email,
+                                phone: user.phone,
+                                date: interview.date,
+                                type: interview.type
+                            }
+                            users.push(selectedUser)
+                        }
+                    })
+                })
+            })
+        })
+    });
+    return users;
+}
+
+router.get("/courses/:startDate/:endDate", async (req, res) => {
+    let startDate = req.params.startDate;
+    let endDate = req.params.endDate
+
+    const courses = await Course
+        .find({})
+        .populate({
+            path: "cohorts",
+            populate: {
+                path: "users",
+                populate: {
+                    path: "jobs",
+                    populate: {
+                        path: "interviews",
+                    },
+                },
+            },
+        })
+        .exec(async function (err, courses) {
+            let data;
+            if (err) {
+                console.log(err);
+            } else {
+                data = await findInterviewsInRange(startDate, endDate, courses)
+            }
+            res.send(data);
+        });
+});
+
 
 router.get("/courses/names", async function (req, res) {
     let courses = await Course.find({}).populate({
@@ -161,7 +225,7 @@ router.post("/jobs/Interviews", async function (req, res) {
     });
     newInterview.save();
 
-    await Jobs.findOneAndUpdate(
+    await Jobs.findByIdAndUpdate(
         { _id: tempInterview.jobId },
         {
             $push: { interviews: newInterview },

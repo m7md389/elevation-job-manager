@@ -1,0 +1,32 @@
+.admin-dashboard-container{
+    width: 80%;
+    margin: 20px auto;
+}
+
+.grid{
+    border: none;
+    outline: none;
+}
+
+.MuiDataGrid-root .MuiDataGrid-cell:focus-within {
+    outline: none !important;
+}
+
+.MuiDataGrid-row{
+    max-height: 400px;
+    min-height: 0px;
+
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    align-items: center;
+    justify-content: center;
+    justify-items: center;
+}
+
+
+
+.grid:focus{
+    border: none;
+    outline: none;
+
+}

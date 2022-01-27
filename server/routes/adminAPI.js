@@ -8,7 +8,7 @@ const Jobs = require("../models/job");
 const Interviews = require("../models/interview");
 
 router.get("/courses", async (req, res) => {
-    const courses = await course
+    const courses = await Course
         .find({})
         .populate({
             path: "cohorts",
@@ -29,6 +29,70 @@ router.get("/courses", async (req, res) => {
             res.send(courses);
         });
 });
+
+const findInterviewsInRange = async (sDate, eDate, courses) => {
+
+    let users = []
+    var endDate = moment(eDate);
+    var startDate = moment(sDate);
+
+    endDate.set({ hour: 23, minute: 59, second: 59, millisecond: 59 })
+    startDate.set({ hour: 23, minute: 59, second: 59, millisecond: 59, day: (moment(sDate).day() - 1) })
+
+    await courses.forEach(course => {
+        course.cohorts.forEach(cohort => {
+            cohort.users.forEach(user => {
+                user.jobs.forEach(job => {
+                    job.interviews.forEach(interview => {
+                        if (moment(interview.date).isBetween(startDate, endDate)) {
+                            let selectedUser = {
+                                id: user._id,
+                                name: user.name,
+                                course: course.title,
+                                email: user.email,
+                                phone: user.phone,
+                                date: interview.date,
+                                type: interview.type
+                            }
+                            users.push(selectedUser)
+                        }
+                    })
+                })
+            })
+        })
+    });
+    return users;
+}
+
+router.get("/courses/:startDate/:endDate", async (req, res) => {
+    let startDate = req.params.startDate;
+    let endDate = req.params.endDate
+
+    const courses = await Course
+        .find({})
+        .populate({
+            path: "cohorts",
+            populate: {
+                path: "users",
+                populate: {
+                    path: "jobs",
+                    populate: {
+                        path: "interviews",
+                    },
+                },
+            },
+        })
+        .exec(async function (err, courses) {
+            let data;
+            if (err) {
+                console.log(err);
+            } else {
+                data = await findInterviewsInRange(startDate, endDate, courses)
+            }
+            res.send(data);
+        });
+});
+
 
 router.get("/courses/names", async function (req, res) {
     let courses = await Course.find({}).populate({
@@ -179,7 +243,7 @@ router.post("/jobs/Interviews", async function (req, res) {
         });
 });
 
-router.post('/courses', async (req, res) => {
+router.post("/courses", async (req, res) => {
     let courseName = req.body.title;
     if (!courseName) {
         res.status(400).send("missed name");
@@ -187,12 +251,11 @@ router.post('/courses', async (req, res) => {
     }
 
     let newCourse = new Course({
-        title: courseName
-    })
-    await newCourse.save()
-    res.redirect('/courses/names')
-})
-
+        title: courseName,
+    });
+    await newCourse.save();
+    res.redirect("/courses/names");
+});
 
 router.put("/jobs/Interviews", async function (req, res) {
     let tempInterview = req.body;
@@ -305,6 +368,38 @@ router.post("/users", async function (req, res) {
     router.post("/login", async function (req, res) {
         const { name, password } = req.body;
         const user = await Users.find({ name, password });
+    });
+});
+
+router.post("/courses/cohort", async (req, res) => {
+    let cohortToAdd = req.body;
+    if (!cohortToAdd.courseId) {
+        res.status(400).send({ error: "Cant find course" });
+        return null;
+    }
+
+    let myDate = moment(cohortToAdd.start_date).format("L");
+    let newCohort = new Cohort({
+        name: cohortToAdd.name,
+        start_date: myDate,
+        users: [],
+    });
+
+    newCohort.save();
+
+    await Course.findByIdAndUpdate(
+        { _id: cohortToAdd.courseId },
+        {
+            $push: {
+                cohorts: newCohort,
+            },
+        },
+        { new: true }
+    ).exec(function (err, newCohort) {
+        if (err) {
+            res.send({ error: "can't add cohort" });
+        }
+        res.send(newCohort);
     });
 });
 

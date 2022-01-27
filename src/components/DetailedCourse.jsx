@@ -24,7 +24,7 @@ const Course = () => {
 
   let [course, setCourse] = useState();
   let [filteredCohorts, setFilteredCohorts] = useState();
-  let [cohort, setCohort] = React.useState("all-cohorts");
+  let [cohort, setCohort] = useState('all-cohorts');
 
   useEffect(async () => {
     let c = await httpService.getCourseDetails(params.courseName);
@@ -34,7 +34,7 @@ const Course = () => {
 
   useEffect(async () => {
     if (!course) return null;
-    if (cohort === "all-cohorts") {
+    if (cohort === "all-cohorts" || cohort === "") {
       setFilteredCohorts(course.cohorts);
     } else {
       setFilteredCohorts([course.cohorts.find((c) => c.name === cohort)]);
@@ -66,7 +66,7 @@ const Course = () => {
   };
 
   const getCohorts = () => {
-    let cohorts = [];
+    let cohorts = ['all-cohorts'];
     course.cohorts.forEach((cohort) => {
       cohorts.push(cohort);
     });
@@ -89,16 +89,16 @@ const Course = () => {
             <Select
               labelId="select-cohort"
               id="select-cohort"
-              value={cohort.name}
+              value={cohort}
               label="cohorts"
               onChange={handleChange}
             >
               <MenuItem value={"all-cohorts"} key={"all-cohorts"}>
                 {"all-cohorts"}
               </MenuItem>
-              {cohorts.map((cohort, idx) => {
+              {cohorts.map((cohort , idx) => {
                 return (
-                  <MenuItem value={cohort.name} key={cohort.name}>
+                  <MenuItem value={cohort.name} key={idx}>
                     {cohort.name}
                   </MenuItem>
                 );

@@ -119,30 +119,6 @@ const Register = () => {
               <option value="stydying">Studying</option>
             </select>
           </div>
-          <input
-            type="text"
-            placeholder="LinkedIn"
-            value={inputs.linkedin}
-            onChange={handleChange}
-            id="linkedin"
-            className="fadeIn eighth"
-          />
-          <input
-            type="text"
-            placeholder="Cohort"
-            value={inputs.cohort}
-            onChange={handleChange}
-            id="cohort"
-            className="fadeIn ninth"
-          />
-          <input
-            type="text"
-            placeholder="Status"
-            value={inputs.status}
-            onChange={handleChange}
-            id="status"
-            className="fadeIn tenth"
-          />
 
           <input
             type="button"

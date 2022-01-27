@@ -278,6 +278,9 @@ input[type="text"]:placeholder {
 .fadeIn.tenth {
   animation-delay: 1.1s;
 }
+.fadeIn.eleventh {
+  animation-delay: 1.2s;
+}
 
 /* Simple CSS3 Fade-in Animation */
 .underlineHover:after {

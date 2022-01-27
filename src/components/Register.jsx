@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import authService from "../services/authService";
+import authService from "../services/userService";
 import "../styles/login.css";
 
 const Register = () => {
@@ -9,6 +9,7 @@ const Register = () => {
     password: "",
     phone: "",
     city: "",
+    linkedin: "",
     course: "",
     cohort: "",
     status: ""
@@ -18,8 +19,8 @@ const Register = () => {
     setInput({ ...input, [event.target.id]: event.target.value });
   };
 
-  const handleSubmit = () => {
-    authService.login({ ...input });
+  const doSubmit = async () => {
+    await authService.register(input);
   };
 
   return (
@@ -78,13 +79,32 @@ const Register = () => {
             id="course"
             className="fadeIn seventh"
           />
+          <div className="dropdown-show">
+            <p
+              className="btn btn-secodary dropdown-toggle"
+              id="dropdownMenuButton"
+            >
+              Course
+            </p>
+          </div>
+          <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
+            <p className="dropdown-item" />
+          </div>
+          <input
+            type="text"
+            placeholder="LinkedIn"
+            value={input.linkedin}
+            onChange={handleChange}
+            id="linkedin"
+            className="fadeIn eighth"
+          />
           <input
             type="text"
             placeholder="Cohort"
             value={input.cohort}
             onChange={handleChange}
             id="cohort"
-            className="fadeIn eighth"
+            className="fadeIn ninth"
           />
           <input
             type="text"
@@ -92,14 +112,14 @@ const Register = () => {
             value={input.status}
             onChange={handleChange}
             id="status"
-            className="fadeIn ninth"
+            className="fadeIn tenth"
           />
 
           <input
             type="button"
             value="register"
-            onClick={handleSubmit}
-            className="fadeIn tenth"
+            onClick={doSubmit}
+            className="fadeIn eleventh"
           />
         </div>
 

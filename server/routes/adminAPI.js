@@ -307,4 +307,36 @@ router.post("/users", async function (req, res) {
   });
 });
 
+router.post("/courses/cohort", async (req, res) => {
+  let cohortToAdd = req.body;
+  if (!cohortToAdd.courseId) {
+    res.status(400).send({ error: "Cant find course" });
+    return null;
+  }
+
+  let myDate = moment(cohortToAdd.start_date).format("L");
+  let newCohort = new Cohort({
+    name: cohortToAdd.name,
+    start_date: myDate,
+    users: [],
+  });
+
+  newCohort.save();
+
+  await Course.findByIdAndUpdate(
+    { _id: cohortToAdd.courseId },
+    {
+      $push: {
+        cohorts: newCohort,
+      },
+    },
+    { new: true }
+  ).exec(function (err, newCohort) {
+    if (err) {
+      res.send({ error: "can't add cohort" });
+    }
+    res.send(newCohort);
+  });
+});
+
 module.exports = router;

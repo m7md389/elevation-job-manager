@@ -17,20 +17,37 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import "../styles/detailed-course.css";
+import AddIcon from '@mui/icons-material/Add';
+import Stack from '@mui/material/Stack';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DateAdapter from '@mui/lab/AdapterMoment';
+import DialogContent from '@mui/material/DialogContent';
+import TextField from '@mui/material/TextField';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import MobileDatePicker from '@mui/lab/MobileDatePicker';
+import DialogActions from '@mui/material/DialogActions';
+import Button from '@mui/material/Button';
+import axios from "axios";
 
 const Course = () => {
+  const URL = 'http://localhost:3001'
   const params = useParams();
   const navigate = useNavigate();
 
+  const [refresh, setRefresh] = useState(1)
+  const [open, setOpen] = useState(false);
+  const [date, setDate] = useState(new Date(Date.now()));
   let [course, setCourse] = useState();
   let [filteredCohorts, setFilteredCohorts] = useState();
   let [cohort, setCohort] = useState('all-cohorts');
+  const [cohortName, setCohortName] = useState("")
 
   useEffect(async () => {
     let c = await httpService.getCourseDetails(params.courseName);
     setFilteredCohorts(c.cohorts);
     setCourse(c);
-  }, []);
+  }, [refresh]);
 
   useEffect(async () => {
     if (!course) return null;
@@ -49,6 +66,10 @@ const Course = () => {
     setCohort(event.target.value);
   };
 
+  const handleInputChange = (event) => {
+    setCohortName(event.target.value)
+}
+
   const getTableRows = () => {
     let users = [];
     filteredCohorts.forEach((cohort) => {
@@ -66,22 +87,65 @@ const Course = () => {
   };
 
   const getCohorts = () => {
-    let cohorts = ['all-cohorts'];
+    let cohorts = [];
     course.cohorts.forEach((cohort) => {
       cohorts.push(cohort);
     });
     return cohorts;
   };
 
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleDateChange = (newValue) => {
+    setDate(newValue);
+  };
+
+  const handleAddCohort = () => {
+    if (!cohortName || !date) { return }
+    let Cohort = {
+      name: cohortName,
+      start_date: date,
+      courseId: course._id
+    }
+    axios.post(`${URL}/courses/cohort`, Cohort).then(() => {
+      setRefresh(refresh + 1)
+    })
+    setOpen(false);
+  }
+
   if (!course) return null;
   if (course.error) return <PageNotFound />;
 
+  
   const cohorts = getCohorts();
 
   return (
     <div className="course-container">
       <Title text={course.title} />
-
+      <div>
+        <Stack direction="row" spacing={2}>
+          <AddIcon onClick={handleClickOpen} variant="outlined" className="add-icon" />
+        </Stack>
+        <Dialog open={open} onClose={handleClose}>
+            <DialogTitle>Add Cohort :</DialogTitle>
+            <DialogContent>
+                <TextField autoFocus margin="dense" onChange={(e) => { handleInputChange(e, "name") }} value={cohortName} id="cohortName" label="Cohort Name" type="text" fullWidth variant="standard" required />
+                <div className='datePicker'>
+                    <LocalizationProvider dateAdapter={DateAdapter}><MobileDatePicker label="Date" inputFormat="DD/MM/yyyy" value={date} onChange={handleDateChange} renderInput={(params) => <TextField {...params} />} /></LocalizationProvider>
+                </div>
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={handleClose}>Cancel</Button>
+                <Button onClick={handleAddCohort}>Add</Button>
+            </DialogActions>
+        </Dialog>
+      </div>
       <div className="filters-detail box">
         <Box id="box" sx={{ minWidth: 120 }}>
           <FormControl fullWidth>

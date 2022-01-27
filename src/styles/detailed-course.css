@@ -16,3 +16,23 @@
   width: 40%;
   margin: 3rem auto 2.5rem;
 }
+
+.add-icon {
+  border: 1px solid #2196f3;
+  border-radius: 50%;
+  color: #2196f3;
+}
+
+.add-course-container {
+  width: 80%;
+  margin: 0 auto;
+  /* font-size: 22px; */
+  padding: 10px;
+}
+
+.add-icon {
+  border: 1px solid #2196f3;
+  border-radius: 50%;
+  color: #2196f3;
+  margin-left: 10%;
+}

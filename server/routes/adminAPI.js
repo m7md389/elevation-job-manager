@@ -98,25 +98,6 @@ router.get("/courses/names", async function (req, res) {
     let courses = await Course.find({}).populate({
         path: "cohorts",
         populate: {
-            path: "jobs",
-            populate: {
-                path: "interviews",
-            },
-        },
-    }
-    )
-        .exec(function (err, courses) {
-            if (err) {
-                console.log(err);
-            }
-            res.send(courses);
-        });
-});
-
-router.get("/courses/names", async function (req, res) {
-    let courses = await Course.find({}).populate({
-        path: "cohorts",
-        populate: {
             path: "users",
         },
     });
@@ -244,7 +225,7 @@ router.post("/jobs/Interviews", async function (req, res) {
     });
     newInterview.save();
 
-    await Jobs.findByIdAndUpdate(
+    await Jobs.findOneAndUpdate(
         { _id: tempInterview.jobId },
         {
             $push: { interviews: newInterview },

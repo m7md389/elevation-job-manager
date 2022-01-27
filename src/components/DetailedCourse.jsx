@@ -42,7 +42,7 @@ const Course = () => {
   const [filteredCohorts, setFilteredCohorts] = useState();
   const [cohort, setCohort] = useState('all-cohorts');
   const [selectedStatus, setSelectedStatus] = useState('all-statuses')
-  
+
   const [cohortName, setCohortName] = useState("")
 
   useEffect(async () => {
@@ -74,13 +74,13 @@ const Course = () => {
 
   const handleInputChange = (event) => {
     setCohortName(event.target.value)
-}
+  }
 
   const getTableRows = () => {
     let users = [];
     filteredCohorts.forEach((cohort) => {
       cohort.users.forEach((user) => {
-        if(selectedStatus === "all-statuses" || user.status === selectedStatus){
+        if (selectedStatus === "all-statuses" || user.status === selectedStatus) {
           users.push({
             _id: user._id,
             name: user.name,
@@ -106,7 +106,7 @@ const Course = () => {
     let statuses = [];
     course.cohorts.forEach((cohort) => {
       cohort.users.forEach(student => {
-        if(!statuses.includes(student.status)){
+        if (!statuses.includes(student.status) && student.status) {
           statuses.push(student.status);
         }
       })
@@ -142,7 +142,7 @@ const Course = () => {
   if (!course) return null;
   if (course.error) return <PageNotFound />;
 
-  
+
   const cohorts = getCohorts();
   const statuses = getStatuses();
 
@@ -154,17 +154,17 @@ const Course = () => {
           <AddIcon onClick={handleClickOpen} variant="outlined" className="add-icon" />
         </Stack>
         <Dialog open={open} onClose={handleClose}>
-            <DialogTitle>Add Cohort :</DialogTitle>
-            <DialogContent>
-                <TextField autoFocus margin="dense" onChange={(e) => { handleInputChange(e, "name") }} value={cohortName} id="cohortName" label="Cohort Name" type="text" fullWidth variant="standard" required />
-                <div className='datePicker'>
-                    <LocalizationProvider dateAdapter={DateAdapter}><MobileDatePicker label="Date" inputFormat="DD/MM/yyyy" value={date} onChange={handleDateChange} renderInput={(params) => <TextField {...params} />} /></LocalizationProvider>
-                </div>
-            </DialogContent>
-            <DialogActions>
-                <Button onClick={handleClose}>Cancel</Button>
-                <Button onClick={handleAddCohort}>Add</Button>
-            </DialogActions>
+          <DialogTitle>Add Cohort :</DialogTitle>
+          <DialogContent>
+            <TextField autoFocus margin="dense" onChange={(e) => { handleInputChange(e, "name") }} value={cohortName} id="cohortName" label="Cohort Name" type="text" fullWidth variant="standard" required />
+            <div className='datePicker'>
+              <LocalizationProvider dateAdapter={DateAdapter}><MobileDatePicker label="Date" inputFormat="DD/MM/yyyy" value={date} onChange={handleDateChange} renderInput={(params) => <TextField {...params} />} /></LocalizationProvider>
+            </div>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Cancel</Button>
+            <Button onClick={handleAddCohort}>Add</Button>
+          </DialogActions>
         </Dialog>
       </div>
       <div className="filters-detail box">
@@ -181,7 +181,7 @@ const Course = () => {
               <MenuItem value={"all-cohorts"} key={"all-cohorts"}>
                 {"all-cohorts"}
               </MenuItem>
-              {cohorts.map((cohort , idx) => {
+              {cohorts.map((cohort, idx) => {
                 return (
                   <MenuItem value={cohort.name} key={idx}>
                     {cohort.name}
@@ -204,7 +204,7 @@ const Course = () => {
               <MenuItem value={"all-statuses"} key={"all-statuses"}>
                 {"all-statuses"}
               </MenuItem>
-              {statuses.map((status , idx) => {
+              {statuses.map((status, idx) => {
                 return (
                   <MenuItem value={status} key={idx}>
                     {status}

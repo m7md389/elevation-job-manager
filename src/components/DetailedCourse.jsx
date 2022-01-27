@@ -38,9 +38,11 @@ const Course = () => {
   const [refresh, setRefresh] = useState(1)
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState(new Date(Date.now()));
-  let [course, setCourse] = useState();
-  let [filteredCohorts, setFilteredCohorts] = useState();
-  let [cohort, setCohort] = useState('all-cohorts');
+  const [course, setCourse] = useState();
+  const [filteredCohorts, setFilteredCohorts] = useState();
+  const [cohort, setCohort] = useState('all-cohorts');
+  const [selectedStatus, setSelectedStatus] = useState('all-statuses')
+  
   const [cohortName, setCohortName] = useState("")
 
   useEffect(async () => {
@@ -66,6 +68,10 @@ const Course = () => {
     setCohort(event.target.value);
   };
 
+  const handleStatusChange = (event) => {
+    setSelectedStatus(event.target.value)
+  }
+
   const handleInputChange = (event) => {
     setCohortName(event.target.value)
 }
@@ -74,13 +80,15 @@ const Course = () => {
     let users = [];
     filteredCohorts.forEach((cohort) => {
       cohort.users.forEach((user) => {
-        users.push({
-          _id: user._id,
-          name: user.name,
-          phone: user.phone,
-          cohort: cohort.name,
-          status: user.status
-        });
+        if(selectedStatus === "all-statuses" || user.status === selectedStatus){
+          users.push({
+            _id: user._id,
+            name: user.name,
+            phone: user.phone,
+            cohort: cohort.name,
+            status: user.status
+          });
+        }
       });
     });
     return users;
@@ -92,6 +100,18 @@ const Course = () => {
       cohorts.push(cohort);
     });
     return cohorts;
+  };
+
+  const getStatuses = () => {
+    let statuses = [];
+    course.cohorts.forEach((cohort) => {
+      cohort.users.forEach(student => {
+        if(!statuses.includes(student.status)){
+          statuses.push(student.status);
+        }
+      })
+    });
+    return statuses;
   };
 
   const handleClickOpen = () => {
@@ -124,6 +144,7 @@ const Course = () => {
 
   
   const cohorts = getCohorts();
+  const statuses = getStatuses();
 
   return (
     <div className="course-container">
@@ -164,6 +185,29 @@ const Course = () => {
                 return (
                   <MenuItem value={cohort.name} key={idx}>
                     {cohort.name}
+                  </MenuItem>
+                );
+              })}
+            </Select>
+          </FormControl>
+        </Box>
+        <Box id="box" sx={{ minWidth: 120 }}>
+          <FormControl fullWidth>
+            <InputLabel id="Status">Status</InputLabel>
+            <Select
+              labelId="select-Status"
+              id="select-Status"
+              value={selectedStatus}
+              label="statuses"
+              onChange={handleStatusChange}
+            >
+              <MenuItem value={"all-statuses"} key={"all-statuses"}>
+                {"all-statuses"}
+              </MenuItem>
+              {statuses.map((status , idx) => {
+                return (
+                  <MenuItem value={status} key={idx}>
+                    {status}
                   </MenuItem>
                 );
               })}

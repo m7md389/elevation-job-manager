@@ -1,20 +1,16 @@
-BASIC html {
-  background-color: #56baed;
-}
-
 body {
   font-family: "Poppins", sans-serif;
   height: 100vh;
 }
 
-a {
+.custom-link {
   color: #92badd;
   display: inline-block;
   text-decoration: none;
   font-weight: 400;
 }
 
-h2 {
+/* h2 {
   text-align: center;
   font-size: 16px;
   font-weight: 600;
@@ -22,7 +18,7 @@ h2 {
   display: inline-block;
   margin: 40px 8px 10px 8px;
   color: #cccccc;
-}
+} */
 
 /* STRUCTURE */
 
@@ -47,12 +43,19 @@ h2 {
   padding: 30px;
   margin: 30px;
   width: 90%;
-  max-width: 450px;
   position: relative;
   padding: 0px;
   -webkit-box-shadow: 0 30px 60px 0 rgba(0, 0, 0, 0.3);
   box-shadow: 0 30px 60px 0 rgba(0, 0, 0, 0.3);
   text-align: center;
+}
+
+.login-content {
+  max-width: 450px;
+}
+
+.register-content {
+  max-width: 900px;
 }
 
 #formFooter {
@@ -70,30 +73,28 @@ h2 {
 
 /* TABS */
 
-h2.inactive {
+/* h2.inactive {
   color: #cccccc;
 }
 
 h2.active {
   color: #0d0d0d;
   border-bottom: 2px solid #5fbae9;
-}
-
-h4 {
-  width: min-content;
-  margin: 0 auto;
-  color: #0f213a;
-}
+} */
 
 /* FORM TYPOGRAPHY*/
+.inputs-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
 
 .title {
+  width: min-content;
+  color: #0f213a;
   margin: 40px auto 20px auto;
 }
 
-input[type="button"],
-input[type="submit"],
-input[type="reset"] {
+.submit {
   background-color: #ff96aa;
   border: none;
   color: white;
@@ -115,15 +116,11 @@ input[type="reset"] {
   transition: all 0.3s ease-in-out;
 }
 
-input[type="button"]:hover,
-input[type="submit"]:hover,
-input[type="reset"]:hover {
+.submit:hover {
   background-color: #880e25;
 }
 
-input[type="button"]:active,
-input[type="submit"]:active,
-input[type="reset"]:active {
+.submit:active {
   -moz-transform: scale(0.95);
   -webkit-transform: scale(0.95);
   -o-transform: scale(0.95);
@@ -131,9 +128,7 @@ input[type="reset"]:active {
   transform: scale(0.95);
 }
 
-input[type="text"],
-input[type="email"],
-input[type="password"] {
+.input {
   background-color: #f6f6f6;
   border: none;
   color: #0d0d0d;
@@ -142,7 +137,7 @@ input[type="password"] {
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
-  margin: 10px;
+  margin: 10px auto;
   width: 85%;
   border: 2px solid #f6f6f6;
   -webkit-transition: all 0.5s ease-in-out;
@@ -163,8 +158,12 @@ input[type="password"] {
   border-bottom: 2px solid #5fbae9;
 }
 
-input[type="text"]:placeholder {
+.input:placeholder {
   color: #cccccc;
+}
+
+.dropdown-course {
+  margin: 0 auto;
 }
 
 #formFooter > span {

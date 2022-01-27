@@ -11,6 +11,7 @@ import "./App.css";
 import AdminHome from './components/AdminHome'
 import Student from "./components/Student";
 import AccountSettings from "./components/AccountSettings";
+import AdminDashboard from "./components/AdminDashboard";
 export default function App() {
   return (
     <BrowserRouter>
@@ -26,6 +27,7 @@ export default function App() {
         <Route path="/settings" element={<AccountSettings />} />
         <Route path="/student/:id" element={<Student />} /> {/*/student/:id*/}
         <Route path="/student" element={<Student />} /> {/*/student/:id*/}
+        <Route path="/" element={<AdminDashboard />} /> {/*/student/:id*/}
       </Routes>
 
       <Footer />

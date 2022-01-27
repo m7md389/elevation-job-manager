@@ -14,6 +14,7 @@ const Register = () => {
     cohort: "default",
     status: "default"
   });
+  let [isdropdownCourseOpened, setIsdropdownCourseOpened] = useState(false);
 
   const handleChange = (event) => {
     setInput({ ...inputs, [event.target.id]: event.target.value });
@@ -25,7 +26,7 @@ const Register = () => {
 
   return (
     <div className="wrapper fadeInDown">
-      <div id="formContent">
+      <div id="formContent" className="register-content">
         <div className="title">
           <h4 className="fadeIn first">Register</h4>
         </div>
@@ -150,13 +151,6 @@ const Register = () => {
             className="submit fadeIn twelfth"
           />
         </div>
-
-        {/* <div id="formFooter">
-          <span>Dont have account?</span>
-          <Link className="underlineHover" to="/register">
-            Create one
-          </Link>
-        </div> */}
       </div>
     </div>
   );

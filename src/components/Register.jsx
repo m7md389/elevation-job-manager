@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import authService from "../services/authService";
-import "../styles/login.css";
+// import "../styles/login.css";
 
 const Register = () => {
   let [input, setInput] = useState({

@@ -43,7 +43,6 @@ const AccountSettings = () => {
     const handlePasswordChange = () => {
         let tempPasswordChangeInput = { ...passwordChangeInput }
         tempPasswordChangeInput["userId"] = userId
-        console.log(tempPasswordChangeInput);
         axios.put(`${URL}password`, tempPasswordChangeInput)
             .then(res => {
                 if (res.data.error) {

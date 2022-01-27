@@ -1,5 +1,5 @@
 import * as React from 'react';
-import 'reactjs-popup/dist/index.css';
+import { useState } from 'react';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
@@ -19,30 +19,32 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DateAdapter from '@mui/lab/AdapterMoment';
 import MobileDatePicker from '@mui/lab/MobileDatePicker';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import { useParams } from 'react-router-dom';
+import Dropdown from 'react-dropdown';
+import 'react-dropdown/style.css';
 
 export default function Student() {
     let URL = "http://localhost:3001/jobs"
 
-    const userId = '61efeb22ed0d90af133e9460'
+    const params = useParams()
+    const userId = params.id
+    const [date, setDate] = useState(new Date(Date.now()));
+    const [refresh, setRefresh] = useState(1)
+    const [jobs, setJobs] = useState([])
+    const [company, setCompany] = useState('');
+    const [open, setOpen] = useState(false);
+    const [jobsInputs, setJobsInputs] = useState({ title: "", link: "", company: "" })
 
-    const [date, setDate] = React.useState(new Date(Date.now()));
+    const companies = ['All companies', 'Yad2', 'Facebook', 'Twitter', 'Intel']
+    const statuses = ['All status', 'Accepted', 'waiting', 'Applied', 'no reply']
+    const statusesForAddJob = ['', 'Accepted', 'waiting', 'Applied', 'no reply']
 
-    const [addedJobFlag, setAddedJobFlag] = React.useState(1)
-    const [jobs, setJobs] = React.useState([])
-
-    const [company, setCompany] = React.useState('');
-
-    const [open, setOpen] = React.useState(false);
-
-    const [jobsInputs, setJobsInputs] = React.useState({ title: "", link: "", company: "" })
+    const [statusOption, setStatusOption] = useState(statusesForAddJob[0])
 
     React.useEffect(async () => {
         let res = (await axios.get(`${URL}/${userId}`)).data
         setJobs(res)
-    }, [addedJobFlag])
-
-    const companies = ['All companies', 'Yad2', 'Facebook', 'Twitter', 'Intel']
-    const statuses = ['All status', 'Accepted', 'waiting', 'Applied', 'no reply']
+    }, [refresh])
 
     const handleChange = (event) => {
         setCompany(event.target.value);
@@ -56,6 +58,14 @@ export default function Student() {
         setOpen(false);
     };
 
+    const handleDateChange = (newValue) => {
+        setDate(newValue);
+    };
+
+    const handleStatusChange = e => {
+        setStatusOption(e.value)
+    }
+
     const handleInputChange = (event, key) => {
         let tempJobsInputs = { ...jobsInputs }
         tempJobsInputs[key] = event.target.value
@@ -63,24 +73,21 @@ export default function Student() {
     }
 
     const handleAddJob = () => {
-        if (!jobsInputs.title || !jobsInputs.link || !jobsInputs.company || !date) { return }
+        if (!jobsInputs.title || !jobsInputs.link || !jobsInputs.company || !date || !statusOption) { return }
         let newJob = {
             title: jobsInputs.title,
             link: jobsInputs.link,
             company: jobsInputs.company,
             date: date,
+            status: statusOption,
             userId: userId
         }
-        // 
         axios.post(`${URL}`, newJob).then(() => {
-            setAddedJobFlag(addedJobFlag + 1)
+            setRefresh(refresh + 1)
         })
         setOpen(false);
     };
 
-    const handleDateChange = (newValue) => {
-        setDate(newValue);
-    };
 
     return (
         <div className='student-page-container'>
@@ -143,9 +150,10 @@ export default function Student() {
                         <DialogContent>
                             <TextField autoFocus margin="dense" onChange={(e) => { handleInputChange(e, "title") }} value={jobsInputs.title} id="title" label="Job Title" type="text" fullWidth variant="standard" required />
                             <TextField autoFocus margin="dense" onChange={(e) => { handleInputChange(e, "link") }} value={jobsInputs.link} id="link" label="Job Link" type="text" fullWidth variant="standard" required />
-                            <div className='addJob-datePicker'>
-                                <LocalizationProvider dateAdapter={DateAdapter}><MobileDatePicker label="Date mobile" inputFormat="MM/dd/yyyy" value={date} onChange={handleDateChange} renderInput={(params) => <TextField {...params} />} /></LocalizationProvider>
+                            <div className='datePicker'>
+                                <LocalizationProvider dateAdapter={DateAdapter}><MobileDatePicker label="Date" inputFormat="DD/MM/yyyy" value={date} onChange={handleDateChange} renderInput={(params) => <TextField {...params} />} /></LocalizationProvider>
                             </div>
+                            <Dropdown options={statusesForAddJob} onChange={(e) => { handleStatusChange(e) }} value={statusOption} placeholder="Status" required /><br />
                             <TextField autoFocus margin="dense" onChange={(e) => { handleInputChange(e, "company") }} value={jobsInputs.company} id="company" label="Company" type="text" fullWidth variant="standard" required />
                         </DialogContent>
                         <DialogActions>
@@ -154,21 +162,20 @@ export default function Student() {
                         </DialogActions>
                     </Dialog>
                 </div>
-            </div>
-            <div className='jobs-title'>
-                <div>job name</div>
-                <div className='vLine'>company</div>
-                <div className='vLine'>date</div>
-                <div className='vLine'>last interview</div>
-                <div className='vLine'>status</div>
-            </div>
-            <div className='rows'>
-                {
-                    jobs.map((j, idx) => {
-                        return <Job key={idx} job={j} />
-                    })
-                }
+                <div className='jobs-title'>
+                    <div>job name</div>
+                    <div className='vLine'>company</div>
+                    <div className='vLine'>date</div>
+                    <div className='vLine'>last interview</div>
+                    <div className='vLine'>status</div>
+                </div>
+                <div className='rows'>
+                    {
+                        jobs.map((j, idx) => {
+                            return <Job refresh={refresh} setRefresh={setRefresh} key={idx} job={j} />
+                        })
+                    }
+                </div >
             </div >
-        </div >
-    );
+            );
 }

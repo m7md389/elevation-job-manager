@@ -82,7 +82,7 @@ const Course = () => {
     <div className="course-container">
       <Title text={course.title} />
 
-      <div classNamee="filters-detail box">
+      <div className="filters-detail box">
         <Box id="box" sx={{ minWidth: 120 }}>
           <FormControl fullWidth>
             <InputLabel id="cohorts">Cohorts</InputLabel>

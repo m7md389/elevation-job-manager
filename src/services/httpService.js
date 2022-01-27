@@ -18,7 +18,7 @@ export const getCourseDetails = async (courseName) => {
 
 export const login = (user) => {
     try {
-        const routeLink = `${LOCAL_API_LINK}/users`;
+        const routeLink = `${LOCAL_API_LINK}/??`;
         axios.post(routeLink, {
             body: {
                 email: user.email,

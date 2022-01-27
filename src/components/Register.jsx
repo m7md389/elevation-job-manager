@@ -122,7 +122,7 @@ const Register = () => {
           <input
             type="text"
             placeholder="LinkedIn"
-            value={input.linkedin}
+            value={inputs.linkedin}
             onChange={handleChange}
             id="linkedin"
             className="fadeIn eighth"
@@ -130,7 +130,7 @@ const Register = () => {
           <input
             type="text"
             placeholder="Cohort"
-            value={input.cohort}
+            value={inputs.cohort}
             onChange={handleChange}
             id="cohort"
             className="fadeIn ninth"
@@ -138,7 +138,7 @@ const Register = () => {
           <input
             type="text"
             placeholder="Status"
-            value={input.status}
+            value={inputs.status}
             onChange={handleChange}
             id="status"
             className="fadeIn tenth"

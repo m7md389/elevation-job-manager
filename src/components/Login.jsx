@@ -40,7 +40,7 @@ const Login = () => {
           />
           <input
             type="submit"
-            onClick={handleSubmit}
+            onClick={doSubmit}
             className="submit fadeIn fourth"
           />
         </div>

@@ -1,5 +1,5 @@
 import React from "react";
-import "../styles/Course.css";
+import "../styles/course.css";
 
 function Course(props) {
   const course = props.course;

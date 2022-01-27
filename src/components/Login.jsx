@@ -1,7 +1,12 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+<<<<<<< HEAD
 import authService from "../services/userService";
 import "../styles/login.css";
+=======
+import authService from "../services/authService";
+// import "../styles/login.css";
+>>>>>>> master
 
 const Login = () => {
   let [input, setInput] = useState({ email: "", password: "" });

@@ -1,6 +1,11 @@
 import React, { useState } from "react";
+<<<<<<< HEAD
 import authService from "../services/userService";
 import "../styles/login.css";
+=======
+import authService from "../services/authService";
+// import "../styles/login.css";
+>>>>>>> master
 
 const Register = () => {
   let [input, setInput] = useState({

@@ -1,27 +1,26 @@
-.course{
-    width: 300px;
-    height: 150px;
-    margin: 20px 0 ;
-    text-align: center;
-    position: relative;
+.course {
+  width: 300px;
+  height: 150px;
+  margin: 20px auto;
+  text-align: center;
+  position: relative;
 }
 
-.course-name{
-    margin: 5px 0;
-    font-weight: bold;
+.course-name {
+  margin: 5px 0;
+  font-weight: bold;
 }
 
-.info{
-    width: 100%;
-    position: absolute;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    bottom: 0;
+.info {
+  width: 100%;
+  position: absolute;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  bottom: 0;
 }
 
 @media only screen and (max-width: 810px) {
-    .course {
-       width: 100%;
-    }
+  .course {
+    width: 100%;
   }
-  
+}

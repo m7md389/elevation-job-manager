@@ -1,22 +1,17 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-<<<<<<< HEAD
 import authService from "../services/userService";
 import "../styles/login.css";
-=======
-import authService from "../services/authService";
-// import "../styles/login.css";
->>>>>>> master
 
 const Login = () => {
-  let [input, setInput] = useState({ email: "", password: "" });
+  let [inputs, setInput] = useState({ email: "", password: "" });
 
   const handleChange = (event) => {
-    setInput({ ...input, [event.target.id]: event.target.value });
+    setInput({ ...inputs, [event.target.id]: event.target.value });
   };
 
-  const handleSubmit = () => {
-    authService.login({ ...input });
+  const doSubmit = () => {
+    authService.login(inputs);
   };
 
   return (
@@ -30,7 +25,7 @@ const Login = () => {
           <input
             type="email"
             placeholder="Email"
-            value={input.email}
+            value={inputs.email}
             onChange={handleChange}
             id="email"
             className="fadeIn second"
@@ -38,7 +33,7 @@ const Login = () => {
           <input
             type="password"
             placeholder="Password"
-            value={input.password}
+            value={inputs.password}
             onChange={handleChange}
             id="password"
             className="fadeIn third"

@@ -1,31 +1,26 @@
 import React, { useState } from "react";
-<<<<<<< HEAD
 import authService from "../services/userService";
 import "../styles/login.css";
-=======
-import authService from "../services/authService";
-// import "../styles/login.css";
->>>>>>> master
 
 const Register = () => {
-  let [input, setInput] = useState({
+  let [inputs, setInput] = useState({
     name: "",
     email: "",
     password: "",
     phone: "",
     city: "",
     linkedin: "",
-    course: "",
-    cohort: "",
-    status: ""
+    course: "default",
+    cohort: "default",
+    status: "default"
   });
 
   const handleChange = (event) => {
-    setInput({ ...input, [event.target.id]: event.target.value });
+    setInput({ ...inputs, [event.target.id]: event.target.value });
   };
 
   const doSubmit = async () => {
-    await authService.register(input);
+    await authService.register(inputs);
   };
 
   return (
@@ -36,64 +31,92 @@ const Register = () => {
         </div>
 
         <div className="form">
-          <input
-            type="text"
-            placeholder="Name"
-            value={input.name}
-            onChange={handleChange}
-            id="name"
-            className="fadeIn second"
-          />
-          <input
-            type="text"
-            placeholder="Email"
-            value={input.email}
-            onChange={handleChange}
-            id="email"
-            className="fadeIn third"
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            value={input.password}
-            onChange={handleChange}
-            id="password"
-            className="fadeIn fourth"
-          />
-          <input
-            type="text"
-            placeholder="Phone"
-            value={input.phone}
-            onChange={handleChange}
-            id="phone"
-            className="fadeIn fifth"
-          />
-          <input
-            type="text"
-            placeholder="City"
-            value={input.city}
-            onChange={handleChange}
-            id="city"
-            className="fadeIn sixth"
-          />
-          <input
-            type="text"
-            placeholder="Course"
-            value={input.course}
-            onChange={handleChange}
-            id="course"
-            className="fadeIn seventh"
-          />
-          <div className="dropdown-show">
-            <p
-              className="btn btn-secodary dropdown-toggle"
-              id="dropdownMenuButton"
+          <div className="inputs-container">
+            <input
+              type="text"
+              placeholder="Name"
+              value={inputs.name}
+              onChange={handleChange}
+              id="name"
+              className="input fadeIn second"
+            />
+            <input
+              type="text"
+              placeholder="Email"
+              value={inputs.email}
+              onChange={handleChange}
+              id="email"
+              className="input fadeIn third"
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              value={inputs.password}
+              onChange={handleChange}
+              id="password"
+              className="input fadeIn fourth"
+            />
+            <input
+              type="text"
+              placeholder="Phone"
+              value={inputs.phone}
+              onChange={handleChange}
+              id="phone"
+              className="input fadeIn fifth"
+            />
+            <input
+              type="text"
+              placeholder="City"
+              value={inputs.city}
+              onChange={handleChange}
+              id="city"
+              className="input fadeIn sixth"
+            />
+            <input
+              type="text"
+              placeholder="LinkedIn"
+              value={inputs.linkedin}
+              onChange={handleChange}
+              id="linkedin"
+              className="input fadeIn seventh"
+            />
+            <select
+              className="input fadeIn ninth"
+              name="course"
+              onChange={handleChange}
+              id="course"
+              value={inputs.course}
             >
-              Course
-            </p>
-          </div>
-          <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
-            <p className="dropdown-item" />
+              <option className="defult-value" value="default" disabled>
+                Course
+              </option>
+              <option value="full-stack">full-stack</option>
+            </select>
+            <select
+              className="input fadeIn tenth"
+              name="cohort"
+              onChange={handleChange}
+              id="cohort"
+              value={inputs.cohort}
+            >
+              <option className="defult-value" value="default" disabled>
+                Cohort
+              </option>
+              <option value="cohort-22">cohort-22</option>
+              <option value="cohort-11">cohort-11</option>
+            </select>
+            <select
+              className="input fadeIn eleventh"
+              name="status"
+              onChange={handleChange}
+              id="status"
+              value={inputs.status}
+            >
+              <option className="defult-value" value="default" disabled>
+                Status
+              </option>
+              <option value="stydying">Studying</option>
+            </select>
           </div>
           <input
             type="text"
@@ -124,7 +147,7 @@ const Register = () => {
             type="button"
             value="register"
             onClick={doSubmit}
-            className="fadeIn eleventh"
+            className="submit fadeIn twelfth"
           />
         </div>
 

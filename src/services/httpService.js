@@ -1,11 +1,11 @@
 import axios from "axios";
 
-const LOCAL_API_LINK = `http://localhost:3001`;
+const apiUrl = `http://localhost:3001`;
 
 export const getCourseDetails = async (courseName) => {
   try {
-    const routeLink = `${LOCAL_API_LINK}/courses/${courseName}`;
-    const courseDetails = await axios.get(routeLink);
+    const apiEndpoint = `${apiUrl}/courses/${courseName}`;
+    const courseDetails = await axios.get(apiEndpoint);
 
     if (courseDetails.data.error) {
       return { error: "something went wrong" };
@@ -16,6 +16,18 @@ export const getCourseDetails = async (courseName) => {
   }
 };
 
-export const login = (user) => {};
+export const login = (user) => {
+  try {
+    const apiEndpoint = `${apiUrl}/??`;
+    axios.post(apiEndpoint, {
+      body: {
+        email: user.email,
+        password: user.password
+      }
+    });
+  } catch (error) {
+    return "error";
+  }
+};
 
 export default { getCourseDetails };

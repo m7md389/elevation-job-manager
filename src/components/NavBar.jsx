@@ -4,7 +4,12 @@ import "../styles/navbar.css";
 
 const NavBar = () => {
   const [isOpenedDropdown, setIsOpenedDropdown] = useState(false);
+  const [isOpenedNavbar, setIsOpenedNavbar] = useState(false);
   const menuClass = `dropdown-menu${isOpenedDropdown ? " show" : ""}`;
+  const navbarClass = `collapse navbar-collapse${
+    isOpenedNavbar ? " show" : ""
+  }`;
+
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <NavLink className="navbar-brand" to="/">
@@ -18,6 +23,9 @@ const NavBar = () => {
       </NavLink>
       <button
         className="navbar-toggler"
+        onClick={() => {
+          setIsOpenedNavbar(!isOpenedNavbar);
+        }}
         type="button"
         data-toggle="collapse"
         data-target="#navbarNav"
@@ -28,7 +36,7 @@ const NavBar = () => {
         <span className="navbar-toggler-icon" />
       </button>
 
-      <div className="collapse navbar-collapse" id="navbarNav">
+      <div className={navbarClass} id="navbarNav">
         <div className="navbar-nav">
           <NavLink className="nav-item nav-link" to="/courses">
             Courses
@@ -58,6 +66,7 @@ const NavBar = () => {
                 alt=""
               />
             </Link>
+
             <div
               id="user-settings-dropdown"
               className={menuClass}

@@ -1,38 +1,39 @@
-import axios from "axios";
+import http from "./httpService";
+import Cookies from "universal-cookie";
+import jwtDecode from "jwt-decode";
 
-const apiUrl = `http://localhost:3001`;
-const apiEndpoint = apiUrl + "/users";
+const apiUrl = "http://localhost:3001/api";
+const apiEndpoint = apiUrl + "/auth";
+const cookies = new Cookies();
 
-export const login = (user) => {
-  return axios.post(apiEndpoint, {
-    email: user.email,
-    password: user.password
+const tokenKey = "token";
+export const login = async (email, password) => {
+  const { data: token } = await http.post(apiEndpoint, {
+    email,
+    password
   });
+  cookies.set(tokenKey, token, { path: "/" });
 };
 
-export const logout = () => {};
-
-export const register = async (user) => {
-  let register = await axios.post(apiEndpoint, {
-    name: user.name,
-    email: user.email,
-    password: user.password,
-    name: user.name,
-    phone: user.phone,
-    city: user.city,
-    linkedin: user.linkedin,
-    course: user.course,
-    cohort: user.cohort,
-    status: user.status
-  });
-  console.log("hiiii");
-  console.log(user);
-  console.log(register);
-  return register;
+export const loginWithToken = (token) => {
+  cookies.set(tokenKey, token, { path: "/" });
 };
 
-export const isLogin = () => {
-  return false;
+export const logout = () => {
+  cookies.remove(tokenKey, { path: "/" });
 };
 
-export default { login, logout, register, isLogin };
+export const getCurrentUser = () => {
+  try {
+    const token = cookies.get(tokenKey);
+    return jwtDecode(token);
+  } catch (ex) {
+    return null;
+  }
+};
+
+export const getToken = () => {
+  return cookies.get(tokenKey);
+};
+
+export default { login, loginWithToken, logout, getCurrentUser, getToken };

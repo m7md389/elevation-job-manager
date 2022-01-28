@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { observer, inject } from "mobx-react";
-import httpService from "../services/httpService";
+import courseService from "../services/courseService";
 import PageNotFound from "./PageNotFound";
 import Title from "./common/Title";
 import Table from "@mui/material/Table";
@@ -17,36 +17,36 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import "../styles/detailed-course.css";
-import AddIcon from '@mui/icons-material/Add';
-import Stack from '@mui/material/Stack';
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DateAdapter from '@mui/lab/AdapterMoment';
-import DialogContent from '@mui/material/DialogContent';
-import TextField from '@mui/material/TextField';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import MobileDatePicker from '@mui/lab/MobileDatePicker';
-import DialogActions from '@mui/material/DialogActions';
-import Button from '@mui/material/Button';
+import AddIcon from "@mui/icons-material/Add";
+import Stack from "@mui/material/Stack";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DateAdapter from "@mui/lab/AdapterMoment";
+import DialogContent from "@mui/material/DialogContent";
+import TextField from "@mui/material/TextField";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import MobileDatePicker from "@mui/lab/MobileDatePicker";
+import DialogActions from "@mui/material/DialogActions";
+import Button from "@mui/material/Button";
 import axios from "axios";
 
 const Course = () => {
-  const URL = 'http://localhost:3001'
+  const URL = "http://localhost:3001";
   const params = useParams();
   const navigate = useNavigate();
 
-  const [refresh, setRefresh] = useState(1)
+  const [refresh, setRefresh] = useState(1);
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState(new Date(Date.now()));
   const [course, setCourse] = useState();
   const [filteredCohorts, setFilteredCohorts] = useState();
-  const [cohort, setCohort] = useState('all-cohorts');
-  const [selectedStatus, setSelectedStatus] = useState('all-statuses')
+  const [cohort, setCohort] = useState("all-cohorts");
+  const [selectedStatus, setSelectedStatus] = useState("all-statuses");
 
-  const [cohortName, setCohortName] = useState("")
+  const [cohortName, setCohortName] = useState("");
 
   useEffect(async () => {
-    let c = await httpService.getCourseDetails(params.courseName);
+    let c = await courseService.getCourseDetails(params.courseName);
     setFilteredCohorts(c.cohorts);
     setCourse(c);
   }, [refresh]);
@@ -69,18 +69,21 @@ const Course = () => {
   };
 
   const handleStatusChange = (event) => {
-    setSelectedStatus(event.target.value)
-  }
+    setSelectedStatus(event.target.value);
+  };
 
   const handleInputChange = (event) => {
-    setCohortName(event.target.value)
-  }
+    setCohortName(event.target.value);
+  };
 
   const getTableRows = () => {
     let users = [];
     filteredCohorts.forEach((cohort) => {
       cohort.users.forEach((user) => {
-        if (selectedStatus === "all-statuses" || user.status === selectedStatus) {
+        if (
+          selectedStatus === "all-statuses" ||
+          user.status === selectedStatus
+        ) {
           users.push({
             _id: user._id,
             name: user.name,
@@ -105,11 +108,11 @@ const Course = () => {
   const getStatuses = () => {
     let statuses = [];
     course.cohorts.forEach((cohort) => {
-      cohort.users.forEach(student => {
+      cohort.users.forEach((student) => {
         if (!statuses.includes(student.status) && student.status) {
           statuses.push(student.status);
         }
-      })
+      });
     });
     return statuses;
   };
@@ -127,21 +130,22 @@ const Course = () => {
   };
 
   const handleAddCohort = () => {
-    if (!cohortName || !date) { return }
+    if (!cohortName || !date) {
+      return;
+    }
     let Cohort = {
       name: cohortName,
       start_date: date,
       courseId: course._id
-    }
+    };
     axios.post(`${URL}/courses/cohort`, Cohort).then(() => {
-      setRefresh(refresh + 1)
-    })
+      setRefresh(refresh + 1);
+    });
     setOpen(false);
-  }
+  };
 
   if (!course) return null;
   if (course.error) return <PageNotFound />;
-
 
   const cohorts = getCohorts();
   const statuses = getStatuses();
@@ -151,14 +155,39 @@ const Course = () => {
       <Title text={course.title} />
       <div>
         <Stack direction="row" spacing={2}>
-          <AddIcon onClick={handleClickOpen} variant="outlined" className="add-icon" />
+          <AddIcon
+            onClick={handleClickOpen}
+            variant="outlined"
+            className="add-icon"
+          />
         </Stack>
         <Dialog open={open} onClose={handleClose}>
           <DialogTitle>Add Cohort :</DialogTitle>
           <DialogContent>
-            <TextField autoFocus margin="dense" onChange={(e) => { handleInputChange(e, "name") }} value={cohortName} id="cohortName" label="Cohort Name" type="text" fullWidth variant="standard" required />
-            <div className='datePicker'>
-              <LocalizationProvider dateAdapter={DateAdapter}><MobileDatePicker label="Date" inputFormat="DD/MM/yyyy" value={date} onChange={handleDateChange} renderInput={(params) => <TextField {...params} />} /></LocalizationProvider>
+            <TextField
+              autoFocus
+              margin="dense"
+              onChange={(e) => {
+                handleInputChange(e, "name");
+              }}
+              value={cohortName}
+              id="cohortName"
+              label="Cohort Name"
+              type="text"
+              fullWidth
+              variant="standard"
+              required
+            />
+            <div className="datePicker">
+              <LocalizationProvider dateAdapter={DateAdapter}>
+                <MobileDatePicker
+                  label="Date"
+                  inputFormat="DD/MM/yyyy"
+                  value={date}
+                  onChange={handleDateChange}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </LocalizationProvider>
             </div>
           </DialogContent>
           <DialogActions>

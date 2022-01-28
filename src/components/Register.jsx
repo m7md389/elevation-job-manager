@@ -1,8 +1,13 @@
+import id from "date-fns/esm/locale/id/index.js";
 import React, { useState } from "react";
-import authService from "../services/userService";
+import { Link, useNavigate } from "react-router-dom";
+import auth from "../services/authService";
+import user from "../services/userService";
 import "../styles/login.css";
 
 const Register = () => {
+  const navigate = useNavigate();
+
   let [inputs, setInput] = useState({
     name: "",
     email: "",
@@ -21,7 +26,16 @@ const Register = () => {
   };
 
   const doSubmit = async () => {
-    await authService.register(inputs);
+    try {
+      const response = await user.register(inputs);
+      const token = response.headers["x-auth-token"];
+      auth.loginWithToken(token);
+      window.location = "/";
+    } catch (ex) {
+      if (ex.response && ex.response.status === 400) {
+        alert(ex.response.data);
+      }
+    }
   };
 
   return (
@@ -32,7 +46,7 @@ const Register = () => {
         </div>
 
         <div className="form">
-          <div className="inputs-container">
+          <div className="register-inputs-container">
             <input
               type="text"
               placeholder="Name"
@@ -150,6 +164,13 @@ const Register = () => {
             onClick={doSubmit}
             className="submit fadeIn twelfth"
           />
+        </div>
+
+        <div id="formFooter">
+          <span>Already registered?</span>
+          <Link className="custom-link underlineHover" to="/login">
+            <span className="link-text">Login</span>
+          </Link>
         </div>
       </div>
     </div>

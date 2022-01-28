@@ -1,0 +1,6 @@
+{
+    "jwtPrivateKey": "PRIVATE_KEY!",
+    "db": "mongodb://localhost/elevationJobManager",
+    "port": "3001",
+    "requiresAuth": true
+}

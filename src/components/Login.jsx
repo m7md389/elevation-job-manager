@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import authService from "../services/userService";
+import auth from "../services/authService";
 import "../styles/login.css";
 
 const Login = () => {
@@ -10,8 +10,15 @@ const Login = () => {
     setInput({ ...inputs, [event.target.id]: event.target.value });
   };
 
-  const doSubmit = () => {
-    authService.login(inputs);
+  const doSubmit = async () => {
+    try {
+      await auth.login(inputs.email, inputs.password);
+      window.location = "/";
+    } catch (ex) {
+      if (ex.response && ex.response.status === 400) {
+        alert(ex.response.data);
+      }
+    }
   };
 
   return (
@@ -39,8 +46,9 @@ const Login = () => {
             className="input fadeIn third"
           />
           <input
-            type="submit"
-            onClick={handleSubmit}
+            type="button"
+            value="Login"
+            onClick={doSubmit}
             className="submit fadeIn fourth"
           />
         </div>

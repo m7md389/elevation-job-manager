@@ -11,7 +11,6 @@ router.get("/me", auth, async (req, res) => {
 });
 
 router.post("/", async function (req, res) {
-  console.log(req);
   const { name, email, password, phone, city, linkedin, status } = req.body;
 
   let user = await User.findOne({ email });
@@ -38,6 +37,7 @@ router.post("/", async function (req, res) {
   const token = user.generateAuthToken();
   res
     .header("x-auth-token", token)
+    .header("access-control-expose-headers", "x-auth-token")
     .send(_.pick(user, ["_id", "name", "email"]));
 });
 

@@ -83,7 +83,7 @@ h2.active {
 } */
 
 /* FORM TYPOGRAPHY*/
-.inputs-container {
+.register-inputs-container {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
 }

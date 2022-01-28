@@ -1,33 +1,27 @@
 import axios from "axios";
+// import logger from ("./logService")
+import auth from "./authService";
+import { toast } from "react-toastify";
 
-const apiUrl = `http://localhost:3001`;
+axios.defaults.headers.common["x-auth-token"] = auth.getToken();
 
-export const getCourseDetails = async (courseName) => {
-  try {
-    const apiEndpoint = `${apiUrl}/courses/${courseName}`;
-    const courseDetails = await axios.get(apiEndpoint);
+axios.interceptors.response.use(null, (error) => {
+  const expectedError =
+    error.response &&
+    error.response.status >= 400 &&
+    error.response.status < 500;
 
-    if (courseDetails.data.error) {
-      return { error: "something went wrong" };
-    }
-    return courseDetails.data;
-  } catch (error) {
-    return "error";
+  if (!expectedError) {
+    console.log(error);
+    toast.error("An unexpected error occurred.");
   }
-};
 
-export const login = (user) => {
-  try {
-    const apiEndpoint = `${apiUrl}/??`;
-    axios.post(apiEndpoint, {
-      body: {
-        email: user.email,
-        password: user.password
-      }
-    });
-  } catch (error) {
-    return "error";
-  }
-};
+  return Promise.reject(error);
+});
 
-export default { getCourseDetails };
+export default {
+  post: axios.post,
+  get: axios.get,
+  put: axios.put,
+  delete: axios.delete
+};

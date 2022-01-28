@@ -7,7 +7,8 @@ const users = require("./routes/users");
 const jobs = require("./routes/jobs");
 const interviews = require("./routes/interviews");
 const mongoose = require("mongoose");
-var cookieParser = require("cookie-parser");
+const cookieParser = require("cookie-parser");
+const cors = require("cors");
 
 const app = express();
 const path = require("path");
@@ -30,6 +31,7 @@ app.use(function (req, res, next) {
   next();
 });
 
+app.use(cors());
 app.use("/", api);
 app.use("/api/auth", auth);
 // app.use('/api/courses', courses);

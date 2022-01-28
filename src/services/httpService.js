@@ -1,11 +1,13 @@
 import axios from "axios";
-// import logger from ("./logService")
-import auth from "./authService";
 import { toast } from "react-toastify";
+import Cookies from "universal-cookie";
 
-// axios.defaults.headers.common["x-auth-token"] = auth.getToken();
+const instance = axios.create({
+  baseURL: "http://localhost:3001/api",
+  headers: { "x-auth-token": new Cookies().get("token") }
+});
 
-axios.interceptors.response.use(null, (error) => {
+instance.interceptors.response.use(null, (error) => {
   const expectedError =
     error.response &&
     error.response.status >= 400 &&
@@ -20,8 +22,8 @@ axios.interceptors.response.use(null, (error) => {
 });
 
 export default {
-  post: axios.post,
-  get: axios.get,
-  put: axios.put,
-  delete: axios.delete
+  post: instance.post,
+  get: instance.get,
+  put: instance.put,
+  delete: instance.delete
 };

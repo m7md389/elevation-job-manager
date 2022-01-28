@@ -1,9 +1,8 @@
-import http from "./httpService";
 import Cookies from "universal-cookie";
 import jwtDecode from "jwt-decode";
+import http from "./httpService";
 
-const apiUrl = "http://localhost:3001/api";
-const apiEndpoint = apiUrl + "/auth";
+const apiEndpoint = "/auth";
 const cookies = new Cookies();
 
 const tokenKey = "token";

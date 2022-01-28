@@ -78,7 +78,6 @@ function AdminHome() {
 
 
       <div className="page-container">
-        {console.log(courses)}
         {courses.map((course) => (
           <Link className="course-link" key={course.title} to={`/courses/${course.title}`}>
             <Course course={course} />

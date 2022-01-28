@@ -277,7 +277,7 @@ const Course = () => {
                 className="table-row"
                 key={index}
                 onClick={() => handleRowClick(row._id)}
-                id="1212121212"
+                id={row.id}
               >
                 <TableCell align="center">{row.name}</TableCell>
                 <TableCell align="center">{row.phone}</TableCell>

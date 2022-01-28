@@ -85,7 +85,6 @@ function AdminHome() {
       </Dialog>
 
       <div className="page-container">
-        {console.log(courses)}
         {courses.map((course) => (
           <Link
             className="course-link"

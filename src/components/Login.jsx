@@ -46,8 +46,12 @@ const Login = () => {
             className="input fadeIn third"
           />
           <input
+<<<<<<< HEAD
             type="button"
             value="Login"
+=======
+            type="submit"
+>>>>>>> master
             onClick={doSubmit}
             className="submit fadeIn fourth"
           />

@@ -91,6 +91,15 @@ function AdminDashboard() {
     console.log(e);
   };
 
+  const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: 40 * 4.5 + 5,
+        width: 250,
+      },
+    },
+  };
+
   return (
     <div className="admin-dashboard-container">
       <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -115,6 +124,7 @@ function AdminDashboard() {
         <FormControl fullWidth>
           <InputLabel id="statuses">Select range :</InputLabel>
           <Select
+            MenuProps={MenuProps}
             labelId="select-Range"
             id="select-Range"
             value={range}

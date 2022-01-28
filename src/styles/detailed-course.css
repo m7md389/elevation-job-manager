@@ -1,6 +1,10 @@
+.table-row {
+  box-shadow: 0 2px 5px rgb(102, 123, 145, 0.3);
+  transition: box-shadow 0.2s ease-in-out;
+}
 .table-row:hover {
   cursor: pointer;
-  box-shadow: rgb(102, 123, 145, 0.3) 0px 0px 25px -10px;
+  box-shadow: #ff96aa 1px 5px 15px;
 }
 
 .table-cell {
@@ -31,8 +35,17 @@
 }
 
 .add-icon {
+  margin-left: 10%;
+  border: 1px solid #ff96aa;
+  border-radius: 50%;
+  color: #ff96aa;
+  font-size: 2rem;
+}
+
+.add-icon:hover {
   border: 1px solid #2196f3;
   border-radius: 50%;
   color: #2196f3;
-  margin-left: 10%;
+  transition: 0.9s;
+  transform: rotateY(180deg);
 }

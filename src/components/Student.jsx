@@ -31,23 +31,51 @@ export default function Student() {
     const [date, setDate] = useState(new Date(Date.now()));
     const [refresh, setRefresh] = useState(1)
     const [jobs, setJobs] = useState([])
-    const [company, setCompany] = useState('');
+    const [filteredJobs, setFilteredJobs] = useState([])
     const [open, setOpen] = useState(false);
     const [jobsInputs, setJobsInputs] = useState({ title: "", link: "", company: "" })
-
-    const companies = ['All companies', 'Yad2', 'Facebook', 'Twitter', 'Intel']
-    const statuses = ['All status', 'Accepted', 'waiting', 'Applied', 'no reply']
-    const statusesForAddJob = ['', 'Accepted', 'waiting', 'Applied', 'no reply']
-
+    
+    const statusesForAddJob = ['Applied', 'Accepted', 'waiting', 'no reply']
+    
+    const [company, setCompany] = useState("All");
+    const [status, setStatus] = useState("All");
     const [statusOption, setStatusOption] = useState(statusesForAddJob[0])
 
-    React.useEffect(async () => {
+    const getJobs = async () => {
+        let tempJobs = []
         let res = (await axios.get(`${URL}/${userId}`)).data
+        res.forEach(job => {
+            if(company !== 'All' || status !== 'All'){
+                if(job.company.toLowerCase() === company && job.status.toLowerCase() === status){
+                    tempJobs.push(job)
+                }
+                else{
+                    if(company && status === 'All' && job.company.toLowerCase() === company){tempJobs.push(job)}
+                    if(status && company === 'All' && job.status.toLowerCase() === status){tempJobs.push(job)}
+                    }
+                }
+            else{
+                tempJobs.push(job)
+            }
+        })
         setJobs(res)
+        setFilteredJobs(tempJobs)
+    }
+
+    React.useEffect(async () => {
+        getJobs()
     }, [refresh])
 
-    const handleChange = (event) => {
+    React.useEffect(async () => {
+        getJobs()
+    }, [company,status])
+
+    const handleCompanyChange = (event) => {
         setCompany(event.target.value);
+    };
+
+    const handleStatusChange = (event) => {
+        setStatus(event.target.value);
     };
 
     const handleClickOpen = () => {
@@ -62,7 +90,7 @@ export default function Student() {
         setDate(newValue);
     };
 
-    const handleStatusChange = e => {
+    const handleAddStatusChange = e => {
         setStatusOption(e.value)
     }
 
@@ -88,20 +116,60 @@ export default function Student() {
         setOpen(false);
     };
 
+    const getCompanies = () => {
+        let companies = ['All'];
+        jobs.forEach((job) => {
+            if(!companies.includes(job.company.toLowerCase())){
+                companies.push(job.company.toLowerCase());
+            }
+        });
+        return companies;
+      };
+
+    const getStatuses = () => {
+        let statuses = ['All'];
+        jobs.forEach((job) => {
+            if(!statuses.includes(job.status.toLowerCase())){
+                statuses.push(job.status.toLowerCase());
+            }
+        });
+        return statuses;
+    };
+
+    if (!params || !userId) return null;
+    const companies = getCompanies()
+    const statuses = getStatuses()
+
+    const MenuProps = {
+        PaperProps: {
+          style: {
+            maxHeight: 40 * 4.5 + 5,
+            width: 250,
+          },
+        },
+    };
 
     return (
         <div className='student-page-container'>
+            <div className='student-details'>
+                <p>name: </p>
+                <p>cohort: </p>
+                <p>email: </p>
+                <p>city: </p>
+                <p>phone: </p>
+            </div>
             <div className='filters-detail'>
                 <div className='cont'>
                     <Box sx={{ minWidth: 120 }} className='box'>
                         <FormControl fullWidth>
                             <InputLabel id="companies">Companies</InputLabel>
                             <Select
+                                MenuProps={MenuProps}
                                 labelId="select-companies"
                                 id="select-companies"
-                                value={companies}
+                                value={company}
                                 label="companies"
-                                onChange={handleChange}>
+                                onChange={handleCompanyChange}>
                                 {companies.map((c, idx) => {
                                     return (
                                         <MenuItem key={idx} value={c}>{c}</MenuItem>
@@ -110,15 +178,18 @@ export default function Student() {
                             </Select>
                         </FormControl>
                     </Box>
-                    <Box sx={{ minWidth: 120 }} >
+                </div>
+                <div className='cont'>
+                    <Box sx={{ minWidth: 120 }} className='box' >
                         <FormControl fullWidth>
                             <InputLabel id="statuses">Statuses</InputLabel>
                             <Select
+                                MenuProps={MenuProps}
                                 labelId="select-statuses"
                                 id="select-statuses"
-                                value={statuses}
+                                value={status}
                                 label="statuses"
-                                onChange={handleChange}>
+                                onChange={handleStatusChange}>
                                 {statuses.map((s, idx) => {
                                     return (
                                         <MenuItem key={idx} value={s}>{s}</MenuItem>
@@ -127,15 +198,6 @@ export default function Student() {
                             </Select>
                         </FormControl>
                     </Box>
-
-                </div>
-
-                <div className='right-box-details'>
-                    <p>name : </p>
-                    <p>cohort : </p>
-                    <p>email : </p>
-                    <p>city : </p>
-                    <p>phone : </p>
                 </div>
             </div>
 
@@ -153,7 +215,7 @@ export default function Student() {
                             <div className='datePicker'>
                                 <LocalizationProvider dateAdapter={DateAdapter}><MobileDatePicker label="Date" inputFormat="DD/MM/yyyy" value={date} onChange={handleDateChange} renderInput={(params) => <TextField {...params} />} /></LocalizationProvider>
                             </div>
-                            <Dropdown options={statusesForAddJob} onChange={(e) => { handleStatusChange(e) }} value={statusOption} placeholder="Status" required /><br />
+                            <Dropdown options={statusesForAddJob} onChange={(e) => { handleAddStatusChange(e) }} value={statusOption} placeholder="Status" required /><br />
                             <TextField autoFocus margin="dense" onChange={(e) => { handleInputChange(e, "company") }} value={jobsInputs.company} id="company" label="Company" type="text" fullWidth variant="standard" required />
                         </DialogContent>
                         <DialogActions>
@@ -171,7 +233,7 @@ export default function Student() {
                 </div>
                 <div className='rows'>
                     {
-                        jobs.map((j, idx) => {
+                        filteredJobs.map((j, idx) => {
                             return <Job refresh={refresh} setRefresh={setRefresh} key={idx} job={j} />
                         })
                     }

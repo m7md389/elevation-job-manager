@@ -56,7 +56,7 @@ const Login = () => {
         </div>
 
         <div id="formFooter">
-          <span>Dont have account?</span>
+          <span>Don't have an account?</span>
           <Link className="custom-link underlineHover" to="/register">
             <span className="link-text">Create one</span>
           </Link>

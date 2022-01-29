@@ -1,4 +1,4 @@
-import axios from "axios";
+import http from "../services/httpService";
 import React, { useEffect, useState } from "react";
 import { Chart } from "react-google-charts";
 import Box from "@mui/material/Box";

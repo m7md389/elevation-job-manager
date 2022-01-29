@@ -9,8 +9,9 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import "../styles/Student.css";
 import InterviewRow from "./InterviewRow";
-// import axios from 'axios';
-import axios from "../services/httpService";
+
+import http from "../services/httpService";
+
 import Job from "./Job";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
@@ -25,7 +26,7 @@ import Dropdown from "react-dropdown";
 import "react-dropdown/style.css";
 
 export default function Student() {
-  let URL = "http://localhost:3001/jobs";
+  let URL = "/jobs";
 
   const params = useParams();
   const userId = params.id;
@@ -47,7 +48,7 @@ export default function Student() {
   const [statusOption, setStatusOption] = useState(statusesForAddJob[0]);
 
   React.useEffect(async () => {
-    let res = (await axios.get(`${URL}/${userId}`)).data;
+    let res = (await http.get(`${URL}/${userId}`)).data;
     setJobs(res);
   }, [refresh]);
 
@@ -95,7 +96,7 @@ export default function Student() {
       status: statusOption,
       userId: userId,
     };
-    axios.post(`${URL}`, newJob).then(() => {
+    http.post(`${URL}`, newJob).then(() => {
       setRefresh(refresh + 1);
     });
     setOpen(false);

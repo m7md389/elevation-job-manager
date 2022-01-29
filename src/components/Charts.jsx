@@ -1,4 +1,4 @@
-import axios from "axios";
+import http from "../services/httpService";
 import React, { useEffect, useState } from "react";
 import { Chart } from "react-google-charts";
 import Box from "@mui/material/Box";
@@ -8,7 +8,7 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 
 function Charts() {
-  let URL = "http://localhost:3001/courses";
+  let URL = "/courses";
 
   const charTitles = ["Working Students", "Courses", "Cohorts"];
   const [chosenChart, setChosenChart] = useState("");
@@ -17,7 +17,7 @@ function Charts() {
   const [data, setData] = useState([]);
 
   useEffect(async () => {
-    let courses = (await axios.get(`${URL}`)).data;
+    let courses = (await http.get(`${URL}`)).data;
     setAllData(courses);
     setData(getWorkingStudents(courses));
   }, []);
@@ -54,7 +54,7 @@ function Charts() {
   const getCourses = (courses) => {
     let arr = [["Courses", "working"]];
     console.log(chosenChart);
-    axios.get("http://localhost:3001/courses/names").then((res) => {
+    http.get("/courses/names").then((res) => {
       res.data.forEach((course, idx) => {
         arr.push([course.title, (course.working * course.studNum) / 100]);
       });

@@ -6,10 +6,8 @@ const Cohort = require("../models/cohort");
 const Users = require("../models/user");
 const Jobs = require("../models/job");
 const Interviews = require("../models/interview");
-const auth = require("../middleware/auth");
-const admin = require("../middleware/admin");
 
-router.get("/courses", async (req, res) => {
+router.get("/api/courses", async (req, res) => {
   const courses = await Course.find({})
     .populate({
       path: "cohorts",
@@ -76,7 +74,7 @@ const findInterviewsInRange = async (sDate, eDate, courses) => {
   return users;
 };
 
-router.get("/courses/:startDate/:endDate", async (req, res) => {
+router.get("/api/courses/:startDate/:endDate", async (req, res) => {
   let startDate = req.params.startDate;
   let endDate = req.params.endDate;
 
@@ -104,7 +102,7 @@ router.get("/courses/:startDate/:endDate", async (req, res) => {
     });
 });
 
-router.get("/courses/names", async function (req, res) {
+router.get("/api/courses/names", async function (req, res) {
   let courses = await Course.find({}).populate({
     path: "cohorts",
     populate: {
@@ -130,7 +128,7 @@ router.get("/courses/names", async function (req, res) {
   res.send(data);
 });
 
-router.get("/courses/:courseName", (req, res) => {
+router.get("/api/courses/:courseName", (req, res) => {
   const { courseName } = req.params;
   if (!courseName) {
     res.status(400).send("missed id");
@@ -152,7 +150,7 @@ router.get("/courses/:courseName", (req, res) => {
     });
 });
 
-router.post("/jobs", auth, async function (req, res) {
+router.post("/api/jobs", async function (req, res) {
   let tempJob = req.body;
   let myDate = moment(tempJob.date).format("L");
   let newJob = new Jobs({
@@ -183,7 +181,7 @@ router.post("/jobs", auth, async function (req, res) {
     });
 });
 
-router.put("/jobs", auth, async function (req, res) {
+router.put("/api/jobs", async function (req, res) {
   let tempJob = req.body;
   let myDate = moment(tempJob.date).format("L");
   let jobToEdit = await Jobs.findById({ _id: tempJob.jobId });
@@ -213,7 +211,7 @@ router.put("/jobs", auth, async function (req, res) {
     });
 });
 
-router.delete("/jobs", auth, async function (req, res) {
+router.delete("/api/jobs", async function (req, res) {
   let jobId = req.body;
   await Jobs.findByIdAndDelete({ _id: jobId.jobId }).exec((err, user) => {
     if (err) {
@@ -223,7 +221,7 @@ router.delete("/jobs", auth, async function (req, res) {
   });
 });
 
-router.post("/jobs/Interviews", auth, async function (req, res) {
+router.post("/api/jobs/Interviews", async function (req, res) {
   let tempInterview = req.body;
   let myDate = moment(tempInterview.date).format("L");
   let newInterview = new Interviews({
@@ -253,7 +251,7 @@ router.post("/jobs/Interviews", auth, async function (req, res) {
     });
 });
 
-router.post("/courses", [auth, admin], async (req, res) => {
+router.post("/api/courses", async (req, res) => {
   let courseName = req.body.title;
   if (!courseName) {
     res.status(400).send("missed name");
@@ -267,7 +265,7 @@ router.post("/courses", [auth, admin], async (req, res) => {
   res.redirect("/courses/names");
 });
 
-router.put("/jobs/Interviews", auth, async function (req, res) {
+router.put("/api/jobs/Interviews", async function (req, res) {
   let tempInterview = req.body;
   let myDate = moment(tempInterview.date).format("L");
   let interview = await Interviews.findById({ _id: tempInterview.interviewId });
@@ -291,7 +289,7 @@ router.put("/jobs/Interviews", auth, async function (req, res) {
   });
 });
 
-router.delete("/jobs/Interviews", auth, async function (req, res) {
+router.delete("/api/jobs/Interviews", async function (req, res) {
   let interviewId = req.body;
   await Interviews.findByIdAndDelete({ _id: interviewId.interviewId }).exec(
     function (err, interview) {
@@ -303,8 +301,8 @@ router.delete("/jobs/Interviews", auth, async function (req, res) {
   );
 });
 
-router.get("/jobs/:userId?", auth, async function (req, res) {
-  await Users.findById({ _id: req.params.userId })
+router.get("/api/jobs/:userId?", function (req, res) {
+  Users.findById({ _id: req.params.userId })
     .populate({
       path: "jobs",
       populate: {
@@ -316,7 +314,7 @@ router.get("/jobs/:userId?", auth, async function (req, res) {
     });
 });
 
-router.get("/users/:userId", async function (req, res) {
+router.get("/api/users/:userId", async function (req, res) {
   let userData = await Users.findById({ _id: req.params.userId }).exec(
     function (err, user) {
       if (err) {
@@ -327,7 +325,7 @@ router.get("/users/:userId", async function (req, res) {
   );
 });
 
-router.put("/users/password", auth, async function (req, res) {
+router.put("/api/users/password", async function (req, res) {
   let updatedPasswordData = req.body;
   let user = await users.findById({ _id: updatedPasswordData.userId });
   if (user.password != updatedPasswordData.currentPassword) {
@@ -350,7 +348,7 @@ router.put("/users/password", auth, async function (req, res) {
   });
 });
 
-router.put("/users", auth, async function (req, res) {
+router.put("/api/users", async function (req, res) {
   let updatedUserData = req.body;
   let user = await Users.find({ _id: updatedUserData.userId });
   await Users.findOneAndUpdate(
@@ -374,7 +372,14 @@ router.put("/users", auth, async function (req, res) {
   });
 });
 
-router.post("/courses/cohort", [auth, admin], async (req, res) => {
+router.post("/api/users", async function (req, res) {
+  router.post("/api/login", async function (req, res) {
+    const { name, password } = req.body;
+    const user = await Users.find({ name, password });
+  });
+});
+
+router.post("/api/courses/cohort", async (req, res) => {
   let cohortToAdd = req.body;
   if (!cohortToAdd.courseId) {
     res.status(400).send({ error: "Cant find course" });

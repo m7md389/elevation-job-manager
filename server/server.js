@@ -35,7 +35,7 @@ app.use(cors());
 app.use("/", api);
 app.use("/api/auth", auth);
 // app.use('/api/courses', courses);
-// app.use('/api/cohorts', cohorts);
+app.use("/api/cohorts", cohorts);
 app.use("/api/users", users);
 // app.use('/api/jobs', jobs);
 // app.use('/api/interviews', interviews);

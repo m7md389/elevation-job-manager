@@ -3,7 +3,7 @@ const router = express.Router();
 const Course = require("../models/course");
 const Cohort = require("../models/cohort");
 
-router.get("/cohorts", (req, res) => {
+router.get("/", (req, res) => {
   Course.find({})
     .populate({ path: "cohorts" })
     .exec(function (err, courses) {

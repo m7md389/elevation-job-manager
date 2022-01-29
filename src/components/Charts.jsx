@@ -6,6 +6,7 @@ import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
+import axios from "axios";
 
 function Charts() {
     let URL = "http://localhost:3001/courses"

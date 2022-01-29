@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import auth from "../services/authService";
 import "../styles/login.css";
 
@@ -20,6 +20,8 @@ const Login = () => {
       }
     }
   };
+
+  if (auth.getCurrentUser()) return <Navigate to="/" />;
 
   return (
     <div className="wrapper fadeInDown ">

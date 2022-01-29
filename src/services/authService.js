@@ -9,7 +9,7 @@ const tokenKey = "token";
 export const login = async (email, password) => {
   const { data: token } = await http.post(apiEndpoint, {
     email,
-    password
+    password,
   });
   cookies.set(tokenKey, token, { path: "/" });
 };
@@ -32,7 +32,9 @@ export const getCurrentUser = () => {
 };
 
 export const getToken = () => {
-  return cookies.get(tokenKey);
+  return cookies.get("token");
 };
+
+http.setToken(getToken());
 
 export default { login, loginWithToken, logout, getCurrentUser, getToken };

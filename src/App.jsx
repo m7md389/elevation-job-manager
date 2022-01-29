@@ -8,14 +8,15 @@ import Logout from "./components/Logout";
 import Register from "./components/Register";
 import PageNotFound from "./components/PageNotFound";
 import DetailedCourse from "./components/DetailedCourse";
-import "./App.css";
 import AdminHome from "./components/AdminHome";
 import Student from "./components/Student";
 import AccountSettings from "./components/AccountSettings";
 import AdminDashboard from "./components/AdminDashboard";
 import Charts from "./components/Charts";
+import ProtectedRoute from "./components/common/ProtectedRoute";
+import "./App.css";
 
-export default function App() {
+const App = () => {
   let [user, setUser] = useState(undefined);
 
   useEffect(() => {
@@ -29,21 +30,70 @@ export default function App() {
 
       <Routes>
         <Route path="*" element={<PageNotFound />} />
-        <Route path="/courses/:courseName" element={<DetailedCourse />} />
-        <Route path="/courses" element={<AdminHome />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/logout" element={<Logout setUser={setUser} />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/settings" element={<AccountSettings />} />
-        <Route path="/student/:id" element={<Student />} /> {/*/student/:id*/}
-        <Route path="/student" element={<Student />} /> {/*/student/:id*/}
-        <Route path="/charts" element={<Charts />} /> {/*/student/:id*/}
-        <Route path="/" element={<AdminDashboard />} /> {/*/student/:id*/}
-
-
+        <Route path="/logout" element={<Logout setUser={setUser} />} />
+        <Route
+          path="/courses/:courseName"
+          element={
+            <ProtectedRoute isAdminPage>
+              <DetailedCourse />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/courses"
+          element={
+            <ProtectedRoute isAdminPage>
+              <AdminHome />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/settings"
+          element={
+            <ProtectedRoute>
+              <AccountSettings />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/student/:id"
+          element={
+            <ProtectedRoute isAdminPage>
+              <Student />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/student"
+          element={
+            <ProtectedRoute isStudentPage>
+              <Student />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/charts"
+          element={
+            <ProtectedRoute isAdminPage>
+              <Charts />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute isAdminPage>
+              <AdminDashboard />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
 
       <Footer />
     </BrowserRouter>
   );
-}
+};
+
+export default App;

@@ -1,13 +1,10 @@
-import id from "date-fns/esm/locale/id/index.js";
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import auth from "../services/authService";
 import user from "../services/userService";
 import "../styles/login.css";
 
 const Register = () => {
-  const navigate = useNavigate();
-
   let [inputs, setInput] = useState({
     name: "",
     email: "",
@@ -17,7 +14,7 @@ const Register = () => {
     linkedin: "",
     course: "default",
     cohort: "default",
-    status: "default"
+    status: "default",
   });
   let [isdropdownCourseOpened, setIsdropdownCourseOpened] = useState(false);
 
@@ -37,6 +34,8 @@ const Register = () => {
       }
     }
   };
+
+  if (auth.getCurrentUser()) return <Navigate to="/" />;
 
   return (
     <div className="wrapper fadeInDown">

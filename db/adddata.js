@@ -4,6 +4,10 @@ const Job = require("../server/models/job");
 const interview = require("../server/models/interview");
 const Cohort = require("../server/models/cohort");
 const Course = require("../server/models/course");
+const auth = require("../server/routes/auth");
+const _ = require("lodash");
+const bcrypt = require("bcrypt");
+
 mongoose.connect(
   process.env.MONGODB_URI || "mongodb://localhost/elevationJobManager",
   { useNewUrlParser: true }
@@ -21,9 +25,10 @@ const Admin = {
   linkedin: "https://www.linkedin.com/in/ofri-meir-weizman/",
   status: "",
   role: "admin",
-  jobs: []
+  jobs: [],
 };
-const addMockAdmin = function (Admin) {
+
+const addMockAdmin = async (Admin) => {
   const tempUser = new user({
     name: Admin.name,
     email: Admin.email,
@@ -33,23 +38,27 @@ const addMockAdmin = function (Admin) {
     linkedin: Admin.linkedin,
     status: Admin.status,
     role: Admin.role,
-    jobs: []
+    jobs: [],
   });
+  const salt = await bcrypt.genSalt(10);
+  tempUser.password = await bcrypt.hash(tempUser.password, salt);
   tempUser.save();
 };
 
-const addMockData = function () {
+const addMockData = async function () {
   let cohortsArray = [];
   let usersArray = [];
   let jobsArray = [];
 
   coursesData.forEach((course) => {
     course.cohorts.forEach((cohort) => {
-      cohort.users.forEach((user) => {
-        user.jobs.forEach((job) => {
-          jobsArray.push(addInterviews(job));
+      cohort.users.forEach(async (user) => {
+        user.jobs.forEach(async (job) => {
+          let tempJobs = await addInterviews(job);
+          jobsArray.push(tempJobs);
         });
-        usersArray.push(addJobs(user, jobsArray));
+        let tempUsers = await addJobs(user, jobsArray);
+        usersArray.push(tempUsers);
         jobsArray = [];
       });
       cohortsArray.push(addUsers(cohort, usersArray));
@@ -58,7 +67,7 @@ const addMockData = function () {
     addCourse(course, cohortsArray);
     cohortsArray = [];
   });
-  addMockAdmin(Admin);
+  await addMockAdmin(Admin);
 };
 
 const addInterviews = function (job) {
@@ -69,7 +78,7 @@ const addInterviews = function (job) {
       type: interviewObj.type,
       status: interviewObj.status,
       date: interviewObj.date,
-      link: interviewObj.link
+      link: interviewObj.link,
     });
     tempInterview.save();
     tempArray.push(tempInterview);
@@ -80,13 +89,13 @@ const addInterviews = function (job) {
     date: job.date,
     company: job.company,
     status: job.status,
-    interviews: tempArray
+    interviews: tempArray,
   });
   tempJob.save();
   return tempJob;
 };
 
-const addJobs = function (user, jobData) {
+const addJobs = async function (user, jobData) {
   const tempUser = new User({
     name: user.name,
     email: user.email,
@@ -96,8 +105,10 @@ const addJobs = function (user, jobData) {
     linkedin: user.linkedin,
     status: user.status,
     role: user.role,
-    jobs: jobData
+    jobs: jobData,
   });
+  const salt = await bcrypt.genSalt(10);
+  tempUser.password = await bcrypt.hash(tempUser.password, salt);
   tempUser.save();
   return tempUser;
 };
@@ -106,7 +117,7 @@ const addUsers = function (cohort, usersData) {
   const tempCohort = new Cohort({
     name: cohort.name,
     start_date: cohort.start_date,
-    users: usersData
+    users: usersData,
   });
   tempCohort.save();
   return tempCohort;
@@ -115,7 +126,7 @@ const addUsers = function (cohort, usersData) {
 const addCourse = function (course, cohortsArray) {
   const tempCourse = new Course({
     title: course.title,
-    cohorts: cohortsArray
+    cohorts: cohortsArray,
   });
   tempCourse.save();
 };

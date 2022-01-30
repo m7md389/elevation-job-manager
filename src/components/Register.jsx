@@ -15,7 +15,7 @@ const Register = () => {
     city: "",
     linkedin: "",
     cohort: "default",
-    status: "default",
+    status: "default"
   });
   let [isdropdownCourseOpened, setIsdropdownCourseOpened] = useState(false);
   let [courses, setCourses] = useState([]);
@@ -37,7 +37,9 @@ const Register = () => {
       const response = await user.register({ ...inputs, cohort, course });
       const token = response.headers["x-auth-token"];
       auth.loginWithToken(token);
-      window.location = "/";
+      if (auth.getCurrentUser().role === "student")
+        window.location = "/student";
+      else if (auth.getCurrentUser().role === "admin") window.location = "/";
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
         alert(ex.response.data);

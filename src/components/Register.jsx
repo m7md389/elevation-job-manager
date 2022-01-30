@@ -1,8 +1,10 @@
-import React, { useState } from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, Navigate } from "react-router-dom";
 import auth from "../services/authService";
 import user from "../services/userService";
+import cohort from "../services/cohortService";
 import "../styles/login.css";
+import Course from "./Course";
 
 const Register = () => {
   let [inputs, setInput] = useState({
@@ -12,11 +14,17 @@ const Register = () => {
     phone: "",
     city: "",
     linkedin: "",
-    course: "default",
     cohort: "default",
     status: "default",
   });
   let [isdropdownCourseOpened, setIsdropdownCourseOpened] = useState(false);
+  let [courses, setCourses] = useState([]);
+  const statusOptions = ["Studying", "Searching", "Working"];
+
+  useEffect(async () => {
+    const c = await cohort.getCohorts();
+    setCourses(c);
+  }, []);
 
   const handleChange = (event) => {
     setInput({ ...inputs, [event.target.id]: event.target.value });
@@ -24,7 +32,9 @@ const Register = () => {
 
   const doSubmit = async () => {
     try {
-      const response = await user.register(inputs);
+      const cohortInput = inputs.cohort.split("@");
+      const [cohort, course] = cohortInput;
+      const response = await user.register({ ...inputs, cohort, course });
       const token = response.headers["x-auth-token"];
       auth.loginWithToken(token);
       window.location = "/";
@@ -96,28 +106,30 @@ const Register = () => {
             />
             <select
               className="input fadeIn ninth"
-              name="course"
-              onChange={handleChange}
-              id="course"
-              value={inputs.course}
-            >
-              <option className="defult-value" value="default" disabled>
-                Course
-              </option>
-              <option value="full-stack">full-stack</option>
-            </select>
-            <select
-              className="input fadeIn tenth"
               name="cohort"
               onChange={handleChange}
               id="cohort"
               value={inputs.cohort}
             >
-              <option className="defult-value" value="default" disabled>
+              <option className="default-value" value="default" disabled>
                 Cohort
               </option>
-              <option value="cohort-22">cohort-22</option>
-              <option value="cohort-11">cohort-11</option>
+              {courses.map((course) => (
+                <optgroup
+                  key={course.title}
+                  label={course.title}
+                  value={course.title}
+                >
+                  {course.cohorts.map((cohort) => (
+                    <option
+                      key={cohort.name + "@" + course.title}
+                      value={cohort.name + "@" + course.title}
+                    >
+                      {cohort.name}
+                    </option>
+                  ))}
+                </optgroup>
+              ))}
             </select>
             <select
               className="input fadeIn eleventh"
@@ -126,10 +138,14 @@ const Register = () => {
               id="status"
               value={inputs.status}
             >
-              <option className="defult-value" value="default" disabled>
+              <option className="default-value" value="default" disabled>
                 Status
               </option>
-              <option value="stydying">Studying</option>
+              {statusOptions.map((status) => (
+                <option key={status} value={status}>
+                  {status}
+                </option>
+              ))}
             </select>
           </div>
 

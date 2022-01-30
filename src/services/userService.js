@@ -1,10 +1,7 @@
 import http from "./httpService";
 
-const apiUrl = "http://localhost:3001/api";
-
-export const register = (user) => {
-  const apiEndpoint = apiUrl + "/users";
-
+export const register = async (user) => {
+  const apiEndpoint = "/users";
   return http.post(apiEndpoint, {
     name: user.name,
     email: user.email,
@@ -14,7 +11,7 @@ export const register = (user) => {
     linkedin: user.linkedin,
     status: user.status,
     course: user.course,
-    cohort: user.cohort
+    cohort: user.cohort,
   });
 };
 

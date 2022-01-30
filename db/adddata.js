@@ -4,10 +4,6 @@ const Job = require("../server/models/job");
 const interview = require("../server/models/interview");
 const Cohort = require("../server/models/cohort");
 const Course = require("../server/models/course");
-const auth = require("../server/routes/auth");
-const _ = require("lodash");
-const bcrypt = require("bcrypt");
-
 mongoose.connect(
   process.env.MONGODB_URI || "mongodb://localhost/elevationJobManager",
   { useNewUrlParser: true }
@@ -27,8 +23,7 @@ const Admin = {
   role: "admin",
   jobs: [],
 };
-
-const addMockAdmin = async (Admin) => {
+const addMockAdmin = function (Admin) {
   const tempUser = new user({
     name: Admin.name,
     email: Admin.email,
@@ -40,25 +35,21 @@ const addMockAdmin = async (Admin) => {
     role: Admin.role,
     jobs: [],
   });
-  const salt = await bcrypt.genSalt(10);
-  tempUser.password = await bcrypt.hash(tempUser.password, salt);
   tempUser.save();
 };
 
-const addMockData = async function () {
+const addMockData = function () {
   let cohortsArray = [];
   let usersArray = [];
   let jobsArray = [];
 
   coursesData.forEach((course) => {
     course.cohorts.forEach((cohort) => {
-      cohort.users.forEach(async (user) => {
-        user.jobs.forEach(async (job) => {
-          let tempJobs = await addInterviews(job);
-          jobsArray.push(tempJobs);
+      cohort.users.forEach((user) => {
+        user.jobs.forEach((job) => {
+          jobsArray.push(addInterviews(job));
         });
-        let tempUsers = await addJobs(user, jobsArray);
-        usersArray.push(tempUsers);
+        usersArray.push(addJobs(user, jobsArray));
         jobsArray = [];
       });
       cohortsArray.push(addUsers(cohort, usersArray));
@@ -67,7 +58,7 @@ const addMockData = async function () {
     addCourse(course, cohortsArray);
     cohortsArray = [];
   });
-  await addMockAdmin(Admin);
+  addMockAdmin(Admin);
 };
 
 const addInterviews = function (job) {
@@ -95,7 +86,7 @@ const addInterviews = function (job) {
   return tempJob;
 };
 
-const addJobs = async function (user, jobData) {
+const addJobs = function (user, jobData) {
   const tempUser = new User({
     name: user.name,
     email: user.email,
@@ -107,8 +98,6 @@ const addJobs = async function (user, jobData) {
     role: user.role,
     jobs: jobData,
   });
-  const salt = await bcrypt.genSalt(10);
-  tempUser.password = await bcrypt.hash(tempUser.password, salt);
   tempUser.save();
   return tempUser;
 };

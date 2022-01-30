@@ -19,7 +19,7 @@ router.post("/api/temp-users", async function (req, res) {
     linkedin,
     status,
     course,
-    cohort
+    cohort,
   } = req.body;
 
   let user = await Users.findOne({ email });
@@ -37,7 +37,7 @@ router.post("/api/temp-users", async function (req, res) {
     linkedin,
     status,
     role: "student",
-    jobs: []
+    jobs: [],
   });
   const salt = await bcrypt.genSalt(10);
   user.password = await bcrypt.hash(password, salt);
@@ -59,10 +59,10 @@ router.get("/api/courses", async (req, res) => {
         populate: {
           path: "jobs",
           populate: {
-            path: "interviews"
-          }
-        }
-      }
+            path: "interviews",
+          },
+        },
+      },
     })
     .exec(function (err, courses) {
       if (err) {
@@ -82,7 +82,7 @@ const findInterviewsInRange = async (sDate, eDate, courses) => {
     minute: 59,
     second: 59,
     millisecond: 59,
-    day: moment(sDate).day() - 1
+    day: moment(sDate).day() - 1,
   });
   await courses.forEach((course) => {
     course.cohorts.forEach((cohort) => {
@@ -97,7 +97,7 @@ const findInterviewsInRange = async (sDate, eDate, courses) => {
                 email: user.email,
                 phone: user.phone,
                 date: interview.date,
-                type: interview.type
+                type: interview.type,
               };
               users.push(selectedUser);
             }
@@ -121,10 +121,10 @@ router.get("/api/courses/:startDate/:endDate", async (req, res) => {
         populate: {
           path: "jobs",
           populate: {
-            path: "interviews"
-          }
-        }
-      }
+            path: "interviews",
+          },
+        },
+      },
     })
     .exec(async function (err, courses) {
       let data;
@@ -141,8 +141,8 @@ router.get("/api/courses/names", async function (req, res) {
   let courses = await Course.find({}).populate({
     path: "cohorts",
     populate: {
-      path: "users"
-    }
+      path: "users",
+    },
   });
   let data = [];
   courses.map((c) => {
@@ -173,8 +173,8 @@ router.get("/api/courses/:courseName", (req, res) => {
     .populate({
       path: "cohorts",
       populate: {
-        path: "users"
-      }
+        path: "users",
+      },
     })
     .exec(function (err, course) {
       if (err) {
@@ -194,19 +194,19 @@ router.post("/api/jobs", async function (req, res) {
     date: myDate,
     company: tempJob.company,
     status: tempJob.status,
-    interviews: []
+    interviews: [],
   });
   newJob.save();
 
   await Users.findOneAndUpdate(
     { _id: tempJob.userId },
     {
-      $push: { jobs: newJob }
+      $push: { jobs: newJob },
     },
     { new: true }
   )
     .populate({
-      path: "jobs"
+      path: "jobs",
     })
     .exec(function (err, user) {
       if (err) {
@@ -230,13 +230,13 @@ router.put("/api/jobs", async function (req, res) {
         date: myDate,
         status: tempJob.status || jobToEdit.status,
         company: tempJob.company || jobToEdit.company,
-        status: tempJob.status || jobToEdit.status
-      }
+        status: tempJob.status || jobToEdit.status,
+      },
     },
     { new: true }
   )
     .populate({
-      path: "jobs"
+      path: "jobs",
     })
     .exec(function (err, user) {
       if (err) {
@@ -264,19 +264,19 @@ router.post("/api/jobs/Interviews", async function (req, res) {
     type: tempInterview.type,
     status: tempInterview.status,
     date: myDate,
-    link: tempInterview.link
+    link: tempInterview.link,
   });
   newInterview.save();
 
   await Jobs.findOneAndUpdate(
     { _id: tempInterview.jobId },
     {
-      $push: { interviews: newInterview }
+      $push: { interviews: newInterview },
     },
     { new: true }
   )
     .populate({
-      path: "interviews"
+      path: "interviews",
     })
     .exec(function (err, job) {
       if (err) {
@@ -294,7 +294,7 @@ router.post("/api/courses", async (req, res) => {
   }
 
   let newCourse = new Course({
-    title: courseName
+    title: courseName,
   });
   await newCourse.save();
   res.redirect("/api/courses/names");
@@ -312,8 +312,8 @@ router.put("/api/jobs/Interviews", async function (req, res) {
         type: tempInterview.type || interview.type,
         date: myDate,
         status: tempInterview.status || interview.status,
-        link: tempInterview.link || interview.link
-      }
+        link: tempInterview.link || interview.link,
+      },
     },
     { new: true }
   ).exec(function (err, interView) {
@@ -341,8 +341,8 @@ router.get("/api/jobs/:userId?", function (req, res) {
     .populate({
       path: "jobs",
       populate: {
-        path: "interviews"
-      }
+        path: "interviews",
+      },
     })
     .exec(function (err, user) {
       res.send(user.jobs);
@@ -371,8 +371,8 @@ router.put("/api/users/password", async function (req, res) {
     { _id: updatedPasswordData.userId },
     {
       $set: {
-        password: updatedPasswordData.newPassword
-      }
+        password: updatedPasswordData.newPassword,
+      },
     },
     { new: true }
   ).exec(function (err, updatedUser) {
@@ -395,8 +395,8 @@ router.put("/api/users", async function (req, res) {
         phone: updatedUserData.phone || user.phone,
         city: updatedUserData.city || user.city,
         linkedin: updatedUserData.linkedin || user.linkedin,
-        status: updatedUserData.status || user.status
-      }
+        status: updatedUserData.status || user.status,
+      },
     },
     { new: true }
   ).exec(function (err, newUser) {
@@ -425,7 +425,7 @@ router.post("/api/courses/cohort", async (req, res) => {
   let newCohort = new Cohort({
     name: cohortToAdd.name,
     start_date: myDate,
-    users: []
+    users: [],
   });
 
   newCohort.save();
@@ -434,8 +434,8 @@ router.post("/api/courses/cohort", async (req, res) => {
     { _id: cohortToAdd.courseId },
     {
       $push: {
-        cohorts: newCohort
-      }
+        cohorts: newCohort,
+      },
     },
     { new: true }
   ).exec(function (err, newCohort) {

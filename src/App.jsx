@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import auth from "./services/authService";
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
@@ -84,13 +85,14 @@ const App = () => {
         <Route
           path="/"
           element={
-            <ProtectedRoute isAdminPage>
+            <ProtectedRoute>
               <AdminDashboard />
             </ProtectedRoute>
           }
         />
       </Routes>
 
+      <ToastContainer />
       <Footer />
     </BrowserRouter>
   );

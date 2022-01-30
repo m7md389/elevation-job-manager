@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Link, Navigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import auth from "../services/authService";
 import user from "../services/userService";
 import cohort from "../services/cohortService";
 import "../styles/login.css";
-import Course from "./Course";
 
 const Register = () => {
   let [inputs, setInput] = useState({
@@ -37,12 +37,10 @@ const Register = () => {
       const response = await user.register({ ...inputs, cohort, course });
       const token = response.headers["x-auth-token"];
       auth.loginWithToken(token);
-      if (auth.getCurrentUser().role === "student")
-        window.location = "/student";
-      else if (auth.getCurrentUser().role === "admin") window.location = "/";
+      window.location = "/";
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
-        alert(ex.response.data);
+        toast.error(ex.response.data);
       }
     }
   };

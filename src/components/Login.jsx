@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { Link, Navigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import auth from "../services/authService";
 import "../styles/login.css";
+import "react-toastify/dist/ReactToastify.css";
 
 const Login = () => {
   let [inputs, setInput] = useState({ email: "", password: "" });
@@ -13,12 +15,10 @@ const Login = () => {
   const doSubmit = async () => {
     try {
       await auth.login(inputs.email, inputs.password);
-      if (auth.getCurrentUser().role === "student")
-        window.location = "/student";
-      else if (auth.getCurrentUser().role === "admin") window.location = "/";
+      window.location = "/";
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
-        alert(ex.response.data);
+        toast.error(ex.response.data);
       }
     }
   };

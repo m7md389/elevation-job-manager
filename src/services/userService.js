@@ -1,7 +1,7 @@
 import http from "./httpService";
 
 export const register = async (user) => {
-  const apiEndpoint = "/users";
+  const apiEndpoint = "/temp-users";
   return http.post(apiEndpoint, {
     name: user.name,
     email: user.email,
@@ -11,7 +11,7 @@ export const register = async (user) => {
     linkedin: user.linkedin,
     status: user.status,
     course: user.course,
-    cohort: user.cohort,
+    cohort: user.cohort
   });
 };
 

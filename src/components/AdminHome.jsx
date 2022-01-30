@@ -82,10 +82,10 @@ function AdminHome() {
       </Dialog>
 
       <div className="page-container">
-        {courses.map((course) => (
+        {courses.map((course, index) => (
           <Link
             className="course-link"
-            key={course.title}
+            key={course.title + index}
             to={`/courses/${course.title}`}
           >
             <Course course={course} />

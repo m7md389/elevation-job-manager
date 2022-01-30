@@ -4,12 +4,12 @@ import http from "./httpService";
 
 const apiEndpoint = "/auth";
 const cookies = new Cookies();
-
 const tokenKey = "token";
+
 export const login = async (email, password) => {
   const { data: token } = await http.post(apiEndpoint, {
     email,
-    password,
+    password
   });
   cookies.set(tokenKey, token, { path: "/" });
 };

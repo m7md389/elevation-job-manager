@@ -6,3 +6,11 @@
 #user-settings-dropdown {
   right: 0;
 }
+
+.navbar-brand {
+  transition: transform 0.3s;
+}
+
+.navbar-brand:hover {
+  transform: translateY(-4px);
+}

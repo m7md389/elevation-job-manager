@@ -37,10 +37,10 @@ const NavBar = () => {
 
       <div className={navbarClass} id="navbarNav">
         <div className="navbar-nav">
-          <NavLink className="nav-item nav-link" to="/courses">
+          <NavLink className="nav-item nav-link nav-link-tabs" to="/courses">
             Courses
           </NavLink>
-          <NavLink className="nav-item nav-link" to="/charts">
+          <NavLink className="nav-item nav-link nav-link-tabs" to="/charts">
             Charts
           </NavLink>
 

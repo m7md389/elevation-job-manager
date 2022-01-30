@@ -47,14 +47,6 @@ const findInterviewsInRange = async (sDate, eDate, courses) => {
         user.jobs.forEach((job) => {
           job.interviews.forEach((interview) => {
             if (moment(interview.date).isBetween(startDate, endDate)) {
-              console.log(
-                "between: " +
-                  moment(interview.date).format("DD/MM/YYYY , h:mm:ss") +
-                  " start: " +
-                  startDate.format("DD/MM/YYYY , h:mm:ss") +
-                  " end: " +
-                  endDate.format("DD/MM/YYYY , h:mm:ss")
-              );
               let selectedUser = {
                 id: user._id,
                 name: user.name,

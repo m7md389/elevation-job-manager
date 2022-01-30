@@ -32,15 +32,9 @@ export const getCurrentUser = () => {
 };
 
 export const getToken = () => {
-  return cookies.get(tokenKey);
+  return cookies.get("token");
 };
 
 http.setToken(getToken());
 
-export default {
-  login,
-  loginWithToken,
-  logout,
-  getCurrentUser,
-  getToken
-};
+export default { login, loginWithToken, logout, getCurrentUser, getToken };

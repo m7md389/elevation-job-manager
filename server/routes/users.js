@@ -11,7 +11,17 @@ router.get("/me", auth, async (req, res) => {
 });
 
 router.post("/", async function (req, res) {
-  const { name, email, password, phone, city, linkedin, status } = req.body;
+  const {
+    name,
+    email,
+    password,
+    phone,
+    city,
+    linkedin,
+    status,
+    course,
+    cohort,
+  } = req.body;
 
   let user = await User.findOne({ email });
   if (user) {
@@ -28,7 +38,7 @@ router.post("/", async function (req, res) {
     linkedin,
     status,
     role: "student",
-    jobs: []
+    jobs: [],
   });
   const salt = await bcrypt.genSalt(10);
   user.password = await bcrypt.hash(password, salt);

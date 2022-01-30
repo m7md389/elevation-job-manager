@@ -28,10 +28,9 @@ import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import MobileDatePicker from "@mui/lab/MobileDatePicker";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
-import axios from "axios";
+import http from "../services/httpService";
 
 const Course = () => {
-  const URL = "http://localhost:3001";
   const params = useParams();
   const navigate = useNavigate();
 
@@ -89,7 +88,7 @@ const Course = () => {
             name: user.name,
             phone: user.phone,
             cohort: cohort.name,
-            status: user.status
+            status: user.status,
           });
         }
       });
@@ -136,9 +135,9 @@ const Course = () => {
     let Cohort = {
       name: cohortName,
       start_date: date,
-      courseId: course._id
+      courseId: course._id,
     };
-    axios.post(`${URL}/courses/cohort`, Cohort).then(() => {
+    http.post(`/courses/cohort`, Cohort).then(() => {
       setRefresh(refresh + 1);
     });
     setOpen(false);
@@ -250,7 +249,7 @@ const Course = () => {
         sx={{
           width: "80%",
           margin: "0 auto",
-          boxShadow: "rgb(102, 123, 145) 0px 0px 25px -10px"
+          boxShadow: "rgb(102, 123, 145) 0px 0px 25px -10px",
         }}
         className="table-container"
       >
@@ -277,7 +276,7 @@ const Course = () => {
                 className="table-row"
                 key={index}
                 onClick={() => handleRowClick(row._id)}
-                id="1212121212"
+                id={row.id}
               >
                 <TableCell align="center">{row.name}</TableCell>
                 <TableCell align="center">{row.phone}</TableCell>

@@ -15,9 +15,8 @@ const NavBar = () => {
       <NavLink className="navbar-brand" to="/">
         <img
           className="ms-4 me-3"
-          src="https://elevation.ac/wp-content/uploads/2020/08/cropped-symbol_pink-06-32x32.png"
-          width="30"
-          height="30"
+          src="https://elevation.ac/wp-content/uploads/2020/08/Elevation_logo_website_mobile.png"
+          width="180"
           alt=""
         />
       </NavLink>
@@ -38,10 +37,10 @@ const NavBar = () => {
 
       <div className={navbarClass} id="navbarNav">
         <div className="navbar-nav">
-          <NavLink className="nav-item nav-link" to="/courses">
+          <NavLink className="nav-item nav-link nav-link-tabs" to="/courses">
             Courses
           </NavLink>
-          <NavLink className="nav-item nav-link" to="/charts">
+          <NavLink className="nav-item nav-link nav-link-tabs" to="/charts">
             Charts
           </NavLink>
 

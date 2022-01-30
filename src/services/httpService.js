@@ -19,7 +19,7 @@ instance.interceptors.response.use(null, (error) => {
   return Promise.reject(error);
 });
 
-export const setToken = (token) => {
+const setToken = (token) => {
   instance.defaults.headers.common["x-auth-token"] = token;
 };
 

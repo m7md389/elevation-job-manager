@@ -4,7 +4,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { Link } from "react-router-dom";
 import Course from "./Course";
 import "../styles/admin-home.css";
-import axios from "axios";
+import http from "../services/httpService";
 import Title from "./common/Title";
 import "reactjs-popup/dist/index.css";
 import Button from "@mui/material/Button";
@@ -15,14 +15,12 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 
 function AdminHome() {
-  let URL = "http://localhost:3001";
-
   const [courses, setCourses] = useState([]);
   const [open, setOpen] = React.useState(false);
   const [courseTitle, setCourseTitle] = useState("");
 
   useEffect(async () => {
-    let res = (await axios.get(`${URL}/courses/names`)).data;
+    let res = (await http.get(`/courses/names`)).data;
     setCourses(res);
   }, []);
 
@@ -45,9 +43,8 @@ function AdminHome() {
   const handleAddCourse = async () => {
     if (!courseTitle) return;
 
-    let updatedCourses = (
-      await axios.post(`${URL}/courses`, { title: courseTitle })
-    ).data;
+    let updatedCourses = (await http.post(`/courses`, { title: courseTitle }))
+      .data;
     setCourses(updatedCourses);
     setOpen(false);
   };

@@ -1,10 +1,8 @@
 import axios from "axios";
 import { toast } from "react-toastify";
-import Cookies from "universal-cookie";
 
 const instance = axios.create({
-  baseURL: "http://localhost:3001/api",
-  headers: { "x-auth-token": new Cookies().get("token") }
+  baseURL: "http://localhost:3001/api"
 });
 
 instance.interceptors.response.use(null, (error) => {
@@ -21,9 +19,14 @@ instance.interceptors.response.use(null, (error) => {
   return Promise.reject(error);
 });
 
+export const setToken = (token) => {
+  instance.defaults.headers.common["x-auth-token"] = token;
+};
+
 export default {
   post: instance.post,
   get: instance.get,
   put: instance.put,
-  delete: instance.delete
+  delete: instance.delete,
+  setToken
 };

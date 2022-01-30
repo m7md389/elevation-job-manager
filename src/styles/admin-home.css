@@ -24,7 +24,7 @@
   font-size: 2rem;
 }
 
-.add-course-container:hover .add-icon {
+.add-course-container .add-icon:hover {
   border: 1px solid #2196f3;
   border-radius: 50%;
   color: #2196f3;

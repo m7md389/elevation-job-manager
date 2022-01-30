@@ -300,6 +300,22 @@ router.post("/api/courses", async (req, res) => {
   res.redirect("/api/courses/names");
 });
 
+router.delete("/api/courses", (req, res) => {
+  let courseName = req.body.title;
+  if (!courseName) {
+    res.status(400).send({ error: "missed name" });
+    return null;
+  }
+
+  Course.findOneAndDelete({ title: courseName }).exec((err, result) => {
+    if (err) {
+      res.status(400).send({ error: "missed name" });
+      return null;
+    }
+  });
+  res.end();
+});
+
 router.put("/api/jobs/Interviews", async function (req, res) {
   let tempInterview = req.body;
   let myDate = moment(tempInterview.date).format("L");

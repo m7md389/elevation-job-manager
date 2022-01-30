@@ -16,19 +16,28 @@ import DialogTitle from "@mui/material/DialogTitle";
 
 import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
 
+import Dropdown from "react-dropdown";
+import "react-dropdown/style.css";
+
 function AdminHome() {
   const [courses, setCourses] = useState([]);
+  const [coursesOptions, setCoursesOptions] = useState([]);
   const [open, setOpen] = useState(false);
   const [courseTitle, setCourseTitle] = useState("");
+  const [refresh, setRefresh] = useState(1)
 
   useEffect(async () => {
     let res = (await http.get(`/courses/names`)).data;
     setCourses(res);
-  }, []);
+  }, [refresh]);
 
   useEffect(async () => {
-    // setCourses(res);
-  }, []);
+    let coursesNames = []
+    courses.forEach(course => {
+      if(!coursesNames.includes(course.title)){coursesNames.push(course.title)}
+    });
+    setCoursesOptions(coursesNames)
+  }, [courses]);
 
   const handleClose = () => {
     setOpen(false);
@@ -57,7 +66,6 @@ function AdminHome() {
   });
 
   const handleEditCourseOpen = () => {
-    console.log("hi");
     setOpenEditCourse(true);
   };
 
@@ -65,18 +73,28 @@ function AdminHome() {
     setOpenEditCourse(false);
   };
 
-  const handleCourseInputChange = (event, key) => {
-    let tempEditJobInputs = { ...editJobInputs };
-    tempEditJobInputs[key] = event.target.value;
-    setEditJobInputs(tempEditJobInputs);
+  const handleCourseInputChange = event => {
+    setCourseTitle(event.target.value);
   };
 
-  const handleEditCourse = () => {
+  const handleCourseOptionChange = (e) => {
+    setCourseTitle(e.value);
+  }
 
+  const handleEditCourse = () => {
+    if (!coursesOptions || !courseTitle) {return}
+    http.put(`/courses`, { data: { title: courseTitle, newTitle } }).then(() => {
+      setRefresh(refresh + 1);
+      setOpenEditCourse(false)
+    })
   }
 
   const handleDeleteCourse = () => {
-
+    if (!coursesOptions) {return}
+    http.delete(`/courses`, { data: { title: courseTitle } }).then(() => {
+      setRefresh(refresh + 1);
+      setOpenEditCourse(false)
+    })
   }
 
   return (
@@ -112,17 +130,26 @@ function AdminHome() {
         </DialogActions>
       </Dialog>
       <Dialog open={openEditCourse} onClose={handleEditCourseClose}>
-        <DialogTitle>Edit Job :</DialogTitle>
+        <DialogTitle>Edit Course :</DialogTitle>
         <DialogContent>
+          <Dropdown
+            options={coursesOptions}
+            onChange={(e) => {
+              handleCourseOptionChange(e);
+            }}
+            value={"All"}
+            placeholder="Course"
+            required
+          />
           <TextField
             autoFocus
             margin="dense"
             onChange={(e) => {
-              handleCourseInputChange(e, "title");
+              handleCourseInputChange(e);
             }}
-            value={editJobInputs.title}
+            value={courseTitle}
             id="title"
-            label="Job Title"
+            label="Course Title"
             type="text"
             fullWidth
             variant="standard"

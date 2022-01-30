@@ -60,6 +60,7 @@ function Job(props) {
   });
 
   const handleToggle = () => {
+
     setActive(!isActive);
   };
 
@@ -183,78 +184,7 @@ function Job(props) {
                 variant="outlined"
               />
             </Stack>
-            <Dialog
-              open={openAddInterview}
-              onClose={handleAddInterviewClickClose}
-            >
-              <DialogTitle>Add Interview :</DialogTitle>
-              <DialogContent>
-                <TextField
-                  autoFocus
-                  margin="dense"
-                  onChange={(e) => {
-                    handleInterviewInputChange(e, "description");
-                  }}
-                  value={interviewInputs.description}
-                  id="description"
-                  label="description"
-                  type="text"
-                  fullWidth
-                  variant="standard"
-                  required
-                />
-                <br />
-                <Dropdown
-                  options={typeOptions}
-                  onChange={(e) => {
-                    handleTypeChange(e);
-                  }}
-                  value={typeOption}
-                  placeholder="Type"
-                  required
-                />{" "}
-                <br />
-                <Dropdown
-                  options={statusOptions}
-                  onChange={(e) => {
-                    handleStatusChange(e);
-                  }}
-                  value={statusOption}
-                  placeholder="Status"
-                  required
-                />
-                <br />
-                <div className="datePicker">
-                  <LocalizationProvider dateAdapter={DateAdapter}>
-                    <MobileDatePicker
-                      label="Date mobile"
-                      inputFormat="DD/MM/yyyy"
-                      value={interviewDate}
-                      onChange={handleDateChange}
-                      renderInput={(params) => <TextField {...params} />}
-                    />
-                  </LocalizationProvider>
-                </div>
-                <br />
-                <TextField
-                  autoFocus
-                  margin="dense"
-                  onChange={(e) => {
-                    handleInterviewInputChange(e, "link");
-                  }}
-                  value={interviewInputs.link}
-                  id="link"
-                  label="Link(Invitation - Zoom)"
-                  type="text"
-                  fullWidth
-                  variant="standard"
-                />
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={handleAddInterviewClickClose}>Cancel</Button>
-                <Button onClick={() => handleAddInterview()}>Add</Button>
-              </DialogActions>
-            </Dialog>
+
           </div>
           <div>
             <Stack direction="row" spacing={2}>
@@ -263,82 +193,158 @@ function Job(props) {
                 variant="outlined"
               />
             </Stack>
-            <Dialog open={openEditJob} onClose={handleEditJobClose}>
-              <DialogTitle>Edit Job :</DialogTitle>
-              <DialogContent>
-                <TextField
-                  autoFocus
-                  margin="dense"
-                  onChange={(e) => {
-                    handleJobInputChange(e, "title");
-                  }}
-                  value={editJobInputs.title}
-                  id="title"
-                  label="Job Title"
-                  type="text"
-                  fullWidth
-                  variant="standard"
-                  required
-                />
-                <TextField
-                  autoFocus
-                  margin="dense"
-                  onChange={(e) => {
-                    handleJobInputChange(e, "link");
-                  }}
-                  value={editJobInputs.link}
-                  id="link"
-                  label="Job Link"
-                  type="text"
-                  fullWidth
-                  variant="standard"
-                  required
-                />
-                <Dropdown
-                  options={statusesForAddJob}
-                  onChange={(e) => {
-                    handleEditJobStatusChange(e);
-                  }}
-                  value={editJobStatusOption}
-                  placeholder="Status"
-                  required
-                />
-                <br />
-                <div className="datePicker">
-                  <LocalizationProvider dateAdapter={DateAdapter}>
-                    <MobileDatePicker
-                      label="Date"
-                      inputFormat="DD/MM/yyyy"
-                      value={jobDate}
-                      onChange={handleJobDateChange}
-                      renderInput={(params) => <TextField {...params} />}
-                    />
-                  </LocalizationProvider>
-                </div>
-                <TextField
-                  autoFocus
-                  margin="dense"
-                  onChange={(e) => {
-                    handleJobInputChange(e, "company");
-                  }}
-                  value={editJobInputs.company}
-                  id="company"
-                  label="Company"
-                  type="text"
-                  fullWidth
-                  variant="standard"
-                  required
-                />
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={handleEditJobClose}>Cancel</Button>
-                <Button onClick={() => handleEditJob()}>Save</Button>
-                <Button onClick={() => handleDeleteJob()}>Delete</Button>
-              </DialogActions>
-            </Dialog>
+
           </div>
         </div>
       </div>
+
+
+      <Dialog open={openEditJob} onClose={handleEditJobClose}>
+        <DialogTitle>Edit Job :</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            onChange={(e) => {
+              handleJobInputChange(e, "title");
+            }}
+            value={editJobInputs.title}
+            id="title"
+            label="Job Title"
+            type="text"
+            fullWidth
+            variant="standard"
+            required
+          />
+          <TextField
+            autoFocus
+            margin="dense"
+            onChange={(e) => {
+              handleJobInputChange(e, "link");
+            }}
+            value={editJobInputs.link}
+            id="link"
+            label="Job Link"
+            type="text"
+            fullWidth
+            variant="standard"
+            required
+          />
+          <Dropdown
+            options={statusesForAddJob}
+            onChange={(e) => {
+              handleEditJobStatusChange(e);
+            }}
+            value={editJobStatusOption}
+            placeholder="Status"
+            required
+          />
+          <br />
+          <div className="datePicker">
+            <LocalizationProvider dateAdapter={DateAdapter}>
+              <MobileDatePicker
+                label="Date"
+                inputFormat="DD/MM/yyyy"
+                value={jobDate}
+                onChange={handleJobDateChange}
+                renderInput={(params) => <TextField {...params} />}
+              />
+            </LocalizationProvider>
+          </div>
+          <TextField
+            autoFocus
+            margin="dense"
+            onChange={(e) => {
+              handleJobInputChange(e, "company");
+            }}
+            value={editJobInputs.company}
+            id="company"
+            label="Company"
+            type="text"
+            fullWidth
+            variant="standard"
+            required
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleEditJobClose}>Cancel</Button>
+          <Button onClick={() => handleEditJob()}>Save</Button>
+          <Button onClick={() => handleDeleteJob()}>Delete</Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={openAddInterview}
+        onClose={handleAddInterviewClickClose}
+      >
+        <DialogTitle>Add Interview :</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            onChange={(e) => {
+              handleInterviewInputChange(e, "description");
+            }}
+            value={interviewInputs.description}
+            id="description"
+            label="description"
+            type="text"
+            fullWidth
+            variant="standard"
+            required
+          />
+          <br />
+          <Dropdown
+            options={typeOptions}
+            onChange={(e) => {
+              handleTypeChange(e);
+            }}
+            value={typeOption}
+            placeholder="Type"
+            required
+          />{" "}
+          <br />
+          <Dropdown
+            options={statusOptions}
+            onChange={(e) => {
+              handleStatusChange(e);
+            }}
+            value={statusOption}
+            placeholder="Status"
+            required
+          />
+          <br />
+          <div className="datePicker">
+            <LocalizationProvider dateAdapter={DateAdapter}>
+              <MobileDatePicker
+                label="Date mobile"
+                inputFormat="DD/MM/yyyy"
+                value={interviewDate}
+                onChange={handleDateChange}
+                renderInput={(params) => <TextField {...params} />}
+              />
+            </LocalizationProvider>
+          </div>
+          <br />
+          <TextField
+            autoFocus
+            margin="dense"
+            onChange={(e) => {
+              handleInterviewInputChange(e, "link");
+            }}
+            value={interviewInputs.link}
+            id="link"
+            label="Link(Invitation - Zoom)"
+            type="text"
+            fullWidth
+            variant="standard"
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleAddInterviewClickClose}>Cancel</Button>
+          <Button onClick={() => handleAddInterview()}>Add</Button>
+        </DialogActions>
+      </Dialog>
 
       <div
         className={

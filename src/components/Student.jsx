@@ -9,7 +9,7 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import "../styles/Student.css";
 import InterviewRow from "./InterviewRow";
-
+import auth from "../services/authService";
 import http from "../services/httpService";
 
 import Job from "./Job";
@@ -29,7 +29,9 @@ export default function Student() {
   let URL = "/jobs";
 
   const params = useParams();
-  const userId = params.id;
+  const currendUser = auth.getCurrentUser();
+
+  const userId = params.id || currendUser._id;
   const [date, setDate] = useState(new Date(Date.now()));
   const [refresh, setRefresh] = useState(1);
   const [jobs, setJobs] = useState([]);
@@ -38,7 +40,7 @@ export default function Student() {
   const [jobsInputs, setJobsInputs] = useState({
     title: "",
     link: "",
-    company: "",
+    company: ""
   });
 
   const companies = ["All companies", "Yad2", "Facebook", "Twitter", "Intel"];
@@ -94,7 +96,7 @@ export default function Student() {
       company: jobsInputs.company,
       date: date,
       status: statusOption,
-      userId: userId,
+      userId: userId
     };
     http.post(`${URL}`, newJob).then(() => {
       setRefresh(refresh + 1);

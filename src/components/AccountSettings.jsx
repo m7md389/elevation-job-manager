@@ -2,10 +2,12 @@ import React, { useState, useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
 import "../styles/navbar.css";
 import http from "../services/httpService";
+import auth from "../services/authService";
 import { Input } from "@mui/material";
 
 const AccountSettings = () => {
-  let userId = "61efeb22ed0d90af133e9439";
+  const currendUser = auth.getCurrentUser();
+  let userId = currendUser._id;
   let URL = "/users/";
   const [updatedDataInputs, setUpdatedDataInputs] = useState({
     name: "",
@@ -13,11 +15,11 @@ const AccountSettings = () => {
     phone: "",
     city: "",
     linkedin: "",
-    status: "",
+    status: ""
   });
   const [passwordChangeInput, setPasswordChangeInput] = useState({
     currentPassword: "",
-    newPassword: "",
+    newPassword: ""
   });
   useEffect(() => {
     http.get(`${URL}${userId}`).then((res) => {
@@ -28,7 +30,7 @@ const AccountSettings = () => {
         phone: user.phone,
         city: user.city,
         linkedin: user.linkedin,
-        status: user.status,
+        status: user.status
       });
     });
   }, []);

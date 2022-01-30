@@ -13,7 +13,9 @@ const Login = () => {
   const doSubmit = async () => {
     try {
       await auth.login(inputs.email, inputs.password);
-      window.location = "/";
+      if (auth.getCurrentUser().role === "student")
+        window.location = "/student";
+      else if (auth.getCurrentUser().role === "admin") window.location = "/";
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
         alert(ex.response.data);

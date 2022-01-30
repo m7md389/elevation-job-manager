@@ -9,6 +9,23 @@
 .course-name {
   margin: 5px 0;
   font-weight: bold;
+  display: grid;
+  grid-template-columns: 10fr 1fr;
+}
+
+.processBar {
+  font-size: 0vw;
+  height: 10px;
+  background-color: #0b3a7c !important;
+  border-radius: 7px;
+}
+
+.processBar:hover {
+  font-size: 1.5vw;
+  color: white !important;
+  height: auto;
+  background-color: #0b3a7c !important;
+  border-radius: 7px;
 }
 
 .info {

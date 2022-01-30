@@ -1,10 +1,12 @@
 .course-link {
   color: #0b3a7c !important;
   transition: transform 0.3s;
+  text-decoration: none;
 }
 
 .course-link:hover {
   transform: translateY(-10px);
+  text-decoration: underline;
 }
 
 .page-container {

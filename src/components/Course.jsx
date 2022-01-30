@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import "../styles/course.css";
 
 function Course(props) {
+
   const course = props.course;
+
   return (
     <div
       className="course"
@@ -14,16 +16,19 @@ function Course(props) {
     >
       {/* data should come from mobx */}
       {/* <progress max="100" value="80"></progress> */}
-      <div className="course-name">{course.title}</div>
-      <div className="info">
-        <p>
-          students :{" "}
-          <span style={{ fontWeight: "bold" }}>{course.studNum}</span>
-        </p>
-        <p>
-          working : <span>{course.working}%</span>
-        </p>
-      </div>
+      <div className="processBar" style={{width: `${course.working || 0}%`}}>{course.working || 0}%</div>
+      <div className="course-data">
+        <div className="course-name">{course.title} </div>
+        <div className="info">
+          <p>
+            students :{" "}
+            <span style={{ fontWeight: "bold" }}>{course.studNum}</span>
+          </p>
+          <p>
+            working : <span>{course.working}%</span>
+          </p>
+        </div>
+        </div>
     </div>
   );
 }

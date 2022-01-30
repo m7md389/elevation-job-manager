@@ -14,9 +14,11 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 
+import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
+
 function AdminHome() {
   const [courses, setCourses] = useState([]);
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const [courseTitle, setCourseTitle] = useState("");
 
   useEffect(async () => {
@@ -49,12 +51,41 @@ function AdminHome() {
     setOpen(false);
   };
 
+  const [openEditCourse, setOpenEditCourse] = useState(false);
+  const [editJobInputs, setEditJobInputs] = useState({
+    title: "course.title"
+  });
+
+  const handleEditCourseOpen = () => {
+    console.log("hi");
+    setOpenEditCourse(true);
+  };
+
+  const handleEditCourseClose = () => {
+    setOpenEditCourse(false);
+  };
+
+  const handleCourseInputChange = (event, key) => {
+    let tempEditJobInputs = { ...editJobInputs };
+    tempEditJobInputs[key] = event.target.value;
+    setEditJobInputs(tempEditJobInputs);
+  };
+
+  const handleEditCourse = () => {
+
+  }
+
+  const handleDeleteCourse = () => {
+
+  }
+
   return (
     <div>
       <Title text="Home Page" />
 
       <div className="add-course-container">
         <AddIcon onClick={handleOpen} className="add-icon" />
+        <ModeEditOutlineOutlinedIcon onClick={handleEditCourseOpen} variant="outlined"/>
       </div>
 
       <Dialog open={open} onClose={handleClose}>
@@ -78,6 +109,31 @@ function AdminHome() {
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
           <Button onClick={handleAddCourse}>Save</Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={openEditCourse} onClose={handleEditCourseClose}>
+        <DialogTitle>Edit Job :</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            onChange={(e) => {
+              handleCourseInputChange(e, "title");
+            }}
+            value={editJobInputs.title}
+            id="title"
+            label="Job Title"
+            type="text"
+            fullWidth
+            variant="standard"
+            required
+          />
+          <br />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleEditCourseClose}>Cancel</Button>
+          <Button onClick={() => handleEditCourse()}>Save</Button>
+          <Button onClick={() => handleDeleteCourse()}>Delete</Button>
         </DialogActions>
       </Dialog>
 

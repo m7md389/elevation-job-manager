@@ -16,10 +16,11 @@
     height: 100%;
 }
 
-/* .link */
 
-/* .buttons{
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: repeat(2 , 1fr);
-} */
+@media only screen and (max-width: 600px) {
+    .interviews p{
+        display: grid;
+        align-items: center;
+        font-size: 0.7rem;
+    }
+}

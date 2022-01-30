@@ -31,7 +31,7 @@ export default function Student() {
 
     const params = useParams();
     const currentUser = auth.getCurrentUser();
-  
+
     const userId = params.id || currentUser._id;
     const [date, setDate] = useState(new Date(Date.now()));
     const [refresh, setRefresh] = useState(1)
@@ -39,33 +39,48 @@ export default function Student() {
     const [filteredJobs, setFilteredJobs] = useState([])
     const [open, setOpen] = useState(false);
     const [jobsInputs, setJobsInputs] = useState({ title: "", link: "", company: "" })
-    
+    const [userInfo, setUserInfo] = useState({})
     const statusesForAddJob = ['Applied', 'Accepted', 'waiting', 'no reply']
-    
+    const [userCohort, setUserCohort] = useState({})
     const [company, setCompany] = useState("All");
     const [status, setStatus] = useState("All");
     const [statusOption, setStatusOption] = useState(statusesForAddJob[0])
 
     const getJobs = async () => {
         let tempJobs = []
-        let res = (await http.get(`${URL}/${userId}`)).data
-        res.forEach(job => {
-            if(company !== 'All' || status !== 'All'){
-                if(job.company.toLowerCase() === company && job.status.toLowerCase() === status){
+        let userJobs = (await http.get(`${URL}/${userId}`)).data
+        // console.log(userJobs);
+        userJobs.jobs.forEach(job => {
+            if (company !== 'All' || status !== 'All') {
+                if (job.company.toLowerCase() === company && job.status.toLowerCase() === status) {
                     tempJobs.push(job)
                 }
-                else{
-                    if(company && status === 'All' && job.company.toLowerCase() === company){tempJobs.push(job)}
-                    if(status && company === 'All' && job.status.toLowerCase() === status){tempJobs.push(job)}
-                    }
+                else {
+                    if (company && status === 'All' && job.company.toLowerCase() === company) { tempJobs.push(job) }
+                    if (status && company === 'All' && job.status.toLowerCase() === status) { tempJobs.push(job) }
                 }
-            else{
+            }
+            else {
                 tempJobs.push(job)
             }
         })
-        setJobs(res)
+        setJobs(userJobs.jobs)
+        setUserInfo(userJobs)
         setFilteredJobs(tempJobs)
+
     }
+
+
+    React.useEffect(async () => {
+        console.log(userId);
+        console.log(jobs);
+        let URL = '/courses'
+        let cohort = (await http.get(`${URL}/${userId}`)).data
+        setUserCohort(cohort)
+        console.log(userCohort);
+
+    }, [])
+
 
     React.useEffect(async () => {
         getJobs()
@@ -73,7 +88,7 @@ export default function Student() {
 
     React.useEffect(async () => {
         getJobs()
-    }, [company,status])
+    }, [company, status])
 
     const handleCompanyChange = (event) => {
         setCompany(event.target.value);
@@ -124,17 +139,17 @@ export default function Student() {
     const getCompanies = () => {
         let companies = ['All'];
         jobs.forEach((job) => {
-            if(!companies.includes(job.company.toLowerCase())){
+            if (!companies.includes(job.company.toLowerCase())) {
                 companies.push(job.company.toLowerCase());
             }
         });
         return companies;
-      };
+    };
 
     const getStatuses = () => {
         let statuses = ['All'];
         jobs.forEach((job) => {
-            if(!statuses.includes(job.status.toLowerCase())){
+            if (!statuses.includes(job.status.toLowerCase())) {
                 statuses.push(job.status.toLowerCase());
             }
         });
@@ -147,21 +162,21 @@ export default function Student() {
 
     const MenuProps = {
         PaperProps: {
-          style: {
-            maxHeight: 40 * 4.5 + 5,
-            width: 250,
-          },
+            style: {
+                maxHeight: 40 * 4.5 + 5,
+                width: 250,
+            },
         },
     };
 
     return (
         <div className='student-page-container'>
             <div className='student-details'>
-                <p>name: </p>
-                <p>cohort: </p>
-                <p>email: </p>
-                <p>city: </p>
-                <p>phone: </p>
+                <p>name: <span>{userInfo.name}</span></p>
+                <p>cohort:<span>{userCohort.cohort}</span> </p>
+                <p>email: <span>{userInfo.email}</span></p>
+                <p>city:  <span>{userInfo.city}</span></p>
+                <p>phone: <span>{userInfo.phone}</span></p>
             </div>
             <div className='filters-detail'>
                 <div className='cont'>
@@ -206,7 +221,7 @@ export default function Student() {
                 </div>
             </div>
 
-            <div style={{ width: '80%', margin: '10px auto' }}> <hr />
+            <div> <hr />
 
                 <div>
                     <Stack direction="row" spacing={2}>

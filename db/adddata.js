@@ -95,7 +95,7 @@ const addJobs = function (user, jobData) {
     city: user.city,
     linkedin: user.linkedin,
     status: user.status,
-    role: user.role,
+    role: 'student',
     jobs: jobData,
   });
   tempUser.save();

@@ -6,8 +6,8 @@ import auth from "../services/authService";
 import { Input } from "@mui/material";
 
 const AccountSettings = () => {
-  const currendUser = auth.getCurrentUser();
-  let userId = currendUser._id;
+  const currentUser = auth.getCurrentUser();
+  let userId = currentUser._id;
   let URL = "/users/";
   const [updatedDataInputs, setUpdatedDataInputs] = useState({
     name: "",
@@ -34,9 +34,9 @@ const AccountSettings = () => {
       });
     });
   }, []);
-  const handleInputChange = (e) => {
+  const handleInputChange = (e,key) => {
     let tempUpdatedDataInputs = { ...updatedDataInputs };
-    tempUpdatedDataInputs[e.target.className] = e.target.value;
+    tempUpdatedDataInputs[key] = e.target.value;
     setUpdatedDataInputs(tempUpdatedDataInputs);
   };
 

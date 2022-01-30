@@ -20,7 +20,7 @@ router.post("/", async function (req, res) {
     linkedin,
     status,
     course,
-    cohort
+    cohort,
   } = req.body;
 
   let user = await User.findOne({ email });
@@ -38,7 +38,7 @@ router.post("/", async function (req, res) {
     linkedin,
     status,
     role: "student",
-    jobs: []
+    jobs: [],
   });
   const salt = await bcrypt.genSalt(10);
   user.password = await bcrypt.hash(password, salt);
@@ -49,6 +49,36 @@ router.post("/", async function (req, res) {
     .header("x-auth-token", token)
     .header("access-control-expose-headers", "x-auth-token")
     .send(_.pick(user, ["_id", "name", "email"]));
+});
+
+router.put("/password", async function (req, res) {
+  const { userId, currentPassword, newPassword } = req.body;
+  let user = await User.findById({ _id: userId });
+  const validPassword = await bcrypt.compare(currentPassword, user.password);
+
+  if (!validPassword) {
+    return res
+      .status(400)
+      .send({ error: "Current password not match the current password" });
+  }
+
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+  User.findOneAndUpdate(
+    { _id: userId },
+    {
+      $set: {
+        password: hashedPassword,
+      },
+    },
+    { new: true }
+  ).exec(function (err, updatedUser) {
+    if (err) {
+      res.send({ error: "error updating password" });
+    }
+    res.send(updatedUser);
+  });
 });
 
 module.exports = router;

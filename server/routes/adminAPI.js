@@ -360,29 +360,6 @@ router.get("/api/users/:userId", async function (req, res) {
   );
 });
 
-router.put("/api/users/password", async function (req, res) {
-  let updatedPasswordData = req.body;
-  let user = await users.findById({ _id: updatedPasswordData.userId });
-  if (user.password != updatedPasswordData.currentPassword) {
-    res.send({ error: "Current password not match the current password" });
-    return;
-  }
-  await Users.findOneAndUpdate(
-    { _id: updatedPasswordData.userId },
-    {
-      $set: {
-        password: updatedPasswordData.newPassword,
-      },
-    },
-    { new: true }
-  ).exec(function (err, updatedUser) {
-    if (err) {
-      res.send({ error: "error updating password" });
-    }
-    res.send(updatedUser);
-  });
-});
-
 router.put("/api/users", async function (req, res) {
   let updatedUserData = req.body;
   let user = await Users.find({ _id: updatedUserData.userId });

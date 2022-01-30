@@ -34,7 +34,7 @@ function AdminHome() {
   useEffect(async () => {
     let coursesNames = []
     courses.forEach(course => {
-      if(!coursesNames.includes(course.title)){coursesNames.push(course.title)}
+      if (!coursesNames.includes(course.title)) { coursesNames.push(course.title) }
     });
     setCoursesOptions(coursesNames)
   }, [courses]);
@@ -82,15 +82,15 @@ function AdminHome() {
   }
 
   const handleEditCourse = () => {
-    if (!coursesOptions || !courseTitle) {return}
-    http.put(`/courses`, { data: { title: courseTitle, newTitle } }).then(() => {
-      setRefresh(refresh + 1);
-      setOpenEditCourse(false)
-    })
+    //   if (!coursesOptions || !courseTitle) { return }
+    //   http.put(`/courses`, { data: { title: courseTitle, newTitle } }).then(() => {
+    //     setRefresh(refresh + 1);
+    //     setOpenEditCourse(false)
+    //   })
   }
 
   const handleDeleteCourse = () => {
-    if (!coursesOptions) {return}
+    if (!coursesOptions) { return }
     http.delete(`/courses`, { data: { title: courseTitle } }).then(() => {
       setRefresh(refresh + 1);
       setOpenEditCourse(false)
@@ -103,7 +103,7 @@ function AdminHome() {
 
       <div className="add-course-container">
         <AddIcon onClick={handleOpen} className="add-icon" />
-        <ModeEditOutlineOutlinedIcon onClick={handleEditCourseOpen} variant="outlined"/>
+        <ModeEditOutlineOutlinedIcon onClick={handleEditCourseOpen} variant="outlined" />
       </div>
 
       <Dialog open={open} onClose={handleClose}>

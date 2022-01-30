@@ -74,7 +74,7 @@ function AdminDashboard() {
         setValue([moment(Date.now()), moment(value[0]).add(7, "days")]);
         break;
       case "Today":
-        setValue([Date.now(), Date.now()]);
+        setValue([moment(Date.now()), moment(Date.now())]);
         break;
       case "Three days":
         setValue([moment(value[0]), moment(value[0]).add(3, "days")]);
@@ -150,7 +150,7 @@ function AdminDashboard() {
           rows={rows}
           columns={columns}
           pageSize={10}
-          rowsPerPageOptions={[5]}
+          rowsPerPageOptions={[10]}
           disableSelectionOnClick
           onRowClick={handleRowClick}
         />

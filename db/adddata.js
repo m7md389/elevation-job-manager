@@ -21,7 +21,7 @@ const Admin = {
   linkedin: "https://www.linkedin.com/in/ofri-meir-weizman/",
   status: "",
   role: "admin",
-  jobs: []
+  jobs: [],
 };
 const addMockAdmin = function (Admin) {
   const tempUser = new user({
@@ -33,7 +33,7 @@ const addMockAdmin = function (Admin) {
     linkedin: Admin.linkedin,
     status: Admin.status,
     role: Admin.role,
-    jobs: []
+    jobs: [],
   });
   tempUser.save();
 };
@@ -69,7 +69,7 @@ const addInterviews = function (job) {
       type: interviewObj.type,
       status: interviewObj.status,
       date: interviewObj.date,
-      link: interviewObj.link
+      link: interviewObj.link,
     });
     tempInterview.save();
     tempArray.push(tempInterview);
@@ -80,7 +80,7 @@ const addInterviews = function (job) {
     date: job.date,
     company: job.company,
     status: job.status,
-    interviews: tempArray
+    interviews: tempArray,
   });
   tempJob.save();
   return tempJob;
@@ -96,7 +96,7 @@ const addJobs = function (user, jobData) {
     linkedin: user.linkedin,
     status: user.status,
     role: user.role,
-    jobs: jobData
+    jobs: jobData,
   });
   tempUser.save();
   return tempUser;
@@ -106,7 +106,7 @@ const addUsers = function (cohort, usersData) {
   const tempCohort = new Cohort({
     name: cohort.name,
     start_date: cohort.start_date,
-    users: usersData
+    users: usersData,
   });
   tempCohort.save();
   return tempCohort;
@@ -115,7 +115,7 @@ const addUsers = function (cohort, usersData) {
 const addCourse = function (course, cohortsArray) {
   const tempCourse = new Course({
     title: course.title,
-    cohorts: cohortsArray
+    cohorts: cohortsArray,
   });
   tempCourse.save();
 };

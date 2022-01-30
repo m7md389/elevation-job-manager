@@ -17,7 +17,7 @@ const Register = () => {
     cohort: "default",
     status: "default"
   });
-  let [isdropdownCourseOpened, setIsdropdownCourseOpened] = useState(false);
+  let [isDropdownCourseOpened, setIsDropdownCourseOpened] = useState(false);
   let [courses, setCourses] = useState([]);
   const statusOptions = ["Studying", "Searching", "Working"];
 

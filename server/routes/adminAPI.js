@@ -297,7 +297,7 @@ router.post("/api/courses", async (req, res) => {
     title: courseName
   });
   await newCourse.save();
-  res.redirect("/courses/names");
+  res.redirect("/api/courses/names");
 });
 
 router.put("/api/jobs/Interviews", async function (req, res) {

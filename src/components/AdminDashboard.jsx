@@ -14,6 +14,8 @@ import TextField from "@mui/material/TextField";
 import DateRangePicker from "@mui/lab/DateRangePicker";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import MenuItem from "@mui/material/MenuItem";
+import auth from "../services/authService";
+import Student from "./Student";
 
 function AdminDashboard() {
   const columns = [
@@ -23,14 +25,14 @@ function AdminDashboard() {
     { field: "course", headerName: "Course Name", width: 150 },
     { field: "email", headerName: "Email", width: 100 },
     { field: "phone", headerName: "Phone", width: 100 },
-    { field: "date", headerName: "Date", type: "date", width: 100 },
+    { field: "date", headerName: "Date", type: "date", width: 100 }
   ];
 
   var date = new Date(Date.now());
   const [rows, setRows] = useState([]);
   const [value, setValue] = React.useState([
     moment(Date.now()),
-    moment(date.setDate(date.getDate() + 7)),
+    moment(date.setDate(date.getDate() + 7))
   ]);
   const ranges = ["Week", "Today", "Three days", "Month"];
   const [range, setRange] = useState(ranges[0]);
@@ -93,10 +95,12 @@ function AdminDashboard() {
     PaperProps: {
       style: {
         maxHeight: 40 * 4.5 + 5,
-        width: 250,
-      },
-    },
+        width: 250
+      }
+    }
   };
+
+  if (auth.getCurrentUser().role === "student") return <Student />;
 
   return (
     <div className="admin-dashboard-container">

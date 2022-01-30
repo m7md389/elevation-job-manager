@@ -14,19 +14,30 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 
+import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
+
+import Dropdown from "react-dropdown";
+import "react-dropdown/style.css";
+
 function AdminHome() {
   const [courses, setCourses] = useState([]);
-  const [open, setOpen] = React.useState(false);
+  const [coursesOptions, setCoursesOptions] = useState([]);
+  const [open, setOpen] = useState(false);
   const [courseTitle, setCourseTitle] = useState("");
+  const [refresh, setRefresh] = useState(1)
 
   useEffect(async () => {
     let res = (await http.get(`/courses/names`)).data;
     setCourses(res);
-  }, []);
+  }, [refresh]);
 
   useEffect(async () => {
-    // setCourses(res);
-  }, []);
+    let coursesNames = []
+    courses.forEach(course => {
+      if(!coursesNames.includes(course.title)){coursesNames.push(course.title)}
+    });
+    setCoursesOptions(coursesNames)
+  }, [courses]);
 
   const handleClose = () => {
     setOpen(false);
@@ -49,12 +60,50 @@ function AdminHome() {
     setOpen(false);
   };
 
+  const [openEditCourse, setOpenEditCourse] = useState(false);
+  const [editJobInputs, setEditJobInputs] = useState({
+    title: "course.title"
+  });
+
+  const handleEditCourseOpen = () => {
+    setOpenEditCourse(true);
+  };
+
+  const handleEditCourseClose = () => {
+    setOpenEditCourse(false);
+  };
+
+  const handleCourseInputChange = event => {
+    setCourseTitle(event.target.value);
+  };
+
+  const handleCourseOptionChange = (e) => {
+    setCourseTitle(e.value);
+  }
+
+  const handleEditCourse = () => {
+    if (!coursesOptions || !courseTitle) {return}
+    http.put(`/courses`, { data: { title: courseTitle, newTitle } }).then(() => {
+      setRefresh(refresh + 1);
+      setOpenEditCourse(false)
+    })
+  }
+
+  const handleDeleteCourse = () => {
+    if (!coursesOptions) {return}
+    http.delete(`/courses`, { data: { title: courseTitle } }).then(() => {
+      setRefresh(refresh + 1);
+      setOpenEditCourse(false)
+    })
+  }
+
   return (
     <div>
       <Title text="Home Page" />
 
       <div className="add-course-container">
         <AddIcon onClick={handleOpen} className="add-icon" />
+        <ModeEditOutlineOutlinedIcon onClick={handleEditCourseOpen} variant="outlined"/>
       </div>
 
       <Dialog open={open} onClose={handleClose}>
@@ -78,6 +127,40 @@ function AdminHome() {
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
           <Button onClick={handleAddCourse}>Save</Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={openEditCourse} onClose={handleEditCourseClose}>
+        <DialogTitle>Edit Course :</DialogTitle>
+        <DialogContent>
+          <Dropdown
+            options={coursesOptions}
+            onChange={(e) => {
+              handleCourseOptionChange(e);
+            }}
+            value={"All"}
+            placeholder="Course"
+            required
+          />
+          <TextField
+            autoFocus
+            margin="dense"
+            onChange={(e) => {
+              handleCourseInputChange(e);
+            }}
+            value={courseTitle}
+            id="title"
+            label="Course Title"
+            type="text"
+            fullWidth
+            variant="standard"
+            required
+          />
+          <br />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleEditCourseClose}>Cancel</Button>
+          <Button onClick={() => handleEditCourse()}>Save</Button>
+          <Button onClick={() => handleDeleteCourse()}>Delete</Button>
         </DialogActions>
       </Dialog>
 

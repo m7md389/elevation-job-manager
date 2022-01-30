@@ -1,10 +1,12 @@
 .course-link {
   color: #0b3a7c !important;
   transition: transform 0.3s;
+  text-decoration: none;
 }
 
 .course-link:hover {
   transform: translateY(-10px);
+  text-decoration: underline;
 }
 
 .page-container {
@@ -22,7 +24,7 @@
   font-size: 2rem;
 }
 
-.add-course-container:hover .add-icon {
+.add-course-container .add-icon:hover {
   border: 1px solid #2196f3;
   border-radius: 50%;
   color: #2196f3;

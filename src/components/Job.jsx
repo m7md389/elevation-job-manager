@@ -193,7 +193,6 @@ function Job(props) {
                 variant="outlined"
               />
             </Stack>
-
           </div>
         </div>
       </div>

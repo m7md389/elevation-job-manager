@@ -1,6 +1,18 @@
 .admin-dashboard-container{
     width: 80%;
     margin: 20px auto;
+    /* display: grid; */
+    justify-content: center;
+}
+
+.range-picker{
+    display: grid;
+    justify-content: center;
+    margin: 30px 0;
+}
+
+.range-by-week{
+    margin: 30px 0;
 }
 
 .grid{

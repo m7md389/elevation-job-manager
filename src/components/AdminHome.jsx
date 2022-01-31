@@ -29,7 +29,7 @@ function AdminHome() {
 
   useEffect(async () => {
     let res = (await http.get(`/courses/names`)).data;
-    if(res.error){
+    if (res.error) {
       return setCourses([])
     }
     setCourses(res);
@@ -60,7 +60,7 @@ function AdminHome() {
 
     let updatedCourses = (await http.post(`/courses`, { title: courseTitle })).data;
     console.log(updatedCourses);
-    if(updatedCourses.error){
+    if (updatedCourses.error) {
       return
     }
     setCourses(updatedCourses);
@@ -86,11 +86,11 @@ function AdminHome() {
   }
 
   const handleEditCourse = () => {
-    //   if (!coursesOptions || !courseTitle) { return }
-    //   http.put(`/courses`, { data: { title: courseTitle, newTitle } }).then(() => {
-    //     setRefresh(refresh + 1);
-    //     setOpenEditCourse(false)
-    //   })
+    if (!coursesOptions || !courseTitle) { return }
+    http.put(`/courses`, { data: { title: courseTitle, courseTitle } }).then(() => {
+      setRefresh(refresh + 1);
+      setOpenEditCourse(false)
+    })
   }
 
   const handleDeleteCourse = () => {

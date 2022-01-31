@@ -11,17 +11,8 @@ router.get("/me", auth, async (req, res) => {
 });
 
 router.post("/", async function (req, res) {
-  const {
-    name,
-    email,
-    password,
-    phone,
-    city,
-    linkedin,
-    status,
-    course,
-    cohort,
-  } = req.body;
+  const { name, email, password, phone, city, linkedin, status, cohortId } =
+    req.body;
 
   let user = await User.findOne({ email });
   if (user) {

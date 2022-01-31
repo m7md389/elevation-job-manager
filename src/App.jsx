@@ -8,6 +8,7 @@ import Login from "./components/Login";
 import Logout from "./components/Logout";
 import Register from "./components/Register";
 import PageNotFound from "./components/PageNotFound";
+import AddAdmin from "./components/AddAdmin";
 import DetailedCourse from "./components/DetailedCourse";
 import AdminHome from "./components/AdminHome";
 import Student from "./components/Student";
@@ -55,6 +56,14 @@ const App = () => {
           element={
             <ProtectedRoute>
               <AccountSettings />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/add-admin"
+          element={
+            <ProtectedRoute isAdminPage>
+              <AddAdmin />
             </ProtectedRoute>
           }
         />

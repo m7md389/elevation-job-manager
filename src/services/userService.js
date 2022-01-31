@@ -10,9 +10,18 @@ export const register = async (user) => {
     city: user.city,
     linkedin: user.linkedin,
     status: user.status,
-    course: user.course,
-    cohort: user.cohort
+    cohortId: user.cohort
   });
 };
 
-export default { register };
+export const addAdmin = async (admin) => {
+  const apiEndpoint = "/users/admin";
+  return http.post(apiEndpoint, {
+    name: admin.name,
+    email: admin.email,
+    password: admin.password,
+    phone: admin.phone
+  });
+};
+
+export default { register, addAdmin };

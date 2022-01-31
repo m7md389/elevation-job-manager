@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const auth = require("../middleware/auth");
+const admin = require("../middleware/admin");
 const _ = require("lodash");
 const bcrypt = require("bcrypt");
 const User = require("../models/user");
@@ -29,7 +30,7 @@ router.post("/", async function (req, res) {
     linkedin,
     status,
     role: "student",
-    jobs: [],
+    jobs: []
   });
   const salt = await bcrypt.genSalt(10);
   user.password = await bcrypt.hash(password, salt);
@@ -40,6 +41,31 @@ router.post("/", async function (req, res) {
     .header("x-auth-token", token)
     .header("access-control-expose-headers", "x-auth-token")
     .send(_.pick(user, ["_id", "name", "email"]));
+});
+
+router.post("/admin", auth, admin, async function (req, res) {
+  const { name, email, password, phone } = req.body;
+
+  let admin = await User.findOne({ email });
+  if (admin) {
+    res.status(400).send("User already registered.");
+    return null;
+  }
+
+  admin = new User({
+    name,
+    email,
+    password,
+    phone,
+    role: "admin"
+  });
+
+  const salt = await bcrypt.genSalt(10);
+  admin.password = await bcrypt.hash(password, salt);
+  await admin.save();
+
+  const token = admin.generateAuthToken();
+  res.send("Admin added successfully");
 });
 
 router.put("/password", async function (req, res) {
@@ -60,8 +86,8 @@ router.put("/password", async function (req, res) {
     { _id: userId },
     {
       $set: {
-        password: hashedPassword,
-      },
+        password: hashedPassword
+      }
     },
     { new: true }
   ).exec(function (err, updatedUser) {

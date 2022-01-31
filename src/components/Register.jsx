@@ -14,10 +14,9 @@ const Register = () => {
     phone: "",
     city: "",
     linkedin: "",
-    cohort: "default",
+    cohortId: "default",
     status: "default"
   });
-  let [isDropdownCourseOpened, setIsDropdownCourseOpened] = useState(false);
   let [courses, setCourses] = useState([]);
   const statusOptions = ["Studying", "Searching", "Working"];
 
@@ -32,9 +31,7 @@ const Register = () => {
 
   const doSubmit = async () => {
     try {
-      const cohortInput = inputs.cohort.split("@");
-      const [cohort, course] = cohortInput;
-      const response = await user.register({ ...inputs, cohort, course });
+      const response = await user.register({ ...inputs });
       const token = response.headers["x-auth-token"];
       auth.loginWithToken(token);
       window.location = "/";
@@ -109,7 +106,7 @@ const Register = () => {
               name="cohort"
               onChange={handleChange}
               id="cohort"
-              value={inputs.cohort}
+              value={inputs.cohortId}
             >
               <option className="default-value" value="default" disabled>
                 Cohort
@@ -121,10 +118,7 @@ const Register = () => {
                   value={course.title}
                 >
                   {course.cohorts.map((cohort) => (
-                    <option
-                      key={cohort.name + "@" + course.title}
-                      value={cohort.name + "@" + course.title}
-                    >
+                    <option key={cohort._id} value={cohort._id}>
                       {cohort.name}
                     </option>
                   ))}

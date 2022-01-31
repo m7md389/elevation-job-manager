@@ -338,8 +338,14 @@ router.post("/api/courses", async (req, res) => {
     return null;
   }
 
+  let checkExist = await Course.find({ title: courseName });
+  if (checkExist) {
+    res.status(400).send("Course already Exist.");
+    return null;
+  }
   let newCourse = new Course({
     title: courseName,
+    cohorts: [],
   });
   await newCourse.save();
   res.redirect("/api/courses/names");

@@ -18,8 +18,8 @@ router.post("/api/temp-users", async function (req, res) {
     city,
     linkedin,
     status,
-    course,
-    cohort,
+
+    cohortId,
   } = req.body;
 
   let user = await Users.findOne({ email });
@@ -42,6 +42,14 @@ router.post("/api/temp-users", async function (req, res) {
   const salt = await bcrypt.genSalt(10);
   user.password = await bcrypt.hash(password, salt);
   await user.save();
+
+  Cohort.findByIdAndUpdate(
+    { _id: cohortId },
+    { $push: { users: user } },
+    { new: true }
+  ).exec((error, result) => {
+    console.log("............................................");
+  });
 
   const token = user.generateAuthToken();
   res
@@ -81,8 +89,7 @@ router.get("/api/courses/:id", async (req, res) => {
       path: "cohorts",
       populate: {
         path: "users",
-
-      }
+      },
     })
     .exec(function (err, courses) {
       if (err) {
@@ -90,23 +97,20 @@ router.get("/api/courses/:id", async (req, res) => {
       }
 
       let userInfo;
-      courses.forEach(course => {
-        course.cohorts.forEach(cohort => {
-          cohort.users.forEach(user => {
+      courses.forEach((course) => {
+        course.cohorts.forEach((cohort) => {
+          cohort.users.forEach((user) => {
             if (user._id == userId) {
               userInfo = {
                 course: course.title,
-                cohort: cohort.name
-              }
+                cohort: cohort.name,
+              };
             }
-          })
-        })
-      })
-      if (userInfo)
-        res.send(userInfo);
-      else
-        res.send({ error: "user id not found" });
-
+          });
+        });
+      });
+      if (userInfo) res.send(userInfo);
+      else res.send({ error: "user id not found" });
     });
 });
 
@@ -391,7 +395,8 @@ router.delete("/api/jobs/Interviews", async function (req, res) {
 });
 
 router.get("/api/jobs/:userId?", function (req, res) {
-  Users.findById({ _id: req.params.userId }).select("-password")
+  Users.findById({ _id: req.params.userId })
+    .select("-password")
     .populate({
       path: "jobs",
       populate: {

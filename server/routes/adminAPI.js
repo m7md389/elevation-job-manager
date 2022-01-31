@@ -80,45 +80,6 @@ router.get("/api/courses", async (req, res) => {
     });
 });
 
-<<<<<<< HEAD
-
-=======
-router.get("/api/courses/:id", async (req, res) => {
-  let userId = req.params.id;
-  let userInfo;
-
-  Course.find({})
-    .populate({
-      path: "cohorts",
-      populate: {
-        path: "users",
-      },
-    })
-    .exec(function (err, courses) {
-      if (err) {
-        console.log(err);
-      }
-
-      courses.forEach((course) => {
-        course.cohorts.forEach((cohort) => {
-          cohort.users.forEach((user) => {
-            if (user._id == userId) {
-              userInfo = {
-                course: course.title,
-                cohort: cohort.name,
-              };
-            }
-          });
-        });
-      });
-    });
-  if (userInfo) {
-    res.send(userInfo);
-  } else {
-    res.send({ error: "user id not found" });
-  }
-});
->>>>>>> 0900a4a6281d26b40b89df320fdef71aeef07cdc
 
 const findInterviewsInRange = async (sDate, eDate, courses) => {
   let users = [];

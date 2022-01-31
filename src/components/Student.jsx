@@ -72,13 +72,9 @@ export default function Student() {
 
 
     React.useEffect(async () => {
-        console.log(userId);
-        console.log(jobs);
         let URL = '/courses'
         let cohort = (await http.get(`${URL}/${userId}`)).data
         setUserCohort(cohort)
-        console.log(userCohort);
-
     }, [])
 
 

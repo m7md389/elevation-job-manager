@@ -72,6 +72,40 @@ router.get("/api/courses", async (req, res) => {
     });
 });
 
+router.get("/api/courses/:id", async (req, res) => {
+  let userId = req.params.id;
+  console.log(userId);
+
+  await Course.find()
+    .populate({
+      path: "cohorts",
+      populate: {
+        path: "users",
+      },
+    })
+    .exec(function (err, courses) {
+      if (err) {
+        console.log(err);
+      }
+
+      let userInfo;
+      courses.forEach((course) => {
+        course.cohorts.forEach((cohort) => {
+          cohort.users.forEach((user) => {
+            if (user._id == userId) {
+              userInfo = {
+                course: course.title,
+                cohort: cohort.name,
+              };
+            }
+          });
+        });
+      });
+      if (userInfo) res.send(userInfo);
+      else res.send({ error: "user id not found" });
+    });
+});
+
 const findInterviewsInRange = async (sDate, eDate, courses) => {
   let users = [];
   var endDate = moment(eDate);
@@ -210,7 +244,7 @@ router.post("/api/jobs", async function (req, res) {
     })
     .exec(function (err, user) {
       if (err) {
-        console.log(err);
+        console.log(res.send({ error: "error adding job" }));
       }
       res.send(user);
     });
@@ -354,6 +388,7 @@ router.delete("/api/jobs/Interviews", async function (req, res) {
 
 router.get("/api/jobs/:userId?", function (req, res) {
   Users.findById({ _id: req.params.userId })
+    .select("-password")
     .populate({
       path: "jobs",
       populate: {
@@ -361,7 +396,7 @@ router.get("/api/jobs/:userId?", function (req, res) {
       },
     })
     .exec(function (err, user) {
-      res.send(user.jobs);
+      res.send(user);
     });
 });
 

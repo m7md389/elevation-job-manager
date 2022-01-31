@@ -29,6 +29,7 @@ function AdminHome() {
 
   useEffect(async () => {
     let {data:res} = (await http.get(`/courses/names`));
+    console.log(res);
     if(res.error){
       return
     }
@@ -59,6 +60,7 @@ function AdminHome() {
     if (!courseTitle) return;
 
     let updatedCourses = (await http.post(`/courses`, { title: courseTitle })).data;
+    console.log(updatedCourses);
     if(updatedCourses.error){
       return
     }

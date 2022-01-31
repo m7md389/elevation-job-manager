@@ -6,12 +6,11 @@ const NavBar = () => {
   const [isOpenedDropdown, setIsOpenedDropdown] = useState(false);
   const [isOpenedNavbar, setIsOpenedNavbar] = useState(false);
   const menuClass = `dropdown-menu${isOpenedDropdown ? " show" : ""}`;
-  const navbarClass = `collapse navbar-collapse${
-    isOpenedNavbar ? " show" : ""
-  }`;
+  const navbarClass = `collapse navbar-collapse${isOpenedNavbar ? " show" : ""
+    }`;
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+    <nav className="navbar navbar-expand-lg navbar-light bg-light my-navbar-container">
       <NavLink className="navbar-brand" to="/">
         <img
           className="ms-4 me-3"

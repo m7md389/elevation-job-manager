@@ -72,7 +72,7 @@ export default function Student() {
 
 
     React.useEffect(async () => {
-        let URL = '/courses'
+        let URL = '/cohorts/courses'
         let cohort = (await http.get(`${URL}/${userId}`)).data
         setUserCohort(cohort)
     }, [])

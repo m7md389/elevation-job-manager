@@ -1,3 +1,7 @@
+.my-navbar-container{
+  font-family: 'IBM Plex Sans Thai Looped', sans-serif;
+}
+
 #user-settings-icon {
   position: absolute;
   right: 0;

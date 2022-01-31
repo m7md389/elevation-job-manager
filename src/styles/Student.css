@@ -1,6 +1,8 @@
 .student-page-container {
   width: 80%;
   margin: 0 auto;
+  font-family: 'IBM Plex Sans Thai Looped', sans-serif;  
+
 }
 
 .filters-detail {

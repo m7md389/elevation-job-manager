@@ -59,7 +59,7 @@ router.post("/api/temp-users", async function (req, res) {
 });
 
 router.get("/api/courses", async (req, res) => {
-  const courses = await Course.find({})
+  const courses = Course.find({})
     .populate({
       path: "cohorts",
       populate: {
@@ -80,7 +80,45 @@ router.get("/api/courses", async (req, res) => {
     });
 });
 
+<<<<<<< HEAD
 
+=======
+router.get("/api/courses/:id", async (req, res) => {
+  let userId = req.params.id;
+  let userInfo;
+
+  Course.find({})
+    .populate({
+      path: "cohorts",
+      populate: {
+        path: "users",
+      },
+    })
+    .exec(function (err, courses) {
+      if (err) {
+        console.log(err);
+      }
+
+      courses.forEach((course) => {
+        course.cohorts.forEach((cohort) => {
+          cohort.users.forEach((user) => {
+            if (user._id == userId) {
+              userInfo = {
+                course: course.title,
+                cohort: cohort.name,
+              };
+            }
+          });
+        });
+      });
+    });
+  if (userInfo) {
+    res.send(userInfo);
+  } else {
+    res.send({ error: "user id not found" });
+  }
+});
+>>>>>>> 0900a4a6281d26b40b89df320fdef71aeef07cdc
 
 const findInterviewsInRange = async (sDate, eDate, courses) => {
   let users = [];
@@ -148,6 +186,7 @@ router.get("/api/courses/:startDate/:endDate", async (req, res) => {
 });
 
 router.get("/api/courses/names", async function (req, res) {
+  console.log("hello2");
   let courses = await Course.find({}).populate({
     path: "cohorts",
     populate: {
@@ -303,8 +342,14 @@ router.post("/api/courses", async (req, res) => {
     return null;
   }
 
+  let checkExist = await Course.find({ title: courseName });
+  if (checkExist) {
+    res.status(400).send("Course already Exist.");
+    return null;
+  }
   let newCourse = new Course({
     title: courseName,
+    cohorts: [],
   });
   await newCourse.save();
   res.redirect("/api/courses/names");

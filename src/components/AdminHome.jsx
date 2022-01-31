@@ -25,9 +25,13 @@ function AdminHome() {
   const [open, setOpen] = useState(false);
   const [courseTitle, setCourseTitle] = useState("");
   const [refresh, setRefresh] = useState(1)
+  const [selectedCourse, setSelectedCourse] = "";
 
   useEffect(async () => {
     let res = (await http.get(`/courses/names`)).data;
+    if(res.error){
+      return setCourses([])
+    }
     setCourses(res);
   }, [refresh]);
 
@@ -54,16 +58,16 @@ function AdminHome() {
   const handleAddCourse = async () => {
     if (!courseTitle) return;
 
-    let updatedCourses = (await http.post(`/courses`, { title: courseTitle }))
-      .data;
+    let updatedCourses = (await http.post(`/courses`, { title: courseTitle })).data;
+    console.log(updatedCourses);
+    if(updatedCourses.error){
+      return
+    }
     setCourses(updatedCourses);
     setOpen(false);
   };
 
   const [openEditCourse, setOpenEditCourse] = useState(false);
-  const [editJobInputs, setEditJobInputs] = useState({
-    title: "course.title"
-  });
 
   const handleEditCourseOpen = () => {
     setOpenEditCourse(true);
@@ -78,7 +82,7 @@ function AdminHome() {
   };
 
   const handleCourseOptionChange = (e) => {
-    setCourseTitle(e.value);
+    setSelectedCourse(e.value);
   }
 
   const handleEditCourse = () => {
@@ -137,7 +141,7 @@ function AdminHome() {
             onChange={(e) => {
               handleCourseOptionChange(e);
             }}
-            value={"All"}
+            value={selectedCourse}
             placeholder="Course"
             required
           />

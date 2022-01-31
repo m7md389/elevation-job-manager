@@ -28,10 +28,9 @@ function AdminHome() {
   const [selectedCourse, setSelectedCourse] = "";
 
   useEffect(async () => {
-    let {data:res} = (await http.get(`/courses/names`));
-    console.log(res);
+    let res = (await http.get(`/courses/names`)).data;
     if(res.error){
-      return
+      return setCourses([])
     }
     setCourses(res);
   }, [refresh]);

@@ -19,7 +19,7 @@ import Student from "./Student";
 
 function AdminDashboard() {
   const columns = [
-    { field: "id", headerName: "id", width: 100 },
+    { field: "id", headerName: "id", width: 100, hide: true },
     { field: "name", headerName: "Name", width: 100 },
     { field: "type", headerName: "Interviews Type", width: 150 },
     { field: "course", headerName: "Course Name", width: 150 },

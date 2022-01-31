@@ -95,7 +95,6 @@ h2.active {
 }
 
 .title {
-  width: min-content;
   color: #0f213a;
   margin: 40px auto 20px auto;
 }

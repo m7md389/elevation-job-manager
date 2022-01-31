@@ -33,7 +33,7 @@ const Register = () => {
     <div className="wrapper fadeInDown">
       <div id="formContent" className="login-content">
         <div className="title">
-          <h4 className="fadeIn first">Register</h4>
+          <h4 className="fadeIn first">Add Admin</h4>
         </div>
 
         <div className="form">

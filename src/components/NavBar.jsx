@@ -1,16 +1,23 @@
 import React, { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
+import auth from "../services/authService";
 import "../styles/navbar.css";
 
 const NavBar = () => {
   const [isOpenedDropdown, setIsOpenedDropdown] = useState(false);
   const [isOpenedNavbar, setIsOpenedNavbar] = useState(false);
   const menuClass = `dropdown-menu${isOpenedDropdown ? " show" : ""}`;
-  const navbarClass = `collapse navbar-collapse${isOpenedNavbar ? " show" : ""
-    }`;
+  const navbarClass = `collapse navbar-collapse${
+    isOpenedNavbar ? " show" : ""
+  }`;
+
+  const currentUser = auth.getCurrentUser();
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light my-navbar-container">
+    <nav
+      id="navbar"
+      className="navbar navbar-expand-lg navbar-light bg-light my-navbar-container"
+    >
       <NavLink className="navbar-brand" to="/">
         <img
           className="ms-4 me-3"
@@ -36,13 +43,31 @@ const NavBar = () => {
 
       <div className={navbarClass} id="navbarNav">
         <div className="navbar-nav">
-          <NavLink className="nav-item nav-link nav-link-tabs" to="/courses">
-            Courses
+          {currentUser.role === "admin" && (
+            <NavLink className="nav-item nav-link nav-link-tabs" to="/courses">
+              Courses
+            </NavLink>
+          )}
+          {currentUser.role === "admin" && (
+            <NavLink className="nav-item nav-link nav-link-tabs" to="/charts">
+              Charts
+            </NavLink>
+          )}
+          {currentUser.role === "admin" && (
+            <NavLink
+              className="nav-item nav-link nav-link-tabs"
+              to="/add-admin"
+            >
+              Add Admin
+            </NavLink>
+          )}
+          <NavLink className="nav-item nav-link nav-link-tabs" to="settings">
+            Settings
           </NavLink>
-          <NavLink className="nav-item nav-link nav-link-tabs" to="/charts">
-            Charts
+          <NavLink className="nav-item nav-link nav-link-tabs" to="logout">
+            Logout
           </NavLink>
-
+          {/*           
           <span
             id="user-settings-icon"
             className="nav-item dropdown"
@@ -77,7 +102,7 @@ const NavBar = () => {
                 Logout
               </NavLink>
             </div>
-          </span>
+          </span> */}
         </div>
       </div>
     </nav>

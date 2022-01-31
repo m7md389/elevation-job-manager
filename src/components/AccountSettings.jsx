@@ -4,6 +4,7 @@ import "../styles/navbar.css";
 import http from "../services/httpService";
 import auth from "../services/authService";
 import { Input } from "@mui/material";
+import Title from "./common/Title";
 
 const AccountSettings = () => {
   const currentUser = auth.getCurrentUser();
@@ -34,7 +35,7 @@ const AccountSettings = () => {
       });
     });
   }, []);
-  const handleInputChange = (e,key) => {
+  const handleInputChange = (e, key) => {
     let tempUpdatedDataInputs = { ...updatedDataInputs };
     tempUpdatedDataInputs[key] = e.target.value;
     setUpdatedDataInputs(tempUpdatedDataInputs);
@@ -64,6 +65,7 @@ const AccountSettings = () => {
 
   return (
     <div className="inputs-container">
+      <Title text="Settings" />
       name:
       <Input
         id="nameInputs"

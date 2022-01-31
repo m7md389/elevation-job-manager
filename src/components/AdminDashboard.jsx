@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
-import http from "../services/httpService";
-
 import moment from "moment";
+
+import http from "../services/httpService";
 import "../styles/admin-dashboard.css";
+import Title from "./common/Title";
+import Student from "./Student";
 
 import Box from "@mui/material/Box";
 import { DataGrid } from "@mui/x-data-grid";
@@ -15,7 +17,6 @@ import DateRangePicker from "@mui/lab/DateRangePicker";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import MenuItem from "@mui/material/MenuItem";
 import auth from "../services/authService";
-import Student from "./Student";
 
 function AdminDashboard() {
   const columns = [
@@ -75,8 +76,6 @@ function AdminDashboard() {
     }
   }, [range]);
 
-
-
   const MenuProps = {
     PaperProps: {
       style: {
@@ -90,6 +89,7 @@ function AdminDashboard() {
 
   return (
     <div className="admin-dashboard-container">
+      <Title text="Interviews" />
 
       <div className="range-picker">
         <LocalizationProvider dateAdapter={AdapterDateFns}>

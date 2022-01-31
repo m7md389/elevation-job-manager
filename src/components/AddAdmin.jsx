@@ -1,9 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { Link, Navigate } from "react-router-dom";
+import React, { useState } from "react";
 import { toast } from "react-toastify";
-import auth from "../services/authService";
 import user from "../services/userService";
-import cohort from "../services/cohortService";
 import "../styles/login.css";
 
 const Register = () => {

@@ -18,8 +18,8 @@ router.post("/api/temp-users", async function (req, res) {
     city,
     linkedin,
     status,
-    course,
-    cohort,
+
+    cohortId,
   } = req.body;
 
   let user = await Users.findOne({ email });
@@ -42,6 +42,14 @@ router.post("/api/temp-users", async function (req, res) {
   const salt = await bcrypt.genSalt(10);
   user.password = await bcrypt.hash(password, salt);
   await user.save();
+
+  Cohort.findByIdAndUpdate(
+    { _id: cohortId },
+    { $push: { users: user } },
+    { new: true }
+  ).exec((error, result) => {
+    console.log("............................................");
+  });
 
   const token = user.generateAuthToken();
   res

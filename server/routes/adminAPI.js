@@ -305,7 +305,8 @@ router.post("/api/courses", async (req, res) => {
   }
 
   let checkExist = await Course.find({ title: courseName });
-  if (checkExist) {
+  console.log(checkExist);
+  if (checkExist.length) {
     res.status(400).send("Course already Exist.");
     return null;
   }

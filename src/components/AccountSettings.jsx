@@ -5,6 +5,7 @@ import http from "../services/httpService";
 import auth from "../services/authService";
 import { Input } from "@mui/material";
 import Title from "./common/Title";
+import {toast} from 'react-toastify'
 
 const AccountSettings = () => {
   const currentUser = auth.getCurrentUser();
@@ -58,7 +59,7 @@ const AccountSettings = () => {
     tempPasswordChangeInput["userId"] = userId;
     http.put(`${URL}password`, tempPasswordChangeInput).then((res) => {
       if (res.data.error) {
-        alert("Current password not match the current password");
+        toast.error("Current password not match the current password");
       }
     });
   };

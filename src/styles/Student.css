@@ -1,13 +1,17 @@
 .student-page-container {
   width: 80%;
   margin: 0 auto;
-  font-family: 'IBM Plex Sans Thai Looped', sans-serif;  
-
+  font-family: "IBM Plex Sans Thai Looped", sans-serif;
 }
 
 .filters-detail {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
+}
+
+.add-edit-cohort {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
 }
 
 .cont {
@@ -26,17 +30,16 @@
   transition: box-shadow 0.3s ease-in-out;
 }
 
-.student-details p{
+.student-details p {
   font-weight: bold;
   font-size: 1.1rem;
 }
 
-.student-details p span{
+.student-details p span {
   font-weight: bold;
   font-size: 1rem;
   font-weight: 200;
 }
-
 
 .student-details:hover {
   box-shadow: 0 10px 20px #ff96aa;
@@ -69,17 +72,13 @@
   height: 20px;
 }
 
-
 @media only screen and (max-width: 600px) {
-  
-
   .student-details {
     font-size: 0.9rem;
     grid-template-columns: repeat(1, 1fr);
     padding: 20px;
     margin: 20px auto;
   }
-
 
   .filters-detail {
     display: grid;
@@ -88,7 +87,7 @@
     justify-content: center;
   }
 
-  .filters-detail .cont{
+  .filters-detail .cont {
     margin: 0 auto;
     width: 100%;
   }
@@ -98,28 +97,28 @@
     margin: 0 auto;
   }
 
-  .jobs-title{
+  .jobs-title {
     font-size: 0.7rem;
     margin: 0;
     width: 100%;
   }
 
-  .job{
+  .job {
     font-size: 0.7rem;
   }
 
-  .interviews-header{
+  .interviews-header {
     font-size: 0.7rem;
   }
 
-  .student-details p span{
+  .student-details p span {
     display: grid;
     justify-self: end;
   }
-  
-.rows {
-  width: 100%;
-  /* margin: 0 auto; */
-  /* text-align: center; */
-}
+
+  .rows {
+    width: 100%;
+    /* margin: 0 auto; */
+    /* text-align: center; */
+  }
 }

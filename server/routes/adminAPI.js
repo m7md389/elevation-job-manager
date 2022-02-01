@@ -464,6 +464,47 @@ router.post("/api/courses/cohort", async (req, res) => {
   });
 });
 
+router.delete("/api/courses/cohorts", async function (req, res) {
+  let { cohortId } = req.body;
+  Cohort.findByIdAndDelete({ _id: cohortId }).exec((err, deletedCohort) => {
+    if (err) {
+      res.send({ error: "can't delete Cohort" });
+    }
+    res.send(deletedCohort);
+  });
+});
+
+router.put("/api/courses/cohorts", async function (req, res) {
+  let { newName, newDate, courseId, cohortId } = req.body.data;
+  let myDate = moment(newDate).format("L");
+  Course.findById({ _id: courseId })
+    .populate({
+      path: "cohorts",
+    })
+    .exec((err, course) => {
+      if (err) {
+        res.status(400).send({ error: "Course not Exist" });
+        return null;
+      }
+    });
+  Cohort.findByIdAndUpdate(
+    { _id: cohortId },
+    {
+      $set: {
+        name: newName,
+        start_date: myDate,
+      },
+    },
+    { new: true }
+  ).exec((err, updatedCohort) => {
+    if (err) {
+      res.send({ error: "can't update Cohort" });
+      return null;
+    }
+    res.send(updatedCohort);
+  });
+});
+
 router.put("/api/courses", async function (req, res) {
   let { title, newTitle } = req.body.data;
   let checkExist = await Course.find({ title: newTitle });

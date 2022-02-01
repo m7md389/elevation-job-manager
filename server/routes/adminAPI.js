@@ -148,7 +148,6 @@ router.get("/api/courses/:startDate/:endDate", async (req, res) => {
 });
 
 router.get("/api/courses/names", async function (req, res) {
-  console.log("hello2");
   let courses = await Course.find({}).populate({
     path: "cohorts",
     populate: {

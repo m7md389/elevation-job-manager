@@ -14,16 +14,53 @@ function Charts() {
   const charTitles = ["Working Students", "Courses", "Cohorts"];
   const [chosenChart, setChosenChart] = useState("");
   const [allData, setAllData] = useState([]);
-  const [options, setOptions] = useState({ title: "Working Students" });
+  const [workingStudentsTitle, setWorkingStudentsTitle] = useState({ title: "Working students in all courses" });
+  const [coursesTitle, setCoursesTitle] = useState({ title: "Working students by course" });
+  const [cohortTitle, setCohortTitle] = useState({ title: "Data by cohort" });
+
+  const [selectedCourse, setSelectedCourse] = useState('')
+
   const [data, setData] = useState([]);
-  const [refresh, setRefresh] = useState(1);
-  const [showCohorts, setShowCohorts] = useState("none");
-  const [chosenCohort, setChosenCohort] = useState("All");
+  // const [refresh, setRefresh] = useState(1);
+  // const [showCohorts, setShowCohorts] = useState("none");
+  const [chosenCohort, setChosenCohort] = useState("All Cohorts");
+  const [cohorts, setCohorts] = useState([])
+  const [showCohort, setShowCohort] = useState([])
+  const [courses, setCourses] = useState([])
+
+  // 0: (2) ['Courses', 'working']
+  // 1: (2) ['full-stack', 5]
+  // 2: (2) ['Android', 3]
+  // 3: (2) ['Data analyst', 1]
+  // 4: (2) ['test', 0]
+  // 5: (2) ['fdfdfd', 0]
+  // 6: (2) ['test', 0]
+  // 7: (2) ['testffgf', 0]
+
+  // ['all cohorts', 'working']
+  // ['searching', 5]
+  // ['working', 3]
+  // ['studding', 1]
+
+  const getCohortByCourse = selectedCourse => {
+    let [course] = allData.filter(c => c.title === selectedCourse)
+    let cohort = course.cohorts.map(c => c.name)
+    setCohorts(['All Cohorts', ...cohort])//put selected course cohort into the cohorts
+  }
+
+  useEffect(async () => {
+    if (selectedCourse) {
+      getCohortByCourse(selectedCourse);
+      // owCohort
+    }
+
+  }, [selectedCourse])
 
   useEffect(async () => {
     let courses = (await http.get(`${URL}`)).data;
     setAllData(courses);
     setData(getWorkingStudents(courses));
+    setCourses(await getCourses())
   }, []);
 
   const getWorkingStudents = (courses) => {
@@ -32,9 +69,9 @@ function Charts() {
     courses.forEach((course) => {
       course.cohorts.forEach((cohort) => {
         cohort.users.forEach((user) => {
-          if (user.role === "user" && user.status === "working") {
+          if (user.role !== 'admin' && user.status === "working") {
             working++;
-          } else if (user.role === "user") {
+          } else if (user.role !== "admin") {
             searching++;
           }
         });
@@ -56,69 +93,68 @@ function Charts() {
       }
       arr.push([course.title, (course.working * course.studNum) / 100]);
     });
+
     return arr;
   };
 
-  useEffect(async () => {
-    if (chosenChart === "Working Students") {
-      setData(getWorkingStudents(allData));
-      setOptions({ title: chosenChart });
-      setRefresh(refresh + 1);
-    }
-    if (chosenChart === "Courses") {
-      let tempData = await getCourses(allData);
-      setData(tempData);
-      setOptions({ title: chosenChart });
-      setRefresh(refresh + 1);
-    }
-    if (chosenChart === "Cohorts") {
-      getByCohorts();
-    }
-  }, [chosenChart]);
 
-  const handleRangeChange = (e) => {
-    setChosenChart(e.target.value);
-    if (e.target.value === "Courses") {
-      setShowCohorts("block");
+  const showCohortOnChart = cohortName => {
+    if (cohortName === 'All Cohorts') {
+      // search by all cohorts
+      console.log(selectedCourse);
     } else {
-      setShowCohorts("none");
+      // search by specific cohort
     }
-  };
 
-  const getByCohorts = () => {};
+    return [['all cohorts', 'working'],
+    ['searching', 5],
+    ['working', 3],
+    ['studding', 1]]
+  }
 
-  const handleCohortChange = (e) => {};
 
-  const cohortsTitles = [];
+  const handleCohortChange = (e) => {
+    console.log(e.target.value);
+    setShowCohort(showCohortOnChart(e.target.value))
+  }
 
   return (
-    <div>
-      <Title text="Charts" />;
-      <div style={{ display: "grid", width: "30%", margin: "40px auto" }}>
-        <div className="filters">
-          <div className="Chart-filter">
-            <Box sx={{ minWidth: 120 }}>
-              <FormControl fullWidth>
-                <InputLabel id="Chart-filters">Filter By:</InputLabel>
-                <Select
-                  labelId="select-filter"
-                  id="select-filter"
-                  value={chosenChart}
-                  label="Filter By:"
-                  onChange={handleRangeChange}
-                >
-                  {charTitles.map((name, idx) => {
-                    return (
-                      <MenuItem key={idx} value={name}>
-                        {name}
-                      </MenuItem>
-                    );
-                  })}
-                </Select>
-              </FormControl>
-            </Box>
-          </div>
-          <div className="Cohort-filter" style={{}}>
+    <div >
+
+      <Chart
+        chartType="PieChart"
+        data={data}
+        options={workingStudentsTitle}
+        width={"100%"}
+        height={"400px"}
+      />
+
+      <Chart
+        chartType="PieChart"
+        data={courses}
+        options={coursesTitle}
+        width={"100%"}
+        height={"400px"}
+        chartEvents={[
+          {
+            eventName: "ready",
+            callback: ({ chartWrapper, google }) => {
+              const chart = chartWrapper.getChart();
+              google.visualization.events.addListener(chart, 'click', (e) => {
+                setSelectedCourse(chart.ha.C[Number.parseInt(e.targetID.split('#')[1])].title)
+              })
+            }
+          }
+        ]}
+      />
+
+
+
+      {selectedCourse ? (
+
+        <div style={{ display: 'grid', justifyItems: 'center' }}>
+          {/* <hr /> */}
+          <div style={{ width: '30%', margin: '30px 0' }}>
             <Box sx={{ minWidth: 120 }}>
               <FormControl fullWidth>
                 <InputLabel id="statuses">Select Chart :</InputLabel>
@@ -129,7 +165,7 @@ function Charts() {
                   label="Cohort"
                   onChange={handleCohortChange}
                 >
-                  {cohortsTitles.map((cohortName, idx) => {
+                  {cohorts.map((cohortName, idx) => {
                     return (
                       <MenuItem key={idx} value={cohortName}>
                         {cohortName}
@@ -140,15 +176,17 @@ function Charts() {
               </FormControl>
             </Box>
           </div>
+
+          <Chart
+            chartType="PieChart"
+            data={showCohort}
+            options={cohortTitle}
+            width={"100%"}
+            height={"400px"}
+          />
         </div>
-      </div>
-      <Chart
-        chartType="PieChart"
-        data={data}
-        options={options}
-        width={"100%"}
-        height={"400px"}
-      />
+      ) : null}
+
     </div>
   );
 }

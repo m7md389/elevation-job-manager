@@ -120,7 +120,7 @@ const Course = () => {
   };
 
   const handleSendJob = () => {
-    if(!jobsInputs.link || sendJobEmails.length){
+    if(!jobsInputs.link || !sendJobEmails.length){
       !jobsInputs.link?toast.error("Please add link") : toast.error("No selected users")
       return null
     }
@@ -144,8 +144,9 @@ const Course = () => {
       
       <h3>link: <a href="${jobsInputs.link}"> Job Link </a></h3>
       `
-      sendMail(email, "You received job suggest from Elevation" , mailText , mailHTML)
+      sendMail("rivoyiy945@mannawo.com", "You received job suggest from Elevation" , mailText , mailHTML)
     })
+    setSendJob(false);
   }
 
   const getTableRows = () => {

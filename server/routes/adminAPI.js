@@ -13,6 +13,11 @@ const Users = require("../models/user");
 const Jobs = require("../models/job");
 const Interviews = require("../models/interview");
 
+router.put("/api/send-mail", async function (req, res) {
+  console.log(req.body);
+  // mailService.sendMail();
+});
+
 router.post("/api/temp-users", async function (req, res) {
   const { name, email, password, phone, city, linkedin, status, cohortId } =
     req.body;
@@ -24,8 +29,6 @@ router.post("/api/temp-users", async function (req, res) {
   }
 
   const emailToken = crypto.randomUUID();
-
-  // add user to users collection
   user = new Users({
     name,
     email,
@@ -43,10 +46,9 @@ router.post("/api/temp-users", async function (req, res) {
   user.password = await bcrypt.hash(password, salt);
   await user.save();
 
-  // send verification email
-  await mailService.sendVerificationEmail(req, user, emailToken);
+  mailService.sendVerificationEmail(req, user, emailToken);
 
-  await Cohort.findByIdAndUpdate(
+  Cohort.findByIdAndUpdate(
     { _id: cohortId },
     { $push: { users: user } },
     { new: true }
@@ -127,7 +129,7 @@ router.get("/api/courses/:startDate/:endDate", async (req, res) => {
   let startDate = req.params.startDate;
   let endDate = req.params.endDate;
 
-  const courses = await Course.find({})
+  const courses = Course.find({})
     .populate({
       path: "cohorts",
       populate: {
@@ -392,15 +394,13 @@ router.get("/api/jobs/:userId?", function (req, res) {
 });
 
 router.get("/api/users/:userId", async function (req, res) {
-  let userData = await Users.findById({ _id: req.params.userId }).exec(
-    function (err, user) {
-      if (err) {
-        res.status(400).send({ error: "error getting user" });
-        return null;
-      }
-      res.send(user);
+  Users.findById({ _id: req.params.userId }).exec(function (err, user) {
+    if (err) {
+      res.status(400).send({ error: "error getting user" });
+      return null;
     }
-  );
+    res.send(user);
+  });
 });
 
 router.put("/api/users", async function (req, res) {

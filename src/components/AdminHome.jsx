@@ -13,6 +13,7 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
+import ElevationButton from "./common/ElevationButton";
 
 import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
 
@@ -24,23 +25,25 @@ function AdminHome() {
   const [coursesOptions, setCoursesOptions] = useState([]);
   const [open, setOpen] = useState(false);
   const [courseTitle, setCourseTitle] = useState("");
-  const [refresh, setRefresh] = useState(1)
+  const [refresh, setRefresh] = useState(1);
   const [selectedCourse, setSelectedCourse] = "";
 
   useEffect(async () => {
     let res = (await http.get(`/courses/names`)).data;
     if (res.error) {
-      return setCourses([])
+      return setCourses([]);
     }
     setCourses(res);
   }, [refresh]);
 
   useEffect(async () => {
-    let coursesNames = []
-    courses.forEach(course => {
-      if (!coursesNames.includes(course.title)) { coursesNames.push(course.title) }
+    let coursesNames = [];
+    courses.forEach((course) => {
+      if (!coursesNames.includes(course.title)) {
+        coursesNames.push(course.title);
+      }
     });
-    setCoursesOptions(coursesNames)
+    setCoursesOptions(coursesNames);
   }, [courses]);
 
   const handleClose = () => {
@@ -58,10 +61,11 @@ function AdminHome() {
   const handleAddCourse = async () => {
     if (!courseTitle) return;
 
-    let updatedCourses = (await http.post(`/courses`, { title: courseTitle })).data;
+    let updatedCourses = (await http.post(`/courses`, { title: courseTitle }))
+      .data;
     console.log(updatedCourses);
     if (updatedCourses.error) {
-      return
+      return;
     }
     setCourses(updatedCourses);
     setOpen(false);
@@ -77,37 +81,47 @@ function AdminHome() {
     setOpenEditCourse(false);
   };
 
-  const handleCourseInputChange = event => {
+  const handleCourseInputChange = (event) => {
     setCourseTitle(event.target.value);
   };
 
   const handleCourseOptionChange = (e) => {
     setSelectedCourse(e.value);
-  }
+  };
 
   const handleEditCourse = () => {
-    if (!coursesOptions || !courseTitle) { return }
-    http.put(`/courses`, { data: { title: courseTitle, courseTitle } }).then(() => {
-      setRefresh(refresh + 1);
-      setOpenEditCourse(false)
-    })
-  }
+    if (!coursesOptions || !courseTitle) {
+      return;
+    }
+    http
+      .put(`/courses`, { data: { title: courseTitle, courseTitle } })
+      .then(() => {
+        setRefresh(refresh + 1);
+        setOpenEditCourse(false);
+      });
+  };
 
   const handleDeleteCourse = () => {
-    if (!coursesOptions) { return }
+    if (!coursesOptions) {
+      return;
+    }
     http.delete(`/courses`, { data: { title: courseTitle } }).then(() => {
       setRefresh(refresh + 1);
-      setOpenEditCourse(false)
-    })
-  }
+      setOpenEditCourse(false);
+    });
+  };
 
   return (
     <div>
+      <ElevationButton />
       <Title text="Home Page" />
 
       <div className="add-course-container">
         <AddIcon onClick={handleOpen} className="add-icon" />
-        <ModeEditOutlineOutlinedIcon onClick={handleEditCourseOpen} variant="outlined" />
+        <ModeEditOutlineOutlinedIcon
+          onClick={handleEditCourseOpen}
+          variant="outlined"
+        />
       </div>
 
       <Dialog open={open} onClose={handleClose}>

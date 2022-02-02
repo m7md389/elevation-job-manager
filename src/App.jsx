@@ -5,6 +5,7 @@ import auth from "./services/authService";
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
 import Login from "./components/Login";
+import VerifyUser from "./components/VerifyUser";
 import Logout from "./components/Logout";
 import Register from "./components/Register";
 import PageNotFound from "./components/PageNotFound";
@@ -35,6 +36,7 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/logout" element={<Logout setUser={setUser} />} />
+        <Route path="verify-user" element={<VerifyUser />} />
         <Route
           path="/courses/:courseName"
           element={

@@ -7,8 +7,7 @@ const Register = () => {
   let [inputs, setInput] = useState({
     name: "",
     email: "",
-    password: "",
-    phone: ""
+    password: ""
   });
 
   const handleChange = (event) => {
@@ -58,14 +57,6 @@ const Register = () => {
               onChange={handleChange}
               id="password"
               className="input fadeIn fourth"
-            />
-            <input
-              type="text"
-              placeholder="Phone"
-              value={inputs.phone}
-              onChange={handleChange}
-              id="phone"
-              className="input fadeIn fifth"
             />
           </div>
 

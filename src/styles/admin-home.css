@@ -9,6 +9,15 @@
   text-decoration: underline;
 }
 
+.Dropdown-control {
+  margin-bottom: 2rem;
+}
+.Dropdown-menu {
+  margin-top: -34px !important;
+  max-height: 144px !important;
+  position: static !important;
+}
+
 .page-container {
   width: 80%;
   display: grid;

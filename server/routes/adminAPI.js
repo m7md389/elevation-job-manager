@@ -19,7 +19,7 @@ router.post("/api/temp-users", async function (req, res) {
 
   let user = await Users.findOne({ email });
   if (user) {
-    res.status(400).send("User already registered.");
+    res.status(400).send({ error: "User already registered." });
     return null;
   }
 
@@ -50,8 +50,9 @@ router.post("/api/temp-users", async function (req, res) {
     { _id: cohortId },
     { $push: { users: user } },
     { new: true }
-  ).exec((ex, result) => {
-    console.log(ex);
+  ).exec((error, result) => {
+    if (error) {
+    }
   });
 
   const token = user.generateAuthToken();
@@ -75,9 +76,10 @@ router.get("/api/courses", async (req, res) => {
         }
       }
     })
-    .exec(function (ex, courses) {
-      if (ex) {
-        console.log(ex);
+    .exec(function (err, courses) {
+      if (err) {
+        res.status(400).send({ error: "error getting data" });
+        return null;
       }
       res.send(courses);
     });
@@ -140,8 +142,9 @@ router.get("/api/courses/:startDate/:endDate", async (req, res) => {
     })
     .exec(async function (ex, courses) {
       let data;
-      if (ex) {
-        console.log(ex);
+      if (err) {
+        res.status(400).send({ error: "error getting data" });
+        return null;
       } else {
         data = await findInterviewsInRange(startDate, endDate, courses);
       }
@@ -150,7 +153,6 @@ router.get("/api/courses/:startDate/:endDate", async (req, res) => {
 });
 
 router.get("/api/courses/names", async function (req, res) {
-  console.log("hello2");
   let courses = await Course.find({}).populate({
     path: "cohorts",
     populate: {
@@ -179,7 +181,7 @@ router.get("/api/courses/names", async function (req, res) {
 router.get("/api/courses/:courseName", (req, res) => {
   const { courseName } = req.params;
   if (!courseName) {
-    res.status(400).send("missed id");
+    res.status(400).send({ error: "Missing ID" });
     return null;
   }
   Course.findOne({ title: courseName })
@@ -211,7 +213,7 @@ router.post("/api/jobs", async function (req, res) {
   });
   newJob.save();
 
-  await Users.findOneAndUpdate(
+  Users.findOneAndUpdate(
     { _id: tempJob.userId },
     {
       $push: { jobs: newJob }
@@ -221,9 +223,10 @@ router.post("/api/jobs", async function (req, res) {
     .populate({
       path: "jobs"
     })
-    .exec(function (ex, user) {
-      if (ex) {
-        console.log(ex);
+    .exec(function (err, user) {
+      if (err) {
+        res.status(400).send({ error: "error adding job" });
+        return null;
       }
       res.send(user);
     });
@@ -234,7 +237,7 @@ router.put("/api/jobs", async function (req, res) {
   let myDate = moment(tempJob.date).format("L");
   let jobToEdit = await Jobs.findById({ _id: tempJob.jobId });
 
-  await Jobs.findOneAndUpdate(
+  Jobs.findOneAndUpdate(
     { _id: tempJob.jobId },
     {
       $set: {
@@ -251,9 +254,10 @@ router.put("/api/jobs", async function (req, res) {
     .populate({
       path: "jobs"
     })
-    .exec(function (ex, user) {
-      if (ex) {
-        console.log(ex);
+    .exec(function (err, user) {
+      if (err) {
+        res.status(400).send({ error: "error updating job" });
+        return null;
       }
       res.send(user);
     });
@@ -281,7 +285,7 @@ router.post("/api/jobs/Interviews", async function (req, res) {
   });
   newInterview.save();
 
-  await Jobs.findOneAndUpdate(
+  Jobs.findOneAndUpdate(
     { _id: tempInterview.jobId },
     {
       $push: { interviews: newInterview }
@@ -291,9 +295,10 @@ router.post("/api/jobs/Interviews", async function (req, res) {
     .populate({
       path: "interviews"
     })
-    .exec(function (ex, job) {
-      if (ex) {
-        console.log(ex);
+    .exec(function (err, job) {
+      if (err) {
+        res.status(400).send({ error: "error adding job" });
+        return null;
       }
       res.send(job);
     });
@@ -302,14 +307,13 @@ router.post("/api/jobs/Interviews", async function (req, res) {
 router.post("/api/courses", async (req, res) => {
   let courseName = req.body.title;
   if (!courseName) {
-    res.status(400).send("missed name");
+    res.status(400).send({ error: "Missing Name" });
     return null;
   }
 
   let checkExist = await Course.find({ title: courseName });
-  console.log(checkExist);
   if (checkExist.length) {
-    res.status(400).send("Course already Exist.");
+    res.status(400).send({ error: "Course already Exist" });
     return null;
   }
   let newCourse = new Course({
@@ -352,9 +356,10 @@ router.put("/api/jobs/Interviews", async function (req, res) {
       }
     },
     { new: true }
-  ).exec(function (ex, interView) {
-    if (ex) {
-      console.log(ex);
+  ).exec(function (err, interView) {
+    if (err) {
+      res.status(400).send({ error: "error updating interview" });
+      return null;
     }
     res.send(interView);
   });
@@ -388,9 +393,10 @@ router.get("/api/jobs/:userId?", function (req, res) {
 
 router.get("/api/users/:userId", async function (req, res) {
   let userData = await Users.findById({ _id: req.params.userId }).exec(
-    function (ex, user) {
-      if (ex) {
-        console.log(ex);
+    function (err, user) {
+      if (err) {
+        res.status(400).send({ error: "error getting user" });
+        return null;
       }
       res.send(user);
     }
@@ -400,7 +406,7 @@ router.get("/api/users/:userId", async function (req, res) {
 router.put("/api/users", async function (req, res) {
   let updatedUserData = req.body;
   let user = await Users.find({ _id: updatedUserData.userId });
-  await Users.findOneAndUpdate(
+  Users.findOneAndUpdate(
     { _id: updatedUserData.userId },
     {
       $set: {
@@ -413,9 +419,10 @@ router.put("/api/users", async function (req, res) {
       }
     },
     { new: true }
-  ).exec(function (ex, newUser) {
-    if (ex) {
-      console.log(ex);
+  ).exec(function (err, newUser) {
+    if (err) {
+      res.status(400).send({ error: "error updating user" });
+      return null;
     }
     res.send(newUser);
   });
@@ -444,7 +451,7 @@ router.post("/api/courses/cohort", async (req, res) => {
 
   newCohort.save();
 
-  await Course.findByIdAndUpdate(
+  Course.findByIdAndUpdate(
     { _id: cohortToAdd.courseId },
     {
       $push: {
@@ -457,6 +464,70 @@ router.post("/api/courses/cohort", async (req, res) => {
       res.send({ error: "can't add cohort" });
     }
     res.send(newCohort);
+  });
+});
+
+router.delete("/api/courses/cohorts", async function (req, res) {
+  let { cohortId } = req.body;
+  Cohort.findByIdAndDelete({ _id: cohortId }).exec((err, deletedCohort) => {
+    if (err) {
+      res.send({ error: "can't delete Cohort" });
+    }
+    res.send(deletedCohort);
+  });
+});
+
+router.put("/api/courses/cohorts", async function (req, res) {
+  let { newName, newDate, courseId, cohortId } = req.body.data;
+  let myDate = moment(newDate).format("L");
+  Course.findById({ _id: courseId })
+    .populate({
+      path: "cohorts"
+    })
+    .exec((err, course) => {
+      if (err) {
+        res.status(400).send({ error: "Course not Exist" });
+        return null;
+      }
+    });
+  Cohort.findByIdAndUpdate(
+    { _id: cohortId },
+    {
+      $set: {
+        name: newName,
+        start_date: myDate
+      }
+    },
+    { new: true }
+  ).exec((err, updatedCohort) => {
+    if (err) {
+      res.send({ error: "can't update Cohort" });
+      return null;
+    }
+    res.send(updatedCohort);
+  });
+});
+
+router.put("/api/courses", async function (req, res) {
+  let { title, newTitle } = req.body.data;
+  let checkExist = await Course.find({ title: newTitle });
+  if (checkExist.length > 0) {
+    res.status(400).send({ error: "Course already Exist" });
+    return null;
+  }
+  Course.findOneAndUpdate(
+    { title: title },
+    {
+      $set: {
+        title: newTitle
+      }
+    },
+    { new: true }
+  ).exec(function (err, newCourse) {
+    if (err) {
+      res.status(400).send({ error: "Error updating course" });
+    }
+    res.send(newCourse);
   });
 });
 

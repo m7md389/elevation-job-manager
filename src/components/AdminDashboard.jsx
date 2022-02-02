@@ -30,7 +30,7 @@ function AdminDashboard() {
     { field: "user_id", headerName: "user_id", hide: true, width: 100 }
   ];
 
-  var date = new Date(Date.now());
+  let date = new Date(Date.now());
   const [rows, setRows] = useState([]);
   const [value, setValue] = React.useState([
     moment(Date.now()),

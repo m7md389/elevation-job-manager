@@ -13,6 +13,7 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
+import { toast } from "react-toastify";
 
 import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
 
@@ -25,7 +26,7 @@ function AdminHome() {
   const [open, setOpen] = useState(false);
   const [courseTitle, setCourseTitle] = useState("");
   const [refresh, setRefresh] = useState(1)
-  const [selectedCourse, setSelectedCourse] = "";
+  const [selectedCourse, setSelectedCourse] = useState("");
 
   useEffect(async () => {
     let res = (await http.get(`/courses/names`)).data;
@@ -59,7 +60,6 @@ function AdminHome() {
     if (!courseTitle) return;
 
     let updatedCourses = (await http.post(`/courses`, { title: courseTitle })).data;
-    console.log(updatedCourses);
     if (updatedCourses.error) {
       return
     }
@@ -83,11 +83,12 @@ function AdminHome() {
 
   const handleCourseOptionChange = (e) => {
     setSelectedCourse(e.value);
+    setCourseTitle(e.value)
   }
 
   const handleEditCourse = () => {
-    if (!coursesOptions || !courseTitle) { return }
-    http.put(`/courses`, { data: { title: courseTitle, courseTitle } }).then(() => {
+    if (!selectedCourse || !courseTitle) { return }
+    http.put(`/courses`, { data: { title: selectedCourse, newTitle: courseTitle } }).then(() => {
       setRefresh(refresh + 1);
       setOpenEditCourse(false)
     })
@@ -95,7 +96,10 @@ function AdminHome() {
 
   const handleDeleteCourse = () => {
     if (!coursesOptions) { return }
-    http.delete(`/courses`, { data: { title: courseTitle } }).then(() => {
+    http.delete(`/courses`, { data: { title: courseTitle } }).then((res) => {
+      if (res.data.error) {
+        toast.error("Current password not match the current password");
+      }
       setRefresh(refresh + 1);
       setOpenEditCourse(false)
     })
@@ -133,7 +137,7 @@ function AdminHome() {
           <Button onClick={handleAddCourse}>Save</Button>
         </DialogActions>
       </Dialog>
-      <Dialog open={openEditCourse} onClose={handleEditCourseClose}>
+      <Dialog className="editCourse" open={openEditCourse} onClose={handleEditCourseClose}>
         <DialogTitle>Edit Course :</DialogTitle>
         <DialogContent>
           <Dropdown

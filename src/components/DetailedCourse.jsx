@@ -30,25 +30,42 @@ import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
 import http from "../services/httpService";
 
+import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
+import { toast } from "react-toastify";
 const Course = () => {
+
   const params = useParams();
   const navigate = useNavigate();
-
-  const [refresh, setRefresh] = useState(1);
-  const [open, setOpen] = useState(false);
-  const [date, setDate] = useState(new Date(Date.now()));
   const [course, setCourse] = useState();
-  const [filteredCohorts, setFilteredCohorts] = useState();
-  const [cohort, setCohort] = useState("all-cohorts");
-  const [selectedStatus, setSelectedStatus] = useState("all-statuses");
-
-  const [cohortName, setCohortName] = useState("");
-
+  const [refresh, setRefresh] = useState(1);
+  
   useEffect(async () => {
     let c = await courseService.getCourseDetails(params.courseName);
     setFilteredCohorts(c.cohorts);
     setCourse(c);
   }, [refresh]);
+  
+  const getCohorts = () => {
+    let cohorts = [];
+    if(!course){return cohorts.push('')}
+    course.cohorts.forEach((cohort) => {
+      cohorts.push(cohort);
+    });
+    return cohorts;
+  };
+
+  const cohorts = getCohorts();
+  
+  const [open, setOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
+  const [date, setDate] = useState(new Date(Date.now()));
+  const [editDate, setEditDate] = useState(new Date(Date.now()));
+  const [filteredCohorts, setFilteredCohorts] = useState();
+  const [cohort, setCohort] = useState('');
+  const [editCohort ,setEditCohort] = useState('')
+  const [selectedStatus, setSelectedStatus] = useState("all-statuses");
+  const [cohortName, setCohortName] = useState("");
+  const [cohortEditName, setCohortEditName] = useState("");
 
   useEffect(async () => {
     if (!course) return null;
@@ -96,13 +113,6 @@ const Course = () => {
     return users;
   };
 
-  const getCohorts = () => {
-    let cohorts = [];
-    course.cohorts.forEach((cohort) => {
-      cohorts.push(cohort);
-    });
-    return cohorts;
-  };
 
   const getStatuses = () => {
     let statuses = [];
@@ -115,6 +125,53 @@ const Course = () => {
     });
     return statuses;
   };
+
+  const handleEditCohortOpen = () => {
+    setEditOpen(true);
+  }
+
+  const handleEditCohortClose = () => {
+    setEditOpen(false);
+  };
+
+  const handleEditCohortChange = (event) => {
+    setEditCohort(event.target.value);
+    setCohortEditName(event.target.value)
+    let tempCohort = course.cohorts.find((cohort) => cohort.name === event.target.value)
+    setEditDate(tempCohort.start_date);
+  }
+
+  const handleEditCohortInputChange = (event) => {
+    setCohortEditName(event.target.value)
+  }
+
+  const handleEditDateChange = (newValue) => {
+    setEditDate(new Date(newValue))
+  };
+
+  const handleDeleteCohort = () => {
+    if (!editCohort) { return }
+    let tempCohort = course.cohorts.find((cohort) => cohort.name === editCohort)
+    http.delete(`/courses/cohorts`, { data: { cohortId: tempCohort._id } }).then((res) => {
+      if (res.data.error) {
+        toast.error("Can't Delete Cohort");
+      }
+      setRefresh(refresh + 1);
+      setEditOpen(false)
+    })
+  }
+
+  const handleEditCohort = () => {
+    if (!editCohort || !cohortEditName || !editDate) { return }
+    let tempCohort = course.cohorts.find((cohort) => cohort.name === editCohort)
+    http.put(`/courses/cohorts`, { data: { newName: cohortEditName, newDate: editDate.toString(), courseId: course._id, cohortId: tempCohort._id} }).then((res) => {
+      if (res.data.error) {
+        toast.error("Can't edit cohort");
+      }
+      setRefresh(refresh + 1);
+      setEditOpen(false)
+    })
+  }
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -146,104 +203,162 @@ const Course = () => {
   if (!course) return null;
   if (course.error) return <PageNotFound />;
 
-  const cohorts = getCohorts();
   const statuses = getStatuses();
 
   return (
     <div className="course-container">
       <Title text={course.title} />
-      <div>
-        <Stack direction="row" spacing={2}>
-          <AddIcon
-            onClick={handleClickOpen}
-            variant="outlined"
-            className="add-icon"
-          />
-        </Stack>
-        <Dialog open={open} onClose={handleClose}>
-          <DialogTitle>Add Cohort :</DialogTitle>
-          <DialogContent>
-            <TextField
-              autoFocus
-              margin="dense"
-              onChange={(e) => {
-                handleInputChange(e, "name");
-              }}
-              value={cohortName}
-              id="cohortName"
-              label="Cohort Name"
-              type="text"
-              fullWidth
-              variant="standard"
-              required
-            />
-            <div className="datePicker">
-              <LocalizationProvider dateAdapter={DateAdapter}>
-                <MobileDatePicker
-                  label="Date"
-                  inputFormat="DD/MM/yyyy"
-                  value={date}
-                  onChange={handleDateChange}
-                  renderInput={(params) => <TextField {...params} />}
-                />
-              </LocalizationProvider>
+      <div className="add-edit-cohort">
+        <div className="add-edit-cohort">
+          <div className="box">
+            <Stack direction="row" spacing={2}>
+              <AddIcon
+                onClick={handleClickOpen}
+                variant="outlined"
+                className="add-icon"
+              />
+            </Stack>
+            <Dialog open={open} onClose={handleClose}>
+                <DialogTitle>Add Cohort :</DialogTitle>
+                <DialogContent>
+                  <TextField
+                    autoFocus
+                    margin="dense"
+                    onChange={(e) => {
+                      handleInputChange(e, "name");
+                    }}
+                    value={cohortName}
+                    id="cohortName"
+                    label="Cohort Name"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                    required
+                  />
+                  <div className="datePicker">
+                    <LocalizationProvider dateAdapter={DateAdapter}>
+                      <MobileDatePicker
+                        label="Date"
+                        inputFormat="DD/MM/yyyy"
+                        value={date}
+                        onChange={handleDateChange}
+                        renderInput={(params) => <TextField {...params} />}
+                      />
+                    </LocalizationProvider>
+                  </div>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleClose}>Cancel</Button>
+                  <Button onClick={handleAddCohort}>Add</Button>
+                </DialogActions>
+              </Dialog>
             </div>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose}>Cancel</Button>
-            <Button onClick={handleAddCohort}>Add</Button>
-          </DialogActions>
-        </Dialog>
-      </div>
-      <div className="filters-detail box">
-        <Box id="box" sx={{ minWidth: 120 }}>
-          <FormControl fullWidth>
-            <InputLabel id="cohorts">Cohorts</InputLabel>
-            <Select
-              labelId="select-cohort"
-              id="select-cohort"
-              value={cohort}
-              label="cohorts"
-              onChange={handleChange}
-            >
-              <MenuItem value={"all-cohorts"} key={"all-cohorts"}>
-                {"all-cohorts"}
-              </MenuItem>
-              {cohorts.map((cohort, idx) => {
-                return (
-                  <MenuItem value={cohort.name} key={idx}>
-                    {cohort.name}
-                  </MenuItem>
-                );
-              })}
-            </Select>
-          </FormControl>
-        </Box>
-        <Box id="box" sx={{ minWidth: 120 }}>
-          <FormControl fullWidth>
-            <InputLabel id="Status">Status</InputLabel>
-            <Select
-              labelId="select-Status"
-              id="select-Status"
-              value={selectedStatus}
-              label="statuses"
-              onChange={handleStatusChange}
-            >
-              <MenuItem value={"all-statuses"} key={"all-statuses"}>
-                {"all-statuses"}
-              </MenuItem>
-              {statuses.map((status, idx) => {
-                return (
-                  <MenuItem value={status} key={idx}>
-                    {status}
-                  </MenuItem>
-                );
-              })}
-            </Select>
-          </FormControl>
-        </Box>
-      </div>
-
+            <div className="box">
+              <Stack direction="row" spacing={2}>
+              <ModeEditOutlineOutlinedIcon className="add-icon" onClick={handleEditCohortOpen} variant="outlined" />
+              </Stack>
+              <Dialog open={editOpen} onClose={handleEditCohortClose}>
+                <DialogTitle>Edit Cohorts :</DialogTitle>
+                <DialogContent>
+                  <InputLabel id="cohorts">Cohorts</InputLabel>
+                  <Select
+                    labelId="select-cohort"
+                    id="select-cohort"
+                    value={editCohort}
+                    label="cohorts"
+                    onChange={handleEditCohortChange}
+                  >
+                    {cohorts.map((cohort, idx) => {
+                      return (
+                        <MenuItem value={cohort.name} key={idx}>
+                          {cohort.name}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                  <TextField
+                    autoFocus
+                    margin="dense"
+                    onChange={(e) => {
+                      handleEditCohortInputChange(e, "name");
+                    }}
+                    value={cohortEditName}
+                    id="cohortName"
+                    label="Cohort Name"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                    required
+                  />
+                  <div className="editDatePicker">
+                    <LocalizationProvider dateAdapter={DateAdapter}>
+                      <MobileDatePicker
+                        label="edit Date"
+                        inputFormat="DD/MM/yyyy"
+                        value={editDate}
+                        onChange={handleEditDateChange}
+                        renderInput={(params) => <TextField {...params} />}
+                      />
+                    </LocalizationProvider>
+                  </div>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleEditCohortClose}>Cancel</Button>
+                  <Button onClick={handleEditCohort}>Save</Button>
+                  <Button onClick={handleDeleteCohort}>Delete</Button>
+                </DialogActions>
+              </Dialog>
+            </div>
+          </div>
+        </div>
+        <div className="filters-detail box">
+          <Box id="box" sx={{ minWidth: 120 }}>
+            <FormControl fullWidth>
+              <InputLabel id="cohorts">Cohorts</InputLabel>
+              <Select
+                labelId="select-cohort"
+                id="select-cohort"
+                value={cohort}
+                label="cohorts"
+                onChange={handleChange}
+              >
+                <MenuItem value={"all-cohorts"} key={"all-cohorts"}>
+                  {"all-cohorts"}
+                </MenuItem>
+                {cohorts.map((cohort, idx) => {
+                  return (
+                    <MenuItem value={cohort.name} key={idx}>
+                      {cohort.name}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
+          </Box>
+          <Box id="box" sx={{ minWidth: 120 }}>
+            <FormControl fullWidth>
+              <InputLabel id="Status">Status</InputLabel>
+              <Select
+                labelId="select-Status"
+                id="select-Status"
+                value={selectedStatus}
+                label="statuses"
+                onChange={handleStatusChange}
+              >
+                <MenuItem value={"all-statuses"} key={"all-statuses"}>
+                  {"all-statuses"}
+                </MenuItem>
+                {statuses.map((status, idx) => {
+                  return (
+                    <MenuItem value={status} key={idx}>
+                      {status}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
+          </Box>
+        </div>
       <TableContainer
         component={Paper}
         sx={{

@@ -7,15 +7,15 @@ const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
     user: process.env.AUTH_EMAIL,
-    pass: process.env.AUTH_PASS
-  }
+    pass: process.env.AUTH_PASS,
+  },
 });
 
 const sendMail = (to, subject, text, html) => {
   const message = { from: process.env.AUTH_EMAIL, to, subject, text, html };
-  transporter.sendMail(message, (ex, info) => {
-    if (ex) return console.log(ex);
-    return "Email sent: " + info.response;
+  transporter.sendMail(message, (err, info) => {
+    if (err) return { error: err };
+    return { msg: "Email sent: " + info.response };
   });
 };
 

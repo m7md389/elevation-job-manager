@@ -140,7 +140,7 @@ router.get("/api/courses/:startDate/:endDate", async (req, res) => {
         }
       }
     })
-    .exec(async function (ex, courses) {
+    .exec(async function (err, courses) {
       let data;
       if (err) {
         res.status(400).send({ error: "error getting data" });

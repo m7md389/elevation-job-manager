@@ -10,7 +10,7 @@ const ProtectedRoute = ({ children, isAdminPage, isStudentPage }) => {
 
   if (!isAuthenticated) return <Navigate to={"/login"} />;
 
-  if (!user.isVerified) return <VerifyAccount />;
+  if (user.role !== "admin" && !user.isVerified) return <VerifyAccount />;
 
   return (isAdminPage && user.role !== "admin") ||
     (isStudentPage && user.role !== "student") ? (

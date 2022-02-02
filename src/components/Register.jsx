@@ -60,14 +60,16 @@ const Register = () => {
               onChange={handleChange}
               id="name"
               className="input fadeIn second"
+              required
             />
             <input
-              type="text"
+              type="email"
               placeholder="Email"
               value={inputs.email}
               onChange={handleChange}
               id="email"
               className="input fadeIn third"
+              required
             />
             <input
               type="password"
@@ -76,6 +78,7 @@ const Register = () => {
               onChange={handleChange}
               id="password"
               className="input fadeIn fourth"
+              required
             />
             <input
               type="text"
@@ -84,6 +87,7 @@ const Register = () => {
               onChange={handleChange}
               id="phone"
               className="input fadeIn fifth"
+              required
             />
             <input
               type="text"

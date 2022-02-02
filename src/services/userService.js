@@ -19,9 +19,13 @@ export const addAdmin = async (admin) => {
   return http.post(apiEndpoint, {
     name: admin.name,
     email: admin.email,
-    password: admin.password,
-    phone: admin.phone
+    password: admin.password
   });
 };
 
-export default { register, addAdmin };
+export const verifyUser = async (emailToken) => {
+  const apiEndpoint = "/users/verify";
+  return http.put(apiEndpoint + `/${emailToken}`);
+};
+
+export default { register, addAdmin, verifyUser };

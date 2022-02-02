@@ -29,7 +29,7 @@ import MobileDatePicker from "@mui/lab/MobileDatePicker";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
 import http from "../services/httpService";
-import mail from "../services/mailService";
+import sendMail from "../services/mailService";
 
 import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
 import {toast} from "react-toastify";
@@ -269,7 +269,7 @@ const Course = () => {
     let Cohort = {
       name: cohortName,
       start_date: date,
-      courseId: course._id,
+      courseId: course._id
     };
     http.post(`/courses/cohort`, Cohort).then(() => {
       setRefresh(refresh + 1);
@@ -547,7 +547,7 @@ const Course = () => {
         sx={{
           width: "80%",
           margin: "0 auto",
-          boxShadow: "rgb(102, 123, 145) 0px 0px 25px -10px",
+          boxShadow: "rgb(102, 123, 145) 0px 0px 25px -10px"
         }}
         className="table-container"
       >

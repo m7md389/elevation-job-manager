@@ -1,14 +1,33 @@
 const express = require("express");
 const router = express.Router();
-const auth = require("../middleware/auth");
-const admin = require("../middleware/admin");
+
 const _ = require("lodash");
 const bcrypt = require("bcrypt");
+const auth = require("../middleware/auth");
+const admin = require("../middleware/admin");
 const User = require("../models/user");
 
 router.get("/me", auth, async (req, res) => {
   const user = await User.findById(req.user._id).select("-password");
   res.send(user);
+});
+
+router.put("/verify/:emailToken", async (req, res) => {
+  const { emailToken } = req.params;
+
+  if (!emailToken) return res.status(400).send("No email token provided.");
+
+  const user = await User.findOne({ emailToken }).exec();
+  if (!user) return res.status(400).send({ error: "Unvalid link." });
+  await User.findByIdAndUpdate(
+    { _id: user._id },
+    { $set: { isVerified: true } }
+  ).exec((ex, result) => {
+    if (ex) {
+      return res.send({ error: ex });
+    }
+    res.send({ msg: "User verified successfully." });
+  });
 });
 
 router.post("/", async function (req, res) {
@@ -17,7 +36,7 @@ router.post("/", async function (req, res) {
 
   let user = await User.findOne({ email });
   if (user) {
-    res.status(400).send("User already registered.");
+    res.status(400).send({ error: "User already registered." });
     return null;
   }
 
@@ -44,11 +63,11 @@ router.post("/", async function (req, res) {
 });
 
 router.post("/admin", auth, admin, async function (req, res) {
-  const { name, email, password, phone } = req.body;
+  const { name, email, password } = req.body;
 
   let admin = await User.findOne({ email });
   if (admin) {
-    res.status(400).send("User already registered.");
+    res.status(400).send({ error: "User already registered." });
     return null;
   }
 
@@ -56,7 +75,6 @@ router.post("/admin", auth, admin, async function (req, res) {
     name,
     email,
     password,
-    phone,
     role: "admin"
   });
 
@@ -65,7 +83,7 @@ router.post("/admin", auth, admin, async function (req, res) {
   await admin.save();
 
   const token = admin.generateAuthToken();
-  res.send("Admin added successfully");
+  res.send({ msg: "Admin added successfully" });
 });
 
 router.put("/password", async function (req, res) {

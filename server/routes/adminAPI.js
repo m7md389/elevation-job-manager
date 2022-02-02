@@ -1,27 +1,21 @@
 const express = require("express");
 const router = express.Router();
 const moment = require("moment");
+const bcrypt = require("bcrypt");
+const _ = require("lodash");
+const crypto = require("crypto");
+
+const mailService = require("../services/mailService");
+
 const Course = require("../models/course");
 const Cohort = require("../models/cohort");
 const Users = require("../models/user");
 const Jobs = require("../models/job");
 const Interviews = require("../models/interview");
 
-const _ = require("lodash");
-const bcrypt = require("bcrypt");
-
 router.post("/api/temp-users", async function (req, res) {
-  const {
-    name,
-    email,
-    password,
-    phone,
-    city,
-    linkedin,
-    status,
-
-    cohortId,
-  } = req.body;
+  const { name, email, password, phone, city, linkedin, status, cohortId } =
+    req.body;
 
   let user = await Users.findOne({ email });
   if (user) {
@@ -29,14 +23,19 @@ router.post("/api/temp-users", async function (req, res) {
     return null;
   }
 
+  const emailToken = crypto.randomUUID();
+
+  // add user to users collection
   user = new Users({
     name,
     email,
+    emailToken,
     password,
     phone,
     city,
     linkedin,
     status,
+    isVerified: false,
     role: "student",
     jobs: [],
   });
@@ -44,7 +43,10 @@ router.post("/api/temp-users", async function (req, res) {
   user.password = await bcrypt.hash(password, salt);
   await user.save();
 
-  Cohort.findByIdAndUpdate(
+  // send verification email
+  await mailService.sendVerificationEmail(req, user, emailToken);
+
+  await Cohort.findByIdAndUpdate(
     { _id: cohortId },
     { $push: { users: user } },
     { new: true }
@@ -57,7 +59,7 @@ router.post("/api/temp-users", async function (req, res) {
   res
     .header("x-auth-token", token)
     .header("access-control-expose-headers", "x-auth-token")
-    .send(_.pick(user, ["_id", "name", "email"]));
+    .send(_.pick(user, ["_id", "name"]));
 });
 
 router.get("/api/courses", async (req, res) => {
@@ -189,9 +191,9 @@ router.get("/api/courses/:courseName", (req, res) => {
         path: "users",
       },
     })
-    .exec(function (err, course) {
-      if (err) {
-        res.send({ error: err });
+    .exec(function (ex, course) {
+      if (ex) {
+        res.send({ error: ex });
         return null;
       }
       res.send(course);
@@ -263,8 +265,8 @@ router.put("/api/jobs", async function (req, res) {
 
 router.delete("/api/jobs", async function (req, res) {
   let jobId = req.body;
-  await Jobs.findByIdAndDelete({ _id: jobId.jobId }).exec((err, user) => {
-    if (err) {
+  await Jobs.findByIdAndDelete({ _id: jobId.jobId }).exec((ex, user) => {
+    if (ex) {
       res.send({ error: "error deleting Job" });
     }
     res.send(user);
@@ -329,8 +331,8 @@ router.delete("/api/courses", (req, res) => {
     return null;
   }
 
-  Course.findOneAndDelete({ title: courseName }).exec((err, result) => {
-    if (err) {
+  Course.findOneAndDelete({ title: courseName }).exec((ex, result) => {
+    if (ex) {
       res.status(400).send({ error: "missed name" });
       return null;
     }
@@ -366,8 +368,8 @@ router.put("/api/jobs/Interviews", async function (req, res) {
 router.delete("/api/jobs/Interviews", async function (req, res) {
   let interviewId = req.body;
   await Interviews.findByIdAndDelete({ _id: interviewId.interviewId }).exec(
-    function (err, interview) {
-      if (err) {
+    function (ex, interview) {
+      if (ex) {
         res.send({ error: "error deleting Interview" });
       }
       res.send(interview);
@@ -384,7 +386,7 @@ router.get("/api/jobs/:userId?", function (req, res) {
         path: "interviews",
       },
     })
-    .exec(function (err, user) {
+    .exec(function (ex, user) {
       res.send(user);
     });
 });
@@ -457,8 +459,8 @@ router.post("/api/courses/cohort", async (req, res) => {
       },
     },
     { new: true }
-  ).exec(function (err, newCohort) {
-    if (err) {
+  ).exec(function (ex, newCohort) {
+    if (ex) {
       res.send({ error: "can't add cohort" });
     }
     res.send(newCohort);

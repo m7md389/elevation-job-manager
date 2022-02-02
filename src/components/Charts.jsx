@@ -28,14 +28,7 @@ function Charts() {
   const [showCohort, setShowCohort] = useState([])
   const [courses, setCourses] = useState([])
 
-  // 0: (2) ['Courses', 'working']
-  // 1: (2) ['full-stack', 5]
-  // 2: (2) ['Android', 3]
-  // 3: (2) ['Data analyst', 1]
-  // 4: (2) ['test', 0]
-  // 5: (2) ['fdfdfd', 0]
-  // 6: (2) ['test', 0]
-  // 7: (2) ['testffgf', 0]
+
 
   // ['all cohorts', 'working']
   // ['searching', 5]
@@ -52,6 +45,8 @@ function Charts() {
     if (selectedCourse) {
       getCohortByCourse(selectedCourse);
       // owCohort
+      setShowCohort(showCohortOnChart(chosenCohort))
+
     }
 
   }, [selectedCourse])
@@ -99,22 +94,54 @@ function Charts() {
 
 
   const showCohortOnChart = cohortName => {
-    if (cohortName === 'All Cohorts') {
-      // search by all cohorts
-      console.log(selectedCourse);
-    } else {
-      // search by specific cohort
-    }
+    let result = []
+    let searching = 0, working = 0, studding = 0, noInfo = 0
+    let [course] = allData.filter(c => c.title === selectedCourse)
 
-    return [['all cohorts', 'working'],
-    ['searching', 5],
-    ['working', 3],
-    ['studding', 1]]
+    if (cohortName === 'All Cohorts') {
+
+      result.push(['All Cohorts', 'status'])
+      // search by all cohorts
+      course.cohorts.map(c => {
+        c.users.map(u => {
+          if (u.role != 'admin' && u.status === 'searching')
+            searching++;
+          else if (u.role != 'admin' && u.status === 'working')
+            working++
+          else if (u.role != 'admin' && u.status === 'studying')
+            studding++;
+          else if (u.role != 'admin')
+            noInfo++;
+        })
+      })
+      result.push(['searching', searching],
+        ['working', working],
+        ['studding', studding],
+        ['no info', noInfo])
+    } else {
+      result.push([cohortName, 'status'])
+      let [specificCohort] = course.cohorts.filter(c => c.name === cohortName)
+      specificCohort.users.map(u => {
+        if (u.role != 'admin' && u.status === 'searching')
+          searching++;
+        else if (u.role != 'admin' && u.status === 'working')
+          working++
+        else if (u.role != 'admin' && u.status === 'studying')
+          studding++;
+        else if (u.role != 'admin')
+          noInfo++;
+      })
+      result.push(['searching', searching],
+        ['working', working],
+        ['studding', studding],
+        ['no info', noInfo])
+    }
+    return result;
   }
 
 
   const handleCohortChange = (e) => {
-    console.log(e.target.value);
+    setChosenCohort(e.target.value)
     setShowCohort(showCohortOnChart(e.target.value))
   }
 
@@ -142,6 +169,8 @@ function Charts() {
               const chart = chartWrapper.getChart();
               google.visualization.events.addListener(chart, 'click', (e) => {
                 setSelectedCourse(chart.ha.C[Number.parseInt(e.targetID.split('#')[1])].title)
+                setChosenCohort("All Cohorts");
+
               })
             }
           }

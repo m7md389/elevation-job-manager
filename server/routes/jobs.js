@@ -3,8 +3,9 @@ const router = express.Router();
 const mailService = require("../services/mailService");
 
 // ../api/jobs/notifications
-router.post("/notifications", async (req, res) => {
-  mailService.sendJobNotification();
-});
+// router.post("/notifications", async (req, res) => {
+//   console.log(req.body);
+//   //   mailService.sendJobNotification();
+// });
 
 module.exports = router;

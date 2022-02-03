@@ -35,7 +35,7 @@ router.post("/temp-users", async function (req, res) {
     status,
     isVerified: false,
     role: "student",
-    jobs: [],
+    jobs: []
   });
   const salt = await bcrypt.genSalt(10);
   user.password = await bcrypt.hash(password, salt);
@@ -68,10 +68,10 @@ router.get("/courses", async (req, res) => {
         populate: {
           path: "jobs",
           populate: {
-            path: "interviews",
-          },
-        },
-      },
+            path: "interviews"
+          }
+        }
+      }
     })
     .exec(function (err, courses) {
       if (err) {
@@ -92,7 +92,7 @@ const findInterviewsInRange = async (sDate, eDate, courses) => {
     minute: 59,
     second: 59,
     millisecond: 59,
-    day: moment(sDate).day() - 1,
+    day: moment(sDate).day() - 1
   });
   await courses.forEach((course) => {
     course.cohorts.forEach((cohort) => {
@@ -108,7 +108,7 @@ const findInterviewsInRange = async (sDate, eDate, courses) => {
                 phone: user.phone,
                 date: interview.date,
                 type: interview.type,
-                user_id: user._id,
+                user_id: user._id
               };
               users.push(selectedUser);
             }
@@ -132,10 +132,10 @@ router.get("/courses/:startDate/:endDate", async (req, res) => {
         populate: {
           path: "jobs",
           populate: {
-            path: "interviews",
-          },
-        },
-      },
+            path: "interviews"
+          }
+        }
+      }
     })
     .exec(async function (err, courses) {
       let data;
@@ -153,8 +153,8 @@ router.get("/courses/names", async function (req, res) {
   let courses = await Course.find({}).populate({
     path: "cohorts",
     populate: {
-      path: "users",
-    },
+      path: "users"
+    }
   });
   let data = [];
   courses.map((c) => {
@@ -185,8 +185,8 @@ router.get("/courses/:courseName", (req, res) => {
     .populate({
       path: "cohorts",
       populate: {
-        path: "users",
-      },
+        path: "users"
+      }
     })
     .exec(function (ex, course) {
       if (ex) {
@@ -206,19 +206,19 @@ router.post("/jobs", async function (req, res) {
     date: myDate,
     company: tempJob.company,
     status: tempJob.status,
-    interviews: [],
+    interviews: []
   });
   newJob.save();
 
   Users.findOneAndUpdate(
     { _id: tempJob.userId },
     {
-      $push: { jobs: newJob },
+      $push: { jobs: newJob }
     },
     { new: true }
   )
     .populate({
-      path: "jobs",
+      path: "jobs"
     })
     .exec(function (err, user) {
       if (err) {
@@ -243,13 +243,13 @@ router.put("/jobs", async function (req, res) {
         date: myDate,
         status: tempJob.status || jobToEdit.status,
         company: tempJob.company || jobToEdit.company,
-        status: tempJob.status || jobToEdit.status,
-      },
+        status: tempJob.status || jobToEdit.status
+      }
     },
     { new: true }
   )
     .populate({
-      path: "jobs",
+      path: "jobs"
     })
     .exec(function (err, user) {
       if (err) {
@@ -278,19 +278,19 @@ router.post("/jobs/Interviews", async function (req, res) {
     type: tempInterview.type,
     status: tempInterview.status,
     date: myDate,
-    link: tempInterview.link,
+    link: tempInterview.link
   });
   newInterview.save();
 
   Jobs.findOneAndUpdate(
     { _id: tempInterview.jobId },
     {
-      $push: { interviews: newInterview },
+      $push: { interviews: newInterview }
     },
     { new: true }
   )
     .populate({
-      path: "interviews",
+      path: "interviews"
     })
     .exec(function (err, job) {
       if (err) {
@@ -315,7 +315,7 @@ router.post("/courses", async (req, res) => {
   }
   let newCourse = new Course({
     title: courseName,
-    cohorts: [],
+    cohorts: []
   });
   await newCourse.save();
   res.redirect("/courses/names");
@@ -349,8 +349,8 @@ router.put("/jobs/Interviews", async function (req, res) {
         type: tempInterview.type || interview.type,
         date: myDate,
         status: tempInterview.status || interview.status,
-        link: tempInterview.link || interview.link,
-      },
+        link: tempInterview.link || interview.link
+      }
     },
     { new: true }
   ).exec(function (err, interView) {
@@ -380,8 +380,8 @@ router.get("/jobs/:userId?", function (req, res) {
     .populate({
       path: "jobs",
       populate: {
-        path: "interviews",
-      },
+        path: "interviews"
+      }
     })
     .exec(function (ex, user) {
       res.send(user);
@@ -410,8 +410,8 @@ router.put("/users", async function (req, res) {
         phone: updatedUserData.phone || user.phone,
         city: updatedUserData.city || user.city,
         linkedin: updatedUserData.linkedin || user.linkedin,
-        status: updatedUserData.status || user.status,
-      },
+        status: updatedUserData.status || user.status
+      }
     },
     { new: true }
   ).exec(function (err, newUser) {
@@ -441,7 +441,7 @@ router.post("/courses/cohort", async (req, res) => {
   let newCohort = new Cohort({
     name: cohortToAdd.name,
     start_date: myDate,
-    users: [],
+    users: []
   });
 
   newCohort.save();
@@ -450,8 +450,8 @@ router.post("/courses/cohort", async (req, res) => {
     { _id: cohortToAdd.courseId },
     {
       $push: {
-        cohorts: newCohort,
-      },
+        cohorts: newCohort
+      }
     },
     { new: true }
   ).exec(function (ex, newCohort) {
@@ -477,7 +477,7 @@ router.put("/courses/cohorts", async function (req, res) {
   let myDate = moment(newDate).format("L");
   Course.findById({ _id: courseId })
     .populate({
-      path: "cohorts",
+      path: "cohorts"
     })
     .exec((err, course) => {
       if (err) {
@@ -490,8 +490,8 @@ router.put("/courses/cohorts", async function (req, res) {
     {
       $set: {
         name: newName,
-        start_date: myDate,
-      },
+        start_date: myDate
+      }
     },
     { new: true }
   ).exec((err, updatedCohort) => {
@@ -514,8 +514,8 @@ router.put("/courses", async function (req, res) {
     { title: title },
     {
       $set: {
-        title: newTitle,
-      },
+        title: newTitle
+      }
     },
     { new: true }
   ).exec(function (err, newCourse) {
@@ -524,6 +524,19 @@ router.put("/courses", async function (req, res) {
     }
     res.send(newCourse);
   });
+});
+
+router.post("/notifications", async (req, res) => {
+  let { sendJobEmails, jobsInputs } = req.body;
+  if (!sendJobEmails.length || !jobsInputs.link) {
+    res.status(400).send({
+      error: "Error sending job please check link and selected users emails"
+    });
+  }
+  sendJobEmails.forEach((email) => {
+    mailService.sendJobNotification(email, jobsInputs);
+  });
+  res.end();
 });
 
 module.exports = router;

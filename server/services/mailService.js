@@ -7,15 +7,15 @@ const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
     user: process.env.AUTH_EMAIL,
-    pass: process.env.AUTH_PASS,
-  },
+    pass: process.env.AUTH_PASS
+  }
 });
 
 const sendMail = async (to, subject, text, html) => {
   const message = { from: process.env.AUTH_EMAIL, to, subject, text, html };
   const res = await transporter.sendMail(message);
   if (res.err) return { error: err };
-  return { msg: "Email sent: " + info.response };
+  return { msg: "Email sent: " + res };
 };
 
 const sendVerificationEmail = async (req, user, emailToken) => {
@@ -45,23 +45,23 @@ const sendVerificationEmail = async (req, user, emailToken) => {
 const sendJobNotification = async (studentMail, job) => {
   const mailSubject = "You received job suggest from Elevation";
   const mailText = `
-  Title: ${job.title}
+  Title: ${job.title || " "}
 
-  Company: ${job.company}
+  Company: ${job.company || " "}
   
-  Description: ${job.description}
+  Description: ${job.description || " "}
   
   Link: ${job.link}
   `;
   const mailHTML = `
-  <h2>Title: ${job.title}</h2>
+  <h4>Title: ${job.title || " "}</h4>
 
-  <h5>Company: ${job.company} </h5>
+  <h5>Company: ${job.company || " "} </h5>
 
-  <h4>Description: </h4>
-  <p>${job.description}</p>
+  <h5>Description: </h5>
+  <p>${job.description || " "}</p>
   
-  <h3>Link: <a href="${job.link}"> Job Link </a></h3>
+  <h5>Link: <a href="${job.link || " "}"> Job Link </a></h5>
   `;
 
   const result = await sendMail(studentMail, mailSubject, mailText, mailHTML);

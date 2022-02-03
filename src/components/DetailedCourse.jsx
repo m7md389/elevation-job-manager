@@ -126,7 +126,7 @@ const Course = () => {
       return null;
     }
 
-    http.post("/jobs/notifications", sendJobEmails , jobsInputs).then(res => {
+    http.post("/notifications", {sendJobEmails , jobsInputs}).then(res => {
       if(res.error){toast.error("Error sending job.")}
       else{toast.success("Successfully sended job.")}
     })

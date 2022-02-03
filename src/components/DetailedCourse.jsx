@@ -144,7 +144,7 @@ const Course = () => {
       
       <h3>link: <a href="${jobsInputs.link}"> Job Link </a></h3>
       `
-      sendMail(email, "You received job suggest from Elevation" , mailText , mailHTML)
+      sendMail("rivoyiy945@mannawo.com", "You received job suggest from Elevation" , mailText , mailHTML)
     })
     setSendJob(false);
   }

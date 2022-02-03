@@ -20,7 +20,6 @@ import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutl
 
 import Dropdown from "react-dropdown";
 import "react-dropdown/style.css";
-import mail from "../services/mailService";
 
 function AdminHome() {
   const [courses, setCourses] = useState([]);
@@ -118,19 +117,8 @@ function AdminHome() {
     });
   };
 
-  function a() {
-    const message = {
-      to: "kusozisy@musiccode.me",
-      subject: "test",
-      text: "test",
-      html: "<h1>test<h1>"
-    };
-    mail.sendMail({ ...message });
-  }
-
   return (
     <div>
-      <button onClick={a}>click me</button>
       <Title text="Home Page" />
 
       <div className="add-course-container">

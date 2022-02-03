@@ -1,4 +1,4 @@
-import React, { useState, useEffect, isValidElement, cloneElement } from "react";
+import React, {useState, useEffect} from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { observer, inject } from "mobx-react";
 import courseService from "../services/courseService";
@@ -29,11 +29,11 @@ import MobileDatePicker from "@mui/lab/MobileDatePicker";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
 import http from "../services/httpService";
-import sendMail from "../services/mailService";
 
 import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
 import { toArray } from "lodash";
+import sendJobNotification from "../../server/services/mailService"
 
 const Course = () => {
   const params = useParams();
@@ -76,8 +76,8 @@ const Course = () => {
   const [cohortName, setCohortName] = useState("");
   const [cohortEditName, setCohortEditName] = useState("");
   const [sendJobEmails, setSendJobEmails] = useState([]);
-  const [selectAllCheckBox, setSelectAllCheckBox] = useState(false)
-  const [sendJob, setSendJob] = useState(false)
+  const [selectAllCheckBox, setSelectAllCheckBox] = useState(false);
+  const [sendJob, setSendJob] = useState(false);
 
   useEffect(async () => {
     if (!course) return null;
@@ -120,11 +120,13 @@ const Course = () => {
   };
 
   const handleSendJob = () => {
-    if(!jobsInputs.link || !sendJobEmails.length){
-      !jobsInputs.link?toast.error("Please add link") : toast.error("No selected users")
-      return null
+    if (!jobsInputs.link || !sendJobEmails.length) {
+      !jobsInputs.link
+        ? toast.error("Please add link")
+        : toast.error("No selected users");
+      return null;
     }
-    sendJobEmails.forEach(email => {
+    sendJobEmails.forEach((email) => {
       const mailText = `
       title: ${jobsInputs.title}
 
@@ -133,7 +135,7 @@ const Course = () => {
       company: ${jobsInputs.company}
 
       description: ${jobsInputs.description}
-      `
+      `;
       const mailHTML = `
       <h2>title: ${jobsInputs.title}</h2>
 
@@ -144,10 +146,10 @@ const Course = () => {
       
       <h3>link: <a href="${jobsInputs.link}"> Job Link </a></h3>
       `
-      sendMail("rivoyiy945@mannawo.com", "You received job suggest from Elevation" , mailText , mailHTML)
+      sendJobNotification("rivoyiy945@mannawo.com", jobsInputs)
     })
     setSendJob(false);
-  }
+  };
 
   const getTableRows = () => {
     let users = [];
@@ -163,7 +165,7 @@ const Course = () => {
             phone: user.phone,
             cohort: cohort.name,
             status: user.status,
-            email: user.email,
+            email: user.email
           });
         }
       });
@@ -239,8 +241,8 @@ const Course = () => {
           newName: cohortEditName,
           newDate: editDate.toString(),
           courseId: course._id,
-          cohortId: tempCohort._id,
-        },
+          cohortId: tempCohort._id
+        }
       })
       .then((res) => {
         if (res.data.error) {
@@ -278,7 +280,7 @@ const Course = () => {
     setOpen(false);
   };
 
-  const handleCheckboxClick =(e) => {
+  const handleCheckboxClick = (e) => {
     e.stopPropagation();
     let tempEmail = sendJobEmails;
     if (e.target.checked) {
@@ -288,24 +290,28 @@ const Course = () => {
     } else if (tempEmail.includes(e.target.value)) {
       tempEmail.splice(tempEmail.indexOf(e.target.value), 1);
     }
-    setSendJobEmails(tempEmail)
-  }
+    setSendJobEmails(tempEmail);
+  };
 
   const handleSelectAllCheckbox = (e) => {
-    let tempAllEmails = []
-    setSelectAllCheckBox(e.target.checked)
-    const tableRows = toArray(e.target.closest("table").lastChild.children)
-    tableRows.forEach(row => {
-      let tempInput = row.firstChild.firstChild
-      if(e.target.checked){
-        if(!tempAllEmails.includes(tempInput.value))
-        tempAllEmails.push(tempInput.value)
-        tempInput.checked = true
+    let tempAllEmails = [];
+    setSelectAllCheckBox(e.target.checked);
+    const tableRows = toArray(e.target.closest("table").lastChild.children);
+    tableRows.forEach((row) => {
+      let tempInput = row.firstChild.firstChild;
+      if (e.target.checked) {
+        if (!tempAllEmails.includes(tempInput.value))
+          tempAllEmails.push(tempInput.value);
+        tempInput.checked = true;
+      } else {
+        tempInput.checked = false;
       }
-      else{tempInput.checked = false}
     });
-    if(e.target.checked){setSendJobEmails(tempAllEmails)}
-    else{setSendJobEmails([])}
+    if (e.target.checked) {
+      setSendJobEmails(tempAllEmails);
+    } else {
+      setSendJobEmails([]);
+    }
   };
 
   if (!course) return null;
@@ -422,77 +428,77 @@ const Course = () => {
             </Dialog>
           </div>
           <div>
-          <Stack direction="row" spacing={2}>
-            <Button onClick={handleSendJobOpen} variant="outlined">
-              Send Job
-            </Button>
-          </Stack>
-          <Dialog open={sendJob} onClose={handleSendJobClose}>
-            <DialogTitle>Send Job :</DialogTitle>
-            <DialogContent>
-              <TextField
-                autoFocus
-                margin="dense"
-                onChange={(e) => {
-                  handleSendJobInputChange(e, "title");
-                }}
-                value={jobsInputs.title}
-                id="title"
-                label="Job Title"
-                type="text"
-                fullWidth
-                variant="standard"
-                required
-              />
-              <TextField
-                autoFocus
-                margin="dense"
-                onChange={(e) => {
-                  handleSendJobInputChange(e, "link");
-                }}
-                value={jobsInputs.link}
-                id="link"
-                label="Job Link"
-                type="text"
-                fullWidth
-                variant="standard"
-                required
-              />
-              <TextField
-                autoFocus
-                margin="dense"
-                onChange={(e) => {
-                  handleSendJobInputChange(e, "company");
-                }}
-                value={jobsInputs.company}
-                id="company"
-                label="Company"
-                type="text"
-                fullWidth
-                variant="standard"
-                required
-              />
-              <TextField
-                autoFocus
-                margin="dense"
-                onChange={(e) => {
-                  handleSendJobInputChange(e, "description");
-                }}
-                value={jobsInputs.description}
-                id="description"
-                label="description"
-                type="text"
-                fullWidth
-                variant="standard"
-                required
-              />
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleSendJobClose}>Cancel</Button>
-              <Button onClick={handleSendJob}>Send</Button>
-            </DialogActions>
-          </Dialog>
-        </div>
+            <Stack direction="row" spacing={2}>
+              <Button onClick={handleSendJobOpen} variant="outlined">
+                Send Job
+              </Button>
+            </Stack>
+            <Dialog open={sendJob} onClose={handleSendJobClose}>
+              <DialogTitle>Send Job :</DialogTitle>
+              <DialogContent>
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  onChange={(e) => {
+                    handleSendJobInputChange(e, "title");
+                  }}
+                  value={jobsInputs.title}
+                  id="title"
+                  label="Job Title"
+                  type="text"
+                  fullWidth
+                  variant="standard"
+                  required
+                />
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  onChange={(e) => {
+                    handleSendJobInputChange(e, "link");
+                  }}
+                  value={jobsInputs.link}
+                  id="link"
+                  label="Job Link"
+                  type="text"
+                  fullWidth
+                  variant="standard"
+                  required
+                />
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  onChange={(e) => {
+                    handleSendJobInputChange(e, "company");
+                  }}
+                  value={jobsInputs.company}
+                  id="company"
+                  label="Company"
+                  type="text"
+                  fullWidth
+                  variant="standard"
+                  required
+                />
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  onChange={(e) => {
+                    handleSendJobInputChange(e, "description");
+                  }}
+                  value={jobsInputs.description}
+                  id="description"
+                  label="description"
+                  type="text"
+                  fullWidth
+                  variant="standard"
+                  required
+                />
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleSendJobClose}>Cancel</Button>
+                <Button onClick={handleSendJob}>Send</Button>
+              </DialogActions>
+            </Dialog>
+          </div>
         </div>
       </div>
       <div className="filters-detail box">
@@ -559,7 +565,7 @@ const Course = () => {
                 <input
                   type="checkbox"
                   id="selectAll"
-                  defaultChecked = {selectAllCheckBox}
+                  defaultChecked={selectAllCheckBox}
                   onClick={handleSelectAllCheckbox}
                 />
               </TableCell>
@@ -585,14 +591,14 @@ const Course = () => {
                 onClick={(event) => handleRowClick(row._id, event)}
                 id={row.id}
               >
-              <TableCell align="center">
-                <input
-                  type="checkbox"
-                  id={index}
-                  defaultChecked={false}
-                  value={row.email}
-                  onClick={handleCheckboxClick}
-                />
+                <TableCell align="center">
+                  <input
+                    type="checkbox"
+                    id={index}
+                    defaultChecked={false}
+                    value={row.email}
+                    onClick={handleCheckboxClick}
+                  />
                 </TableCell>
                 <TableCell align="center">{row.name}</TableCell>
                 <TableCell align="center">{row.phone}</TableCell>

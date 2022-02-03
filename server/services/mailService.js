@@ -7,21 +7,19 @@ const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
     user: process.env.AUTH_EMAIL,
-    pass: process.env.AUTH_PASS
-  }
+    pass: process.env.AUTH_PASS,
+  },
 });
 
-const sendMail = (to, subject, text, html) => {
+const sendMail = async (to, subject, text, html) => {
   const message = { from: process.env.AUTH_EMAIL, to, subject, text, html };
-  return transporter.sendMail(message, (err, info) => {
-    if (err) return { error: err };
-    return { msg: "Email sent: " + info.response };
-  });
+  const res = await transporter.sendMail(message);
+  if (res.err) return { error: err };
+  return { msg: "Email sent: " + info.response };
 };
 
 const sendVerificationEmail = async (req, user, emailToken) => {
   const mailSubject = "Confirm Your Account";
-  console.log(process.env);
   const verificationLink = `http://${CLIENT_URI}/verify-user?emailToken=${emailToken}`;
   const mailText = `
     Hello ${user.name},
@@ -44,6 +42,31 @@ const sendVerificationEmail = async (req, user, emailToken) => {
   return { result };
 };
 
-const sendNotificationEmail = (userEmail) => {};
+const sendJobNotification = async (studentMail, job) => {
+  const mailSubject = "You received job suggest from Elevation";
+  const mailText = `
+  Title: ${job.title}
 
-module.exports = { sendMail, sendVerificationEmail, sendNotificationEmail };
+  Company: ${job.company}
+  
+  Description: ${job.description}
+  
+  Link: ${job.link}
+  `;
+  const mailHTML = `
+  <h2>Title: ${job.title}</h2>
+
+  <h5>Company: ${job.company} </h5>
+
+  <h4>Description: </h4>
+  <p>${job.description}</p>
+  
+  <h3>Link: <a href="${job.link}"> Job Link </a></h3>
+  `;
+
+  const result = await sendMail(studentMail, mailSubject, mailText, mailHTML);
+
+  return { result };
+};
+
+module.exports = { sendMail, sendVerificationEmail, sendJobNotification };

@@ -4,7 +4,6 @@ const auth = require("./routes/auth");
 const courses = require("./routes/courses");
 const cohorts = require("./routes/cohorts");
 const users = require("./routes/users");
-const jobs = require("./routes/jobs");
 const mail = require("./routes/mail");
 const interviews = require("./routes/interviews");
 const mongoose = require("mongoose");
@@ -36,8 +35,7 @@ app.use("/api/auth", auth);
 // app.use('/api/courses', courses);
 app.use("/api/cohorts", cohorts);
 app.use("/api/users", users);
-app.use("/api/mail", mail);
-// app.use('/api/jobs', jobs);
+// app.use("/api/jobs", jobs);
 // app.use('/api/interviews', interviews);
 app.use("/api", api);
 

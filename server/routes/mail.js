@@ -1,11 +1,13 @@
 const express = require("express");
 const router = express.Router();
 const auth = require("../middleware/auth");
-const mail = require("../services/mailService");
+const mailService = require("../services/mailService");
 
 router.post("/", auth, async (req, res) => {
   const { to, subject, text, html } = req.body;
-  const mailResult = await mail.sendMail(to, subject, text, html);
+  console.log("🚀 ~ file: mail.js ~ line 8 ~ router.post ~ req.body", req.body);
+
+  const mailResult = await mailService.sendMail(to, subject, text, html);
   res.send(mailResult);
 });
 

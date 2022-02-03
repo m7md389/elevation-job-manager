@@ -7,20 +7,20 @@ const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
     user: process.env.AUTH_EMAIL,
-    pass: process.env.AUTH_PASS,
-  },
+    pass: process.env.AUTH_PASS
+  }
 });
 
 const sendMail = (to, subject, text, html) => {
   const message = { from: process.env.AUTH_EMAIL, to, subject, text, html };
-  transporter.sendMail(message, (err, info) => {
+  return transporter.sendMail(message, (err, info) => {
     if (err) return { error: err };
     return { msg: "Email sent: " + info.response };
   });
 };
 
-const sendVerificationEmail = (req, user, emailToken) => {
-  const mailSubject = "Cofirm Your Account";
+const sendVerificationEmail = async (req, user, emailToken) => {
+  const mailSubject = "Confirm Your Account";
   console.log(process.env);
   const verificationLink = `http://${CLIENT_URI}/verify-user?emailToken=${emailToken}`;
   const mailText = `
@@ -39,7 +39,7 @@ const sendVerificationEmail = (req, user, emailToken) => {
   <a href=${verificationLink}>Verify your account</a>
   `;
 
-  const result = sendMail(user.email, mailSubject, mailText, mailHTML);
+  const result = await sendMail(user.email, mailSubject, mailText, mailHTML);
 
   return { result };
 };

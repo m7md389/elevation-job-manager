@@ -13,10 +13,9 @@ const transporter = nodemailer.createTransport({
 
 const sendMail = (to, subject, text, html) => {
   const message = { from: process.env.AUTH_EMAIL, to, subject, text, html };
-  return transporter.sendMail(message, (err, info) => {
-    if (err) return { error: err };
-    return { msg: "Email sent: " + info.response };
-  });
+  const res = await transporter.sendMail(message);
+  if (res.err) return { error: err };
+  return { msg: "Email sent: " + info.response };
 };
 
 const sendVerificationEmail = async (req, user, emailToken) => {

@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const auth = require("../middleware/auth");
 const mail = require("../services/mailService");
 
 router.post("/", auth, async (req, res) => {
@@ -7,3 +8,5 @@ router.post("/", auth, async (req, res) => {
   const mailResult = await mail.sendMail(to, subject, text, html);
   res.send(mailResult);
 });
+
+module.exports = router;

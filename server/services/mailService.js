@@ -54,6 +54,7 @@ const sendJobNotification = async (studentMail, job) => {
   Link: ${job.link}
   `;
   const mailHTML = `
+  <h1 style={text-align:center}>* Elevation *</h1>
   <h4>Title: ${job.title || " "}</h4>
 
   <h5>Company: ${job.company || " "} </h5>

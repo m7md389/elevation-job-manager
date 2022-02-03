@@ -234,30 +234,25 @@ router.put("/jobs", async function (req, res) {
   let myDate = moment(tempJob.date).format("L");
   let jobToEdit = await Jobs.findById({ _id: tempJob.jobId });
 
-  Jobs.findOneAndUpdate(
+  Jobs.findByIdAndUpdate(
     { _id: tempJob.jobId },
     {
       $set: {
         title: tempJob.title || jobToEdit.title,
         link: tempJob.link || jobToEdit.link,
-        date: myDate,
+        date: myDate || jobToEdit.date,
         status: tempJob.status || jobToEdit.status,
-        company: tempJob.company || jobToEdit.company,
-        status: tempJob.status || jobToEdit.status
+        company: tempJob.company || jobToEdit.company
       }
     },
     { new: true }
-  )
-    .populate({
-      path: "jobs"
-    })
-    .exec(function (err, user) {
-      if (err) {
-        res.status(400).send({ error: "error updating job" });
-        return null;
-      }
-      res.send(user);
-    });
+  ).exec(function (err, user) {
+    if (err) {
+      res.status(400).send({ error: "error updating job" });
+      return null;
+    }
+    res.send(user);
+  });
 });
 
 router.delete("/jobs", async function (req, res) {

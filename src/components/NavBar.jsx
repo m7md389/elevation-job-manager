@@ -7,16 +7,15 @@ const NavBar = () => {
   const [isOpenedDropdown, setIsOpenedDropdown] = useState(false);
   const [isOpenedNavbar, setIsOpenedNavbar] = useState(false);
   const menuClass = `dropdown-menu${isOpenedDropdown ? " show" : ""}`;
-  const navbarClass = `collapse navbar-collapse${
-    isOpenedNavbar ? " show" : ""
-  }`;
+  const navbarClass = `collapse navbar-collapse${isOpenedNavbar ? " show" : ""
+    }`;
 
   const currentUser = auth.getCurrentUser();
 
   return (
     <nav
       id="navbar"
-      className="navbar navbar-expand-lg navbar-light bg-light my-navbar-container"
+      className="navbar navbar-expand-lg navbar-light  my-navbar-container"
     >
       <NavLink className="navbar-brand" to="/">
         <img
@@ -43,31 +42,32 @@ const NavBar = () => {
 
       <div className={navbarClass} id="navbarNav">
         <div className="navbar-nav">
-          {currentUser.role === "admin" && (
-            <NavLink className="nav-item nav-link nav-link-tabs" to="/courses">
-              Courses
+          <div className="navbar-links-content-container">
+            {currentUser.role === "admin" && (
+              <NavLink className="nav-item nav-link nav-link-tabs" to="/courses">
+                Courses
+              </NavLink>
+            )}
+            {currentUser.role === "admin" && (
+              <NavLink className="nav-item nav-link nav-link-tabs" to="/charts">
+                Charts
+              </NavLink>
+            )}
+            {currentUser.role === "admin" && (
+              <NavLink
+                className="nav-item nav-link nav-link-tabs"
+                to="/add-admin"
+              >
+                Add Admin
+              </NavLink>
+            )}
+            <NavLink className="nav-item nav-link nav-link-tabs" to="settings">
+              Settings
             </NavLink>
-          )}
-          {currentUser.role === "admin" && (
-            <NavLink className="nav-item nav-link nav-link-tabs" to="/charts">
-              Charts
+            <NavLink className="nav-item nav-link nav-link-tabs" to="logout">
+              Logout
             </NavLink>
-          )}
-          {currentUser.role === "admin" && (
-            <NavLink
-              className="nav-item nav-link nav-link-tabs"
-              to="/add-admin"
-            >
-              Add Admin
-            </NavLink>
-          )}
-          <NavLink className="nav-item nav-link nav-link-tabs" to="settings">
-            Settings
-          </NavLink>
-          <NavLink className="nav-item nav-link nav-link-tabs" to="logout">
-            Logout
-          </NavLink>
-          {/*           
+            {/*           
           <span
             id="user-settings-icon"
             className="nav-item dropdown"
@@ -103,6 +103,7 @@ const NavBar = () => {
               </NavLink>
             </div>
           </span> */}
+          </div>
         </div>
       </div>
     </nav>

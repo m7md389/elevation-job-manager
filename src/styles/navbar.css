@@ -1,7 +1,10 @@
-#navbar {
-  /* position: -webkit-sticky; 
-  position: sticky;
-  top: 0; */
+
+#navbar{
+  background-color: #f7f7f7;
+}
+
+#navbarNav .navbar-nav a{
+  display: inline-block;
 }
 
 .my-navbar-container {
@@ -23,4 +26,79 @@
 
 .navbar-brand:hover {
   transform: translateY(-4px);
+}
+
+@media only screen and (max-width: 1000px) {
+  
+  #navbarNav{
+    border-radius: 15px;    
+  }
+
+  .navbar-nav{
+    direction: rtl;
+    background-color: none ;
+    position: absolute;
+    right: 0;
+  }
+  
+  .navbar-links-content-container{
+    direction: rtl;
+    position: relative;
+    display: grid;
+    justify-content: center;
+    width: 50vw;
+    border-bottom-left-radius: 15px;
+    margin-top: 8px;
+    background-color: rgb(255,214,222);
+    opacity: 1;
+  }
+  
+  .navbar-nav a{
+    padding: 20px  10px;
+    font-weight: bold;
+    width: 100%;
+
+    
+
+  }
+
+
+  
+  
+  
+}
+
+@-webkit-keyframes navbar-links-content-container {
+  0% {
+    -webkit-transform: scaleY(0.4);
+            transform: scaleY(0.4);
+    -webkit-transform-origin: 100% 0%;
+            transform-origin: 100% 0%;
+  }
+  100% {
+    -webkit-transform: scaleY(1);
+            transform: scaleY(1);
+    -webkit-transform-origin: 100% 0%;
+            transform-origin: 100% 0%;
+  }
+}
+@keyframes navbar-links-content-container {
+  0% {
+    -webkit-transform: scaleY(0.4);
+            transform: scaleY(0.4);
+    -webkit-transform-origin: 100% 0%;
+            transform-origin: 100% 0%;
+  }
+  100% {
+    -webkit-transform: scaleY(1);
+            transform: scaleY(1);
+    -webkit-transform-origin: 100% 0%;
+            transform-origin: 100% 0%;
+  }
+}
+
+
+.display {
+-webkit-animation: scale-up-ver-top 0.4s cubic-bezier(0.215, 0.610, 0.355, 1.000) both;
+        animation: scale-up-ver-top 0.4s cubic-bezier(0.215, 0.610, 0.355, 1.000) both;
 }

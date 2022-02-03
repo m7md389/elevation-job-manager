@@ -112,8 +112,7 @@ function ProcessRow(props) {
           <div>
             {/* handleAddInterviewClickOpen */}
             <Stack direction="row" spacing={2}>
-              <ModeEditOutlineOutlinedIcon
-                style={{ color: "#2196f3" }}
+              <ModeEditOutlineOutlinedIcon className="edit-inter-hover"
                 onClick={handleEditInterviewOpen}
                 variant="outlined"
               />

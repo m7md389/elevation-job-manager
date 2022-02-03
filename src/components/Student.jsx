@@ -88,6 +88,7 @@ export default function Student() {
   React.useEffect(async () => {
     let URL = "/cohorts/courses";
     let cohort = (await http.get(`${URL}/${userId}`)).data;
+    console.log(cohort);
     setUserCohort(cohort);
   }, []);
 
@@ -187,177 +188,182 @@ export default function Student() {
   };
 
   return (
-    <div className="student-page-container">
+    <div>
       <Title text="Home" />
 
-      <div className="student-details">
-        <p>
-          name: <span>{userInfo.name}</span>
-        </p>
-        <p>
-          cohort:<span>{userCohort.cohort}</span>{" "}
-        </p>
-        <p>
-          email: <span>{userInfo.email}</span>
-        </p>
-        <p>
-          city: <span>{userInfo.city}</span>
-        </p>
-        <p>
-          phone: <span>{userInfo.phone}</span>
-        </p>
-      </div>
-      <div className="filters-detail">
-        <div className="cont">
-          <Box sx={{ minWidth: 120 }} className="box">
-            <FormControl fullWidth>
-              <InputLabel id="companies">Companies</InputLabel>
-              <Select
-                MenuProps={MenuProps}
-                labelId="select-companies"
-                id="select-companies"
-                value={company}
-                label="companies"
-                onChange={handleCompanyChange}
-              >
-                {companies.map((c, idx) => {
-                  return (
-                    <MenuItem key={idx} value={c}>
-                      {c}
-                    </MenuItem>
-                  );
-                })}
-              </Select>
-            </FormControl>
-          </Box>
+      <div className="student-page-container">
+
+        <div className="student-details">
+          <p>
+            name: <span>{userInfo.name}</span>
+          </p>
+          <p>
+            cohort:<span>{userCohort.cohort}</span>{" "}
+          </p>
+          <p>
+            email: <span>{userInfo.email}</span>
+          </p>
+          <p>
+            city: <span>{userInfo.city}</span>
+          </p>
+          <p>
+            phone: <span>{userInfo.phone}</span>
+          </p>
         </div>
-        <div className="cont">
-          <Box sx={{ minWidth: 120 }} className="box">
-            <FormControl fullWidth>
-              <InputLabel id="statuses">Statuses</InputLabel>
-              <Select
-                MenuProps={MenuProps}
-                labelId="select-statuses"
-                id="select-statuses"
-                value={status}
-                label="statuses"
-                onChange={handleStatusChange}
-              >
-                {statuses.map((s, idx) => {
-                  return (
-                    <MenuItem key={idx} value={s}>
-                      {s}
-                    </MenuItem>
-                  );
-                })}
-              </Select>
-            </FormControl>
-          </Box>
+        <div className="filters-detail">
+          <div className="cont">
+            <Box sx={{ minWidth: 120 }} className="box">
+              <FormControl fullWidth>
+                <InputLabel id="companies">Companies</InputLabel>
+                <Select
+                  MenuProps={MenuProps}
+                  labelId="select-companies"
+                  id="select-companies"
+                  value={company}
+                  label="companies"
+                  onChange={handleCompanyChange}
+                >
+                  {companies.map((c, idx) => {
+                    return (
+                      <MenuItem key={idx} value={c}>
+                        {c}
+                      </MenuItem>
+                    );
+                  })}
+                </Select>
+              </FormControl>
+            </Box>
+          </div>
+          <div className="cont">
+            <Box sx={{ minWidth: 120 }} className="box">
+              <FormControl fullWidth>
+                <InputLabel id="statuses">Statuses</InputLabel>
+                <Select
+                  MenuProps={MenuProps}
+                  labelId="select-statuses"
+                  id="select-statuses"
+                  value={status}
+                  label="statuses"
+                  onChange={handleStatusChange}
+                >
+                  {statuses.map((s, idx) => {
+                    return (
+                      <MenuItem key={idx} value={s}>
+                        {s}
+                      </MenuItem>
+                    );
+                  })}
+                </Select>
+              </FormControl>
+            </Box>
+          </div>
+        </div>
+
+        <div>
+          {" "}
+          <hr />
+          <div>
+            <Stack direction="row" spacing={2}>
+              <Button onClick={handleClickOpen} variant="outlined">
+                Add Job
+              </Button>
+            </Stack>
+            <Dialog open={open} onClose={handleClose}>
+              <DialogTitle>Add Job :</DialogTitle>
+              <DialogContent>
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  onChange={(e) => {
+                    handleInputChange(e, "title");
+                  }}
+                  value={jobsInputs.title}
+                  id="title"
+                  label="Job Title"
+                  type="text"
+                  fullWidth
+                  variant="standard"
+                  required
+                />
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  onChange={(e) => {
+                    handleInputChange(e, "link");
+                  }}
+                  value={jobsInputs.link}
+                  id="link"
+                  label="Job Link"
+                  type="text"
+                  fullWidth
+                  variant="standard"
+                  required
+                />
+                <div className="datePicker">
+                  <LocalizationProvider dateAdapter={DateAdapter}>
+                    <MobileDatePicker
+                      label="Date"
+                      inputFormat="DD/MM/yyyy"
+                      value={date}
+                      onChange={handleDateChange}
+                      renderInput={(params) => <TextField {...params} />}
+                    />
+                  </LocalizationProvider>
+                </div>
+                <Dropdown
+                  options={statusesForAddJob}
+                  onChange={(e) => {
+                    handleAddStatusChange(e);
+                  }}
+                  value={statusOption}
+                  placeholder="Status"
+                  required
+                />
+                <br />
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  onChange={(e) => {
+                    handleInputChange(e, "company");
+                  }}
+                  value={jobsInputs.company}
+                  id="company"
+                  label="Company"
+                  type="text"
+                  fullWidth
+                  variant="standard"
+                  required
+                />
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleClose}>Cancel</Button>
+                <Button onClick={handleAddJob}>Add</Button>
+              </DialogActions>
+            </Dialog>
+          </div>
+          <div className="jobs-title">
+            <div>job name</div>
+            <div className="vLine">company</div>
+            <div className="vLine">date</div>
+            <div className="vLine">last interview</div>
+            <div className="vLine">status</div>
+          </div>
+          <div className="rows">
+            {filteredJobs.map((j, idx) => {
+              return (
+                <Job
+                  refresh={refresh}
+                  setRefresh={setRefresh}
+                  key={idx}
+                  job={j}
+                />
+              );
+            })}
+          </div>
         </div>
       </div>
 
-      <div>
-        {" "}
-        <hr />
-        <div>
-          <Stack direction="row" spacing={2}>
-            <Button onClick={handleClickOpen} variant="outlined">
-              Add Job
-            </Button>
-          </Stack>
-          <Dialog open={open} onClose={handleClose}>
-            <DialogTitle>Add Job :</DialogTitle>
-            <DialogContent>
-              <TextField
-                autoFocus
-                margin="dense"
-                onChange={(e) => {
-                  handleInputChange(e, "title");
-                }}
-                value={jobsInputs.title}
-                id="title"
-                label="Job Title"
-                type="text"
-                fullWidth
-                variant="standard"
-                required
-              />
-              <TextField
-                autoFocus
-                margin="dense"
-                onChange={(e) => {
-                  handleInputChange(e, "link");
-                }}
-                value={jobsInputs.link}
-                id="link"
-                label="Job Link"
-                type="text"
-                fullWidth
-                variant="standard"
-                required
-              />
-              <div className="datePicker">
-                <LocalizationProvider dateAdapter={DateAdapter}>
-                  <MobileDatePicker
-                    label="Date"
-                    inputFormat="DD/MM/yyyy"
-                    value={date}
-                    onChange={handleDateChange}
-                    renderInput={(params) => <TextField {...params} />}
-                  />
-                </LocalizationProvider>
-              </div>
-              <Dropdown
-                options={statusesForAddJob}
-                onChange={(e) => {
-                  handleAddStatusChange(e);
-                }}
-                value={statusOption}
-                placeholder="Status"
-                required
-              />
-              <br />
-              <TextField
-                autoFocus
-                margin="dense"
-                onChange={(e) => {
-                  handleInputChange(e, "company");
-                }}
-                value={jobsInputs.company}
-                id="company"
-                label="Company"
-                type="text"
-                fullWidth
-                variant="standard"
-                required
-              />
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleClose}>Cancel</Button>
-              <Button onClick={handleAddJob}>Add</Button>
-            </DialogActions>
-          </Dialog>
-        </div>
-        <div className="jobs-title">
-          <div>job name</div>
-          <div className="vLine">company</div>
-          <div className="vLine">date</div>
-          <div className="vLine">last interview</div>
-          <div className="vLine">status</div>
-        </div>
-        <div className="rows">
-          {filteredJobs.map((j, idx) => {
-            return (
-              <Job
-                refresh={refresh}
-                setRefresh={setRefresh}
-                key={idx}
-                job={j}
-              />
-            );
-          })}
-        </div>
-      </div>
+
     </div>
   );
 }

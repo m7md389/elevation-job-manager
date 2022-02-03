@@ -179,18 +179,20 @@ function Job(props) {
         <div className="job-edit-btns">
           <div>
             <Stack direction="row" spacing={2}>
-              <AddCircleOutlinedIcon
+              <AddCircleOutlinedIcon className="edit-inter-hover"
                 onClick={handleAddInterviewClickOpen}
                 variant="outlined"
+
               />
             </Stack>
 
           </div>
           <div>
             <Stack direction="row" spacing={2}>
-              <ModeEditOutlineOutlinedIcon
+              <ModeEditOutlineOutlinedIcon className="edit-inter-hover"
                 onClick={handleEditJobOpen}
                 variant="outlined"
+
               />
             </Stack>
           </div>

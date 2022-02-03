@@ -16,6 +16,17 @@
     height: 100%;
 }
 
+ 
+.edit-inter-hover{
+    color: rgb(15 33 58 / 35%)
+}
+
+.edit-inter-hover:hover{
+    color: rgb(15 33 58 / 100%);
+    cursor: pointer;
+
+}
+
 
 @media only screen and (max-width: 600px) {
     .interviews p{

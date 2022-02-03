@@ -88,62 +88,65 @@ function AdminDashboard() {
   if (auth.getCurrentUser().role === "student") return <Student />;
 
   return (
-    <div className="admin-dashboard-container">
+    <div>
       <Title text="Interviews" />
 
-      <div className="range-picker">
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <DateRangePicker
-            startText="From"
-            endText="Until"
-            value={value}
-            onChange={(newValue) => {
-              setValue(newValue);
-            }}
-            renderInput={(startProps, endProps) => (
-              <React.Fragment>
-                <TextField {...startProps} />
-                <Box sx={{ mx: 2 }}> to </Box>
-                <TextField {...endProps} />
-              </React.Fragment>
-            )}
+      <div className="admin-dashboard-container">
+
+        <div className="range-picker">
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <DateRangePicker
+              startText="From"
+              endText="Until"
+              value={value}
+              onChange={(newValue) => {
+                setValue(newValue);
+              }}
+              renderInput={(startProps, endProps) => (
+                <React.Fragment>
+                  <TextField {...startProps} />
+                  <Box sx={{ mx: 2 }}> to </Box>
+                  <TextField {...endProps} />
+                </React.Fragment>
+              )}
+            />
+          </LocalizationProvider>
+        </div>
+
+        <div className="range-by-week">
+          <Box sx={{ minWidth: 120 }}>
+            <FormControl fullWidth>
+              <InputLabel id="statuses">Select range :</InputLabel>
+              <Select
+                MenuProps={MenuProps}
+                labelId="select-Range"
+                id="select-Range"
+                value={range}
+                label="range"
+                onChange={handleRangeChange}
+              >
+                {ranges.map((range, idx) => {
+                  return (
+                    <MenuItem key={idx} value={range}>
+                      {range}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
+          </Box>
+        </div>
+
+        <div style={{ height: 400, width: "100%" }}>
+          <DataGrid
+            className="grid"
+            rows={rows}
+            columns={columns}
+            pageSize={10}
+            rowsPerPageOptions={[10]}
+            disableSelectionOnClick
           />
-        </LocalizationProvider>
-      </div>
-
-      <div className="range-by-week">
-        <Box sx={{ minWidth: 120 }}>
-          <FormControl fullWidth>
-            <InputLabel id="statuses">Select range :</InputLabel>
-            <Select
-              MenuProps={MenuProps}
-              labelId="select-Range"
-              id="select-Range"
-              value={range}
-              label="range"
-              onChange={handleRangeChange}
-            >
-              {ranges.map((range, idx) => {
-                return (
-                  <MenuItem key={idx} value={range}>
-                    {range}
-                  </MenuItem>
-                );
-              })}
-            </Select>
-          </FormControl>
-        </Box>
-      </div>
-
-      <div style={{ height: 400, width: "100%" }}>
-        <DataGrid
-          className="grid"
-          rows={rows}
-          columns={columns}
-          pageSize={10}
-          rowsPerPageOptions={[10]}
-          disableSelectionOnClick
-        />
+        </div>
       </div>
     </div>
   );

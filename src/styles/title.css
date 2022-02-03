@@ -14,6 +14,11 @@ background: linear-gradient(180deg, rgba(255,152,171,1) 12%, rgba(255,233,237,1)
 }
 
 
+.course-title:hover{
+  -webkit-box-shadow: 5px 5px 15px -9px rgba(0,0,0,0.71); 
+  box-shadow: 5px 5px 15px -9px rgba(0,0,0,0.71);
+  
+}
 
 
 /* .course-title h1 {

@@ -153,6 +153,7 @@ const AccountSettings = () => {
             style={{ width: '100%', display: 'grid', justifyContent: 'center' }}>
             <button
               style={{
+                transform: 'translateY(1.276px)',
                 backgroundColor: 'rgb(255 152 171)',
                 margin: '10px 0',
                 padding: '10px 30px',

@@ -1,0 +1,29 @@
+.intern-inputs{
+    width: 80%;
+    margin: 0 auto;
+    background-color: #ffe2e7;
+    padding: 30px;
+  font-family: "IBM Plex Sans Thai Looped", sans-serif;
+  border-radius: 12px;
+}
+
+
+
+.intern-div Input{
+    /* text-align: center; */
+    width: 100%;
+    
+}
+
+.input-label{
+    color: #0f213a;
+    margin: 20px 0 5px 0;
+}
+
+
+.intern-div{
+    width: 80%;
+    margin: 20px auto;
+}
+
+

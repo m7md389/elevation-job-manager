@@ -1,13 +1,30 @@
 import React, { useState, useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
-import "../styles/navbar.css";
 import http from "../services/httpService";
 import auth from "../services/authService";
 import { Input } from "@mui/material";
 import Title from "./common/Title";
-import {toast} from 'react-toastify'
+import { makeStyles } from "@material-ui/core/styles";
+import { toast } from 'react-toastify'
+import '../styles/account-settings.css'
+import { color } from '../colors'
+
+
+const useStyles = makeStyles({
+  input: {
+    color: "#0f213a",
+    backgroundColor: 'white',
+    width: '80%',
+    padding: '10px',
+    borderRadius: '7px',
+    border: 'none',
+    fontWeight: 'bold'
+  }
+});
 
 const AccountSettings = () => {
+
+  const classes = useStyles();
   const currentUser = auth.getCurrentUser();
   let userId = currentUser._id;
   let URL = "/users/";
@@ -67,71 +84,132 @@ const AccountSettings = () => {
   return (
     <div className="inputs-container">
       <Title text="Settings" />
-      name:
-      <Input
-        id="nameInputs"
-        onChange={(event) => handleInputChange(event, "name")}
-        value={updatedDataInputs.name}
-      />
-      <br />
-      email:
-      <Input
-        id="emailInputs"
-        onChange={(event) => handleInputChange(event, "email")}
-        value={updatedDataInputs.email}
-      />
-      <br />
-      phone:
-      <Input
-        id="phoneInputs"
-        onChange={(event) => handleInputChange(event, "phone")}
-        value={updatedDataInputs.phone}
-      />
-      <br />
-      city:
-      <Input
-        id="cityInputs"
-        onChange={(event) => handleInputChange(event, "city")}
-        value={updatedDataInputs.city}
-      />
-      <br />
-      linkedin:
-      <Input
-        id="linkedinInputs"
-        onChange={(event) => handleInputChange(event, "linkedin")}
-        value={updatedDataInputs.linkedin}
-      />
-      <br />
-      status:
-      <Input
-        id="statusInputs"
-        onChange={(event) => handleInputChange(event, "status")}
-        value={updatedDataInputs.status}
-      />
-      <br />
-      <button onClick={handleEditUser}>Save</button>
-      <br />
-      current password:
-      <Input
-        type="password"
-        id="currentPasswordInputs"
-        onChange={(event) =>
-          handlePasswordInputChange(event, "currentPassword")
-        }
-        value={passwordChangeInput.currentPassword}
-      />
-      <br />
-      new password:
-      <Input
-        type="password"
-        id="newPasswordInputs"
-        onChange={(event) => handlePasswordInputChange(event, "newPassword")}
-        value={passwordChangeInput.newPassword}
-        required
-      />
-      <br />
-      <button onClick={handlePasswordChange}>change password</button>
-      <br />
+
+      <div className="intern-inputs">
+
+        <div className="intern-div">
+          <div className="input-label"><span>name:</span></div>
+          <Input
+            inputProps={{ className: classes.input }}
+            style={{ width: '100%', backgroundColor: 'white', padding: '10px', borderRadius: '7px' }}
+            id="nameInputs"
+            onChange={(event) => handleInputChange(event, "name")}
+            value={updatedDataInputs.name}
+          />
+          <br />
+
+          <div className="input-label"><span >email:</span></div>
+          <Input
+            inputProps={{ className: classes.input }}
+            style={{ width: '100%', backgroundColor: 'white', padding: '10px', borderRadius: '7px' }}
+
+            id="emailInputs"
+            onChange={(event) => handleInputChange(event, "email")}
+            value={updatedDataInputs.email}
+          />
+          <br />
+
+          <div className="input-label"><span >phone:</span></div>
+          <Input
+            inputProps={{ className: classes.input }}
+            style={{ width: '100%', backgroundColor: 'white', padding: '10px', borderRadius: '7px' }}
+
+            id="phoneInputs"
+            onChange={(event) => handleInputChange(event, "phone")}
+            value={updatedDataInputs.phone}
+          />
+          <br />
+
+          <div className="input-label"><span >city:</span></div>
+          <Input
+            inputProps={{ className: classes.input }}
+            style={{ width: '100%', backgroundColor: 'white', padding: '10px', borderRadius: '7px' }}
+            id="cityInputs"
+            onChange={(event) => handleInputChange(event, "city")}
+            value={updatedDataInputs.city}
+          />
+          <br />
+
+          <div className="input-label"><span >linkedin: </span></div>
+          <Input
+            inputProps={{ className: classes.input }}
+            style={{ width: '100%', backgroundColor: 'white', padding: '10px', borderRadius: '7px' }}
+            id="linkedinInputs"
+            onChange={(event) => handleInputChange(event, "linkedin")}
+            value={updatedDataInputs.linkedin}
+          />
+          <br />
+
+          <div className="input-label"><span >status: </span></div>
+          <Input
+            inputProps={{ className: classes.input }}
+            style={{ width: '100%', backgroundColor: 'white', padding: '10px', borderRadius: '7px' }}
+            id="statusInputs"
+            onChange={(event) => handleInputChange(event, "status")}
+            value={updatedDataInputs.status}
+          />
+
+          <div
+            style={{ width: '100%', display: 'grid', justifyContent: 'center' }}>
+            <button
+              style={{
+                backgroundColor: 'rgb(255 152 171)',
+                margin: '10px 0',
+                padding: '10px 30px',
+                border: '1px solid white',
+                borderRadius: '15px',
+                color: '#0f213a',
+                fontWeight: 'bold'
+              }}
+              onClick={handleEditUser}>Save</button>
+          </div>
+
+
+          <div>
+            <hr style={{ margin: '50px 0' }} />
+          </div>
+
+          <div className="input-label"><span >current password: </span></div>
+          <Input
+            inputProps={{ className: classes.input }}
+            style={{ width: '100%', backgroundColor: 'white', padding: '10px', borderRadius: '7px' }}
+            type="password"
+            id="currentPasswordInputs"
+            onChange={(event) =>
+              handlePasswordInputChange(event, "currentPassword")
+            }
+            value={passwordChangeInput.currentPassword}
+          />
+          <br />
+
+          <div className="input-label"><span>new password: </span></div>
+          <Input
+            inputProps={{ className: classes.input }}
+            style={{ width: '100%', backgroundColor: 'white', padding: '10px', borderRadius: '7px' }}
+            type="password"
+            id="newPasswordInputs"
+            onChange={(event) => handlePasswordInputChange(event, "newPassword")}
+            value={passwordChangeInput.newPassword}
+            required
+          />
+
+          <div style={{ width: '100%', display: 'grid', justifyContent: 'center' }}>
+            <button
+              style={{
+                backgroundColor: 'rgb(255 152 171)',
+                margin: '10px 0',
+                padding: '10px 30px',
+                border: '1px solid white',
+                borderRadius: '15px',
+                color: '#0f213a',
+                fontWeight: 'bold'
+              }}
+              onClick={handlePasswordChange}>change password</button>
+
+          </div>
+        </div>
+
+      </div>
     </div>
   );
 };

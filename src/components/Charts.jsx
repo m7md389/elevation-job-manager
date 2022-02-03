@@ -147,6 +147,7 @@ function Charts() {
 
   return (
     <div >
+      <Title text="Charts" />
 
       <Chart
         chartType="PieChart"

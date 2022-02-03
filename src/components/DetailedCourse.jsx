@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { observer, inject } from "mobx-react";
 import courseService from "../services/courseService";
@@ -32,22 +32,31 @@ import http from "../services/httpService";
 
 import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
 import { toast } from "react-toastify";
-const Course = () => {
+import { toArray } from "lodash";
 
+const Course = () => {
   const params = useParams();
   const navigate = useNavigate();
   const [course, setCourse] = useState();
   const [refresh, setRefresh] = useState(1);
-  
+  const [jobsInputs, setJobsInputs] = useState({
+    title: "",
+    link: "",
+    company: "",
+    description: ""
+  });
+
   useEffect(async () => {
     let c = await courseService.getCourseDetails(params.courseName);
     setFilteredCohorts(c.cohorts);
     setCourse(c);
   }, [refresh]);
-  
+
   const getCohorts = () => {
     let cohorts = [];
-    if(!course){return cohorts.push('')}
+    if (!course) {
+      return cohorts.push("");
+    }
     course.cohorts.forEach((cohort) => {
       cohorts.push(cohort);
     });
@@ -55,17 +64,19 @@ const Course = () => {
   };
 
   const cohorts = getCohorts();
-  
   const [open, setOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
   const [date, setDate] = useState(new Date(Date.now()));
   const [editDate, setEditDate] = useState(new Date(Date.now()));
   const [filteredCohorts, setFilteredCohorts] = useState();
-  const [cohort, setCohort] = useState('');
-  const [editCohort ,setEditCohort] = useState('')
+  const [cohort, setCohort] = useState("");
+  const [editCohort, setEditCohort] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("all-statuses");
   const [cohortName, setCohortName] = useState("");
   const [cohortEditName, setCohortEditName] = useState("");
+  const [sendJobEmails, setSendJobEmails] = useState([]);
+  const [selectAllCheckBox, setSelectAllCheckBox] = useState(false);
+  const [sendJob, setSendJob] = useState(false);
 
   useEffect(async () => {
     if (!course) return null;
@@ -76,7 +87,8 @@ const Course = () => {
     }
   }, [cohort]);
 
-  const handleRowClick = (studentId) => {
+  const handleRowClick = (studentId, event) => {
+    event.stopPropagation();
     navigate(`/student/${studentId}`);
   };
 
@@ -92,6 +104,35 @@ const Course = () => {
     setCohortName(event.target.value);
   };
 
+  const handleSendJobOpen = () => {
+    setSendJob(true);
+  };
+
+  const handleSendJobClose = () => {
+    setSendJob(false);
+  };
+
+  const handleSendJobInputChange = (event, key) => {
+    let tempSendJobInputs = { ...jobsInputs };
+    tempSendJobInputs[key] = event.target.value;
+    setJobsInputs(tempSendJobInputs);
+  };
+
+  const handleSendJob = () => {
+    if (!jobsInputs.link || !sendJobEmails.length) {
+      !jobsInputs.link
+        ? toast.error("Please add link.")
+        : toast.error("No selected users.");
+      return null;
+    }
+
+    http.post("/notifications", {sendJobEmails , jobsInputs}).then(res => {
+      if(res.error){toast.error("Error sending job.")}
+      else{toast.success("Successfully sended job.")}
+    })
+    setSendJob(false);
+  };
+
   const getTableRows = () => {
     let users = [];
     filteredCohorts.forEach((cohort) => {
@@ -105,14 +146,14 @@ const Course = () => {
             name: user.name,
             phone: user.phone,
             cohort: cohort.name,
-            status: user.status
+            status: user.status,
+            email: user.email
           });
         }
       });
     });
     return users;
   };
-
 
   const getStatuses = () => {
     let statuses = [];
@@ -128,7 +169,7 @@ const Course = () => {
 
   const handleEditCohortOpen = () => {
     setEditOpen(true);
-  }
+  };
 
   const handleEditCohortClose = () => {
     setEditOpen(false);
@@ -136,42 +177,63 @@ const Course = () => {
 
   const handleEditCohortChange = (event) => {
     setEditCohort(event.target.value);
-    setCohortEditName(event.target.value)
-    let tempCohort = course.cohorts.find((cohort) => cohort.name === event.target.value)
+    setCohortEditName(event.target.value);
+    let tempCohort = course.cohorts.find(
+      (cohort) => cohort.name === event.target.value
+    );
     setEditDate(tempCohort.start_date);
-  }
+  };
 
   const handleEditCohortInputChange = (event) => {
-    setCohortEditName(event.target.value)
-  }
+    setCohortEditName(event.target.value);
+  };
 
   const handleEditDateChange = (newValue) => {
-    setEditDate(new Date(newValue))
+    setEditDate(new Date(newValue));
   };
 
   const handleDeleteCohort = () => {
-    if (!editCohort) { return }
-    let tempCohort = course.cohorts.find((cohort) => cohort.name === editCohort)
-    http.delete(`/courses/cohorts`, { data: { cohortId: tempCohort._id } }).then((res) => {
-      if (res.data.error) {
-        toast.error("Can't Delete Cohort");
-      }
-      setRefresh(refresh + 1);
-      setEditOpen(false)
-    })
-  }
+    if (!editCohort) {
+      return;
+    }
+    let tempCohort = course.cohorts.find(
+      (cohort) => cohort.name === editCohort
+    );
+    http
+      .delete(`/courses/cohorts`, { data: { cohortId: tempCohort._id } })
+      .then((res) => {
+        if (res.data.error) {
+          toast.error("Can't Delete Cohort");
+        }
+        setRefresh(refresh + 1);
+        setEditOpen(false);
+      });
+  };
 
   const handleEditCohort = () => {
-    if (!editCohort || !cohortEditName || !editDate) { return }
-    let tempCohort = course.cohorts.find((cohort) => cohort.name === editCohort)
-    http.put(`/courses/cohorts`, { data: { newName: cohortEditName, newDate: editDate.toString(), courseId: course._id, cohortId: tempCohort._id} }).then((res) => {
-      if (res.data.error) {
-        toast.error("Can't edit cohort");
-      }
-      setRefresh(refresh + 1);
-      setEditOpen(false)
-    })
-  }
+    if (!editCohort || !cohortEditName || !editDate) {
+      return;
+    }
+    let tempCohort = course.cohorts.find(
+      (cohort) => cohort.name === editCohort
+    );
+    http
+      .put(`/courses/cohorts`, {
+        data: {
+          newName: cohortEditName,
+          newDate: editDate.toString(),
+          courseId: course._id,
+          cohortId: tempCohort._id
+        }
+      })
+      .then((res) => {
+        if (res.data.error) {
+          toast.error("Can't edit cohort");
+        }
+        setRefresh(refresh + 1);
+        setEditOpen(false);
+      });
+  };
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -200,6 +262,40 @@ const Course = () => {
     setOpen(false);
   };
 
+  const handleCheckboxClick = (e) => {
+    e.stopPropagation();
+    let tempEmail = sendJobEmails;
+    if (e.target.checked) {
+      if (!tempEmail.includes(e.target.value)) {
+        tempEmail.push(e.target.value);
+      }
+    } else if (tempEmail.includes(e.target.value)) {
+      tempEmail.splice(tempEmail.indexOf(e.target.value), 1);
+    }
+    setSendJobEmails(tempEmail);
+  };
+
+  const handleSelectAllCheckbox = (e) => {
+    let tempAllEmails = [];
+    setSelectAllCheckBox(e.target.checked);
+    const tableRows = toArray(e.target.closest("table").lastChild.children);
+    tableRows.forEach((row) => {
+      let tempInput = row.firstChild.firstChild;
+      if (e.target.checked) {
+        if (!tempAllEmails.includes(tempInput.value))
+          tempAllEmails.push(tempInput.value);
+        tempInput.checked = true;
+      } else {
+        tempInput.checked = false;
+      }
+    });
+    if (e.target.checked) {
+      setSendJobEmails(tempAllEmails);
+    } else {
+      setSendJobEmails([]);
+    }
+  };
+
   if (!course) return null;
   if (course.error) return <PageNotFound />;
 
@@ -219,146 +315,222 @@ const Course = () => {
               />
             </Stack>
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Add Cohort :</DialogTitle>
-                <DialogContent>
-                  <TextField
-                    autoFocus
-                    margin="dense"
-                    onChange={(e) => {
-                      handleInputChange(e, "name");
-                    }}
-                    value={cohortName}
-                    id="cohortName"
-                    label="Cohort Name"
-                    type="text"
-                    fullWidth
-                    variant="standard"
-                    required
-                  />
-                  <div className="datePicker">
-                    <LocalizationProvider dateAdapter={DateAdapter}>
-                      <MobileDatePicker
-                        label="Date"
-                        inputFormat="DD/MM/yyyy"
-                        value={date}
-                        onChange={handleDateChange}
-                        renderInput={(params) => <TextField {...params} />}
-                      />
-                    </LocalizationProvider>
-                  </div>
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={handleClose}>Cancel</Button>
-                  <Button onClick={handleAddCohort}>Add</Button>
-                </DialogActions>
-              </Dialog>
-            </div>
-            <div className="box">
-              <Stack direction="row" spacing={2}>
-              <ModeEditOutlineOutlinedIcon className="add-icon" onClick={handleEditCohortOpen} variant="outlined" />
-              </Stack>
-              <Dialog open={editOpen} onClose={handleEditCohortClose}>
-                <DialogTitle>Edit Cohorts :</DialogTitle>
-                <DialogContent>
-                  <InputLabel id="cohorts">Cohorts</InputLabel>
-                  <Select
-                    labelId="select-cohort"
-                    id="select-cohort"
-                    value={editCohort}
-                    label="cohorts"
-                    onChange={handleEditCohortChange}
-                  >
-                    {cohorts.map((cohort, idx) => {
-                      return (
-                        <MenuItem value={cohort.name} key={idx}>
-                          {cohort.name}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
-                  <TextField
-                    autoFocus
-                    margin="dense"
-                    onChange={(e) => {
-                      handleEditCohortInputChange(e, "name");
-                    }}
-                    value={cohortEditName}
-                    id="cohortName"
-                    label="Cohort Name"
-                    type="text"
-                    fullWidth
-                    variant="standard"
-                    required
-                  />
-                  <div className="editDatePicker">
-                    <LocalizationProvider dateAdapter={DateAdapter}>
-                      <MobileDatePicker
-                        label="edit Date"
-                        inputFormat="DD/MM/yyyy"
-                        value={editDate}
-                        onChange={handleEditDateChange}
-                        renderInput={(params) => <TextField {...params} />}
-                      />
-                    </LocalizationProvider>
-                  </div>
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={handleEditCohortClose}>Cancel</Button>
-                  <Button onClick={handleEditCohort}>Save</Button>
-                  <Button onClick={handleDeleteCohort}>Delete</Button>
-                </DialogActions>
-              </Dialog>
-            </div>
+              <DialogTitle>Add Cohort :</DialogTitle>
+              <DialogContent>
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  onChange={(e) => {
+                    handleInputChange(e, "name");
+                  }}
+                  value={cohortName}
+                  id="cohortName"
+                  label="Cohort Name"
+                  type="text"
+                  fullWidth
+                  variant="standard"
+                  required
+                />
+                <div className="datePicker">
+                  <LocalizationProvider dateAdapter={DateAdapter}>
+                    <MobileDatePicker
+                      label="Date"
+                      inputFormat="DD/MM/yyyy"
+                      value={date}
+                      onChange={handleDateChange}
+                      renderInput={(params) => <TextField {...params} />}
+                    />
+                  </LocalizationProvider>
+                </div>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleClose}>Cancel</Button>
+                <Button onClick={handleAddCohort}>Add</Button>
+              </DialogActions>
+            </Dialog>
+          </div>
+          <div className="box">
+            <Stack direction="row" spacing={2}>
+              <ModeEditOutlineOutlinedIcon
+                className="add-icon"
+                onClick={handleEditCohortOpen}
+                variant="outlined"
+              />
+            </Stack>
+            <Dialog open={editOpen} onClose={handleEditCohortClose}>
+              <DialogTitle>Edit Cohorts :</DialogTitle>
+              <DialogContent>
+                <InputLabel id="cohorts">Cohorts</InputLabel>
+                <Select
+                  labelId="select-cohort"
+                  id="select-cohort"
+                  value={editCohort}
+                  label="cohorts"
+                  onChange={handleEditCohortChange}
+                >
+                  {cohorts.map((cohort, idx) => {
+                    return (
+                      <MenuItem value={cohort.name} key={idx}>
+                        {cohort.name}
+                      </MenuItem>
+                    );
+                  })}
+                </Select>
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  onChange={(e) => {
+                    handleEditCohortInputChange(e, "name");
+                  }}
+                  value={cohortEditName}
+                  id="cohortName"
+                  label="Cohort Name"
+                  type="text"
+                  fullWidth
+                  variant="standard"
+                  required
+                />
+                <div className="editDatePicker">
+                  <LocalizationProvider dateAdapter={DateAdapter}>
+                    <MobileDatePicker
+                      label="edit Date"
+                      inputFormat="DD/MM/yyyy"
+                      value={editDate}
+                      onChange={handleEditDateChange}
+                      renderInput={(params) => <TextField {...params} />}
+                    />
+                  </LocalizationProvider>
+                </div>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleEditCohortClose}>Cancel</Button>
+                <Button onClick={handleEditCohort}>Save</Button>
+                <Button onClick={handleDeleteCohort}>Delete</Button>
+              </DialogActions>
+            </Dialog>
+          </div>
+          <div>
+            <Stack direction="row" spacing={2}>
+              <Button onClick={handleSendJobOpen} variant="outlined">
+                Send Job
+              </Button>
+            </Stack>
+            <Dialog open={sendJob} onClose={handleSendJobClose}>
+              <DialogTitle>Send Job :</DialogTitle>
+              <DialogContent>
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  onChange={(e) => {
+                    handleSendJobInputChange(e, "title");
+                  }}
+                  value={jobsInputs.title}
+                  id="title"
+                  label="Job Title"
+                  type="text"
+                  fullWidth
+                  variant="standard"
+                  required
+                />
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  onChange={(e) => {
+                    handleSendJobInputChange(e, "link");
+                  }}
+                  value={jobsInputs.link}
+                  id="link"
+                  label="Job Link"
+                  type="text"
+                  fullWidth
+                  variant="standard"
+                  required
+                />
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  onChange={(e) => {
+                    handleSendJobInputChange(e, "company");
+                  }}
+                  value={jobsInputs.company}
+                  id="company"
+                  label="Company"
+                  type="text"
+                  fullWidth
+                  variant="standard"
+                  required
+                />
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  onChange={(e) => {
+                    handleSendJobInputChange(e, "description");
+                  }}
+                  value={jobsInputs.description}
+                  id="description"
+                  label="description"
+                  type="text"
+                  fullWidth
+                  variant="standard"
+                  required
+                />
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleSendJobClose}>Cancel</Button>
+                <Button onClick={handleSendJob}>Send</Button>
+              </DialogActions>
+            </Dialog>
           </div>
         </div>
-        <div className="filters-detail box">
-          <Box id="box" sx={{ minWidth: 120 }}>
-            <FormControl fullWidth>
-              <InputLabel id="cohorts">Cohorts</InputLabel>
-              <Select
-                labelId="select-cohort"
-                id="select-cohort"
-                value={cohort}
-                label="cohorts"
-                onChange={handleChange}
-              >
-                <MenuItem value={"all-cohorts"} key={"all-cohorts"}>
-                  {"all-cohorts"}
-                </MenuItem>
-                {cohorts.map((cohort, idx) => {
-                  return (
-                    <MenuItem value={cohort.name} key={idx}>
-                      {cohort.name}
-                    </MenuItem>
-                  );
-                })}
-              </Select>
-            </FormControl>
-          </Box>
-          <Box id="box" sx={{ minWidth: 120 }}>
-            <FormControl fullWidth>
-              <InputLabel id="Status">Status</InputLabel>
-              <Select
-                labelId="select-Status"
-                id="select-Status"
-                value={selectedStatus}
-                label="statuses"
-                onChange={handleStatusChange}
-              >
-                <MenuItem value={"all-statuses"} key={"all-statuses"}>
-                  {"all-statuses"}
-                </MenuItem>
-                {statuses.map((status, idx) => {
-                  return (
-                    <MenuItem value={status} key={idx}>
-                      {status}
-                    </MenuItem>
-                  );
-                })}
-              </Select>
-            </FormControl>
-          </Box>
-        </div>
+      </div>
+      <div className="filters-detail box">
+        <Box id="box" sx={{ minWidth: 120 }}>
+          <FormControl fullWidth>
+            <InputLabel id="cohorts">Cohorts</InputLabel>
+            <Select
+              labelId="select-cohort"
+              id="select-cohort"
+              value={cohort}
+              label="cohorts"
+              onChange={handleChange}
+            >
+              <MenuItem value={"all-cohorts"} key={"all-cohorts"}>
+                {"all-cohorts"}
+              </MenuItem>
+              {cohorts.map((cohort, idx) => {
+                return (
+                  <MenuItem value={cohort.name} key={idx}>
+                    {cohort.name}
+                  </MenuItem>
+                );
+              })}
+            </Select>
+          </FormControl>
+        </Box>
+        <Box id="box" sx={{ minWidth: 120 }}>
+          <FormControl fullWidth>
+            <InputLabel id="Status">Status</InputLabel>
+            <Select
+              labelId="select-Status"
+              id="select-Status"
+              value={selectedStatus}
+              label="statuses"
+              onChange={handleStatusChange}
+            >
+              <MenuItem value={"all-statuses"} key={"all-statuses"}>
+                {"all-statuses"}
+              </MenuItem>
+              {statuses.map((status, idx) => {
+                return (
+                  <MenuItem value={status} key={idx}>
+                    {status}
+                  </MenuItem>
+                );
+              })}
+            </Select>
+          </FormControl>
+        </Box>
+      </div>
       <TableContainer
         component={Paper}
         sx={{
@@ -371,6 +543,14 @@ const Course = () => {
         <Table sx={{ minWidth: 350 }} aria-label="simple table">
           <TableHead>
             <TableRow>
+              <TableCell align="center">
+                <input
+                  type="checkbox"
+                  id="selectAll"
+                  defaultChecked={selectAllCheckBox}
+                  onClick={handleSelectAllCheckbox}
+                />
+              </TableCell>
               <TableCell align="center">
                 <span className="table-cell">Name</span>
               </TableCell>
@@ -390,9 +570,18 @@ const Course = () => {
               <TableRow
                 className="table-row"
                 key={index}
-                onClick={() => handleRowClick(row._id)}
+                onClick={(event) => handleRowClick(row._id, event)}
                 id={row.id}
               >
+                <TableCell align="center">
+                  <input
+                    type="checkbox"
+                    id={index}
+                    defaultChecked={false}
+                    value={row.email}
+                    onClick={handleCheckboxClick}
+                  />
+                </TableCell>
                 <TableCell align="center">{row.name}</TableCell>
                 <TableCell align="center">{row.phone}</TableCell>
                 <TableCell align="center">{row.cohort}</TableCell>

@@ -3,12 +3,8 @@ const router = express.Router();
 const Course = require("../models/course");
 const Cohort = require("../models/cohort");
 
-
-
 router.get("/courses/:id", async (req, res) => {
   let userId = req.params.id;
-  console.log(userId);
-
   await Course.find()
     .populate({
       path: "cohorts",

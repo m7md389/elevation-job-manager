@@ -53,7 +53,6 @@ export default function Student() {
   const getJobs = async () => {
     let tempJobs = [];
     let userJobs = (await http.get(`${URL}/${userId}`)).data;
-    // console.log(userJobs);
     userJobs.jobs.forEach((job) => {
       if (company !== "All" || status !== "All") {
         if (

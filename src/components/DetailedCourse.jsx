@@ -33,7 +33,6 @@ import http from "../services/httpService";
 import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
 import { toast } from "react-toastify";
 import { toArray } from "lodash";
-import sendJobNotification from "../../server/services/mailService"
 
 const Course = () => {
   const params = useParams();
@@ -122,31 +121,14 @@ const Course = () => {
   const handleSendJob = () => {
     if (!jobsInputs.link || !sendJobEmails.length) {
       !jobsInputs.link
-        ? toast.error("Please add link")
-        : toast.error("No selected users");
+        ? toast.error("Please add link.")
+        : toast.error("No selected users.");
       return null;
     }
-    sendJobEmails.forEach((email) => {
-      const mailText = `
-      title: ${jobsInputs.title}
 
-      link: ${jobsInputs.link}
-
-      company: ${jobsInputs.company}
-
-      description: ${jobsInputs.description}
-      `;
-      const mailHTML = `
-      <h2>title: ${jobsInputs.title}</h2>
-
-      <h5> company: ${jobsInputs.company} </h5>
-
-      <h4> description: </h4> 
-      <p>${jobsInputs.description}</p>
-      
-      <h3>link: <a href="${jobsInputs.link}"> Job Link </a></h3>
-      `
-      sendJobNotification("rivoyiy945@mannawo.com", jobsInputs)
+    http.post("/jobs/notifications", sendJobEmails , jobsInputs).then(res => {
+      if(res.error){toast.error("Error sending job.")}
+      else{toast.success("Successfully sended job.")}
     })
     setSendJob(false);
   };

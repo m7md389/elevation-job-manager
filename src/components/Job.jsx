@@ -20,6 +20,10 @@ import Stack from "@mui/material/Stack";
 import Dropdown from "react-dropdown";
 import "react-dropdown/style.css";
 
+import Slide from '@mui/material/Slide';
+import DialogContentText from '@mui/material/DialogContentText';
+import { toast } from "react-toastify";
+
 function Job(props) {
   let URL = "/jobs";
   const jobId = props.job._id;
@@ -27,18 +31,18 @@ function Job(props) {
   const [openAddInterview, setOpenAddInterview] = useState(false);
   const [openEditJob, setOpenEditJob] = useState(false);
   const [interviewDate, setInterviewDate] = useState(new Date(Date.now()));
-  const [jobDate, setJobDate] = React.useState(props.job.date);
+  const [jobDate, setJobDate] = useState(props.job.date);
+  const [updateInterviewStatus,setUpdateInterviewStatus] = useState(false)
 
-  const statusOptions = ["", "Waiting", "Rejected", "Passed"];
+  const statusOptions = ["waiting", "rejected", "passed"];
   const typeOptions = [
-    "",
-    "HR",
-    "Phone Interview",
-    "Technical",
-    "HomeWork",
-    "Contract",
+    "hr",
+    "phone interview",
+    "technical",
+    "homework",
+    "contract",
   ];
-  const statusesForAddJob = ["", "Accepted", "waiting", "Applied", "no reply"];
+  const statusesForAddJob = ["accepted", "waiting", "applied", "no reply"];
 
   const [editJobInputs, setEditJobInputs] = useState({
     title: props.job.title,
@@ -48,7 +52,8 @@ function Job(props) {
   });
   const [editJobStatusOption, setEditJobStatusOption] = useState(
     statusesForAddJob[0]
-  );
+    );
+  const [open, setOpen] = useState(false);
   const [typeOption, setTypeOption] = useState(typeOptions[0]);
   const [statusOption, setStatusOption] = useState(statusOptions[0]);
   const [interviewInputs, setInterviewInputs] = useState({
@@ -60,7 +65,6 @@ function Job(props) {
   });
 
   const handleToggle = () => {
-
     setActive(!isActive);
   };
 
@@ -87,8 +91,15 @@ function Job(props) {
   };
 
   const handleAddInterview = () => {
-    if (!typeOption || !statusOption || !interviewDate) {
+    let flag = false
+    if (!typeOption || !statusOption || !interviewDate || !job) {
       return;
+    }
+    for(let i=0 ; i < job.interviews.length && !flag ; i++){
+      if(job.interviews[i].status.toLowerCase() !== "passed"){
+        setOpen(true);
+        flag = true
+      }
     }
     let newInterview = {
       description: interviewInputs.description,
@@ -99,10 +110,12 @@ function Job(props) {
       jobId: jobId,
     };
 
-    http.post(`${URL}/Interviews`, newInterview).then(() => {
-      props.setRefresh(props.refresh + 1);
-    });
-    setOpenAddInterview(false);
+    if(updateInterviewStatus || !flag){
+      http.post(`${URL}/Interviews`, newInterview).then(() => {
+        props.setRefresh(props.refresh + 1);
+        setOpenAddInterview(false);
+      });
+    }
   };
 
   const handleDateChange = (newValue) => {
@@ -162,6 +175,45 @@ function Job(props) {
     });
   };
 
+  const handleAcceptChangeInterviewsStatus = () => {
+    let error = false
+    if (!typeOption || !statusOption || !interviewDate || !job) {
+      return;
+    }
+    for(let i=0 ; i < job.interviews.length ; i++){
+      if(job.interviews[i].status !== "passed"){
+        http.put(`${URL}/Interviews/passed`,{interviewId: job.interviews[i]._id}).then(res =>{
+          if (res.error){error= true}
+        })
+      }
+    }
+    if (error){toast.error("Error updating interviews")}
+    else{toast.success("All interviews updated successfully")}
+    let newInterview = {
+      description: interviewInputs.description,
+      type: typeOption.toLowerCase(),
+      status: statusOption.toLowerCase(),
+      date: interviewDate,
+      link: interviewInputs.link,
+      jobId: jobId,
+    };
+    http.post(`${URL}/Interviews`, newInterview).then(() => {
+      props.setRefresh(props.refresh + 1);
+    })
+    setOpenAddInterview(false);
+    setOpen(false)
+  }
+
+  const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+  });
+
+  const handleClose = () => {
+    setUpdateInterviewStatus(false)
+    setOpen(false);
+    setOpenAddInterview(false);
+  };
+
   const job = props.job;
 
   return (
@@ -196,7 +248,6 @@ function Job(props) {
           </div>
         </div>
       </div>
-
 
       <Dialog open={openEditJob} onClose={handleEditJobClose}>
         <DialogTitle>Edit Job :</DialogTitle>
@@ -271,80 +322,96 @@ function Job(props) {
           <Button onClick={() => handleDeleteJob()}>Delete</Button>
         </DialogActions>
       </Dialog>
-
-      <Dialog
-        open={openAddInterview}
-        onClose={handleAddInterviewClickClose}
-      >
-        <DialogTitle>Add Interview :</DialogTitle>
-        <DialogContent>
-          <TextField
-            autoFocus
-            margin="dense"
-            onChange={(e) => {
-              handleInterviewInputChange(e, "description");
-            }}
-            value={interviewInputs.description}
-            id="description"
-            label="description"
-            type="text"
-            fullWidth
-            variant="standard"
-            required
-          />
-          <br />
-          <Dropdown
-            options={typeOptions}
-            onChange={(e) => {
-              handleTypeChange(e);
-            }}
-            value={typeOption}
-            placeholder="Type"
-            required
-          />{" "}
-          <br />
-          <Dropdown
-            options={statusOptions}
-            onChange={(e) => {
-              handleStatusChange(e);
-            }}
-            value={statusOption}
-            placeholder="Status"
-            required
-          />
-          <br />
-          <div className="datePicker">
-            <LocalizationProvider dateAdapter={DateAdapter}>
-              <MobileDatePicker
-                label="Date mobile"
-                inputFormat="DD/MM/yyyy"
-                value={interviewDate}
-                onChange={handleDateChange}
-                renderInput={(params) => <TextField {...params} />}
-              />
-            </LocalizationProvider>
-          </div>
-          <br />
-          <TextField
-            autoFocus
-            margin="dense"
-            onChange={(e) => {
-              handleInterviewInputChange(e, "link");
-            }}
-            value={interviewInputs.link}
-            id="link"
-            label="Link(Invitation - Zoom)"
-            type="text"
-            fullWidth
-            variant="standard"
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleAddInterviewClickClose}>Cancel</Button>
-          <Button onClick={() => handleAddInterview()}>Add</Button>
-        </DialogActions>
-      </Dialog>
-
+        <Dialog
+          open={openAddInterview}
+          onClose={handleAddInterviewClickClose}
+        >
+          <DialogTitle>Add Interview :</DialogTitle>
+          <DialogContent>
+            <TextField
+              autoFocus
+              margin="dense"
+              onChange={(e) => {
+                handleInterviewInputChange(e, "description");
+              }}
+              value={interviewInputs.description}
+              id="description"
+              label="description"
+              type="text"
+              fullWidth
+              variant="standard"
+              required
+            />
+            <br />
+            <Dropdown
+              options={typeOptions}
+              onChange={(e) => {
+                handleTypeChange(e);
+              }}
+              value={typeOption}
+              placeholder="Type"
+              required
+            />{" "}
+            <br />
+            <Dropdown
+              options={statusOptions}
+              onChange={(e) => {
+                handleStatusChange(e);
+              }}
+              value={statusOption}
+              placeholder="Status"
+              required
+            />
+            <br />
+            <div className="datePicker">
+              <LocalizationProvider dateAdapter={DateAdapter}>
+                <MobileDatePicker
+                  label="Date mobile"
+                  inputFormat="DD/MM/yyyy"
+                  value={interviewDate}
+                  onChange={handleDateChange}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </LocalizationProvider>
+            </div>
+            <br />
+            <TextField
+              autoFocus
+              margin="dense"
+              onChange={(e) => {
+                handleInterviewInputChange(e, "link");
+              }}
+              value={interviewInputs.link}
+              id="link"
+              label="Link(Invitation - Zoom)"
+              type="text"
+              fullWidth
+              variant="standard"
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleAddInterviewClickClose}>Cancel</Button>
+            <Button onClick={() => handleAddInterview()}>Add</Button>
+          </DialogActions>
+          <Dialog
+            open={open}
+            TransitionComponent={Transition}
+            onClose={handleClose}
+            aria-describedby="alert-dialog-slide-description"
+          >
+            <DialogTitle>{"Update other interviews Status ?"}</DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-slide-description">
+                You can't add interview if you didn't passed the previous once.
+                Do you want to let the App update all previous interviews status to passed ?.
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleClose}>Disagree</Button>
+              <Button onClick={handleAcceptChangeInterviewsStatus}>Agree</Button>
+            </DialogActions>
+          </Dialog>
+        </Dialog>
       <div
         className={
           isActive

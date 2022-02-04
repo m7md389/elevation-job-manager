@@ -1,10 +1,10 @@
-
-#navbar{
+#navbar {
   background-color: #f7f7f7;
 }
 
-#navbarNav .navbar-nav a{
+#navbarNav .navbar-nav a {
   display: inline-block;
+  font-size: 0.9rem;
 }
 
 .my-navbar-container {
@@ -29,19 +29,21 @@
 }
 
 @media only screen and (max-width: 1000px) {
-  
-  #navbarNav{
-    border-radius: 15px;    
+  #navbarNav {
+    border-radius: 15px;
   }
 
-  .navbar-nav{
+  .navbar-nav {
     direction: rtl;
-    background-color: none ;
+    background-color: none;
     position: absolute;
     right: 0;
   }
-  
-  .navbar-links-content-container{
+  .nav-link-tabs {
+    width: 100%;
+  }
+
+  .navbar-links-content-container {
     direction: rtl;
     position: relative;
     display: grid;
@@ -49,56 +51,48 @@
     width: 50vw;
     border-bottom-left-radius: 15px;
     margin-top: 8px;
-    background-color: rgb(255,214,222);
+    background-color: rgb(255, 214, 222);
     opacity: 1;
   }
-  
-  .navbar-nav a{
-    padding: 20px  10px;
+
+  .navbar-nav a {
+    padding: 20px 10px;
     font-weight: bold;
     width: 100%;
-
-    
-
   }
-
-
-  
-  
-  
 }
 
 @-webkit-keyframes navbar-links-content-container {
   0% {
     -webkit-transform: scaleY(0.4);
-            transform: scaleY(0.4);
+    transform: scaleY(0.4);
     -webkit-transform-origin: 100% 0%;
-            transform-origin: 100% 0%;
+    transform-origin: 100% 0%;
   }
   100% {
     -webkit-transform: scaleY(1);
-            transform: scaleY(1);
+    transform: scaleY(1);
     -webkit-transform-origin: 100% 0%;
-            transform-origin: 100% 0%;
+    transform-origin: 100% 0%;
   }
 }
 @keyframes navbar-links-content-container {
   0% {
     -webkit-transform: scaleY(0.4);
-            transform: scaleY(0.4);
+    transform: scaleY(0.4);
     -webkit-transform-origin: 100% 0%;
-            transform-origin: 100% 0%;
+    transform-origin: 100% 0%;
   }
   100% {
     -webkit-transform: scaleY(1);
-            transform: scaleY(1);
+    transform: scaleY(1);
     -webkit-transform-origin: 100% 0%;
-            transform-origin: 100% 0%;
+    transform-origin: 100% 0%;
   }
 }
 
-
 .display {
--webkit-animation: scale-up-ver-top 0.4s cubic-bezier(0.215, 0.610, 0.355, 1.000) both;
-        animation: scale-up-ver-top 0.4s cubic-bezier(0.215, 0.610, 0.355, 1.000) both;
+  -webkit-animation: scale-up-ver-top 0.4s cubic-bezier(0.215, 0.61, 0.355, 1)
+    both;
+  animation: scale-up-ver-top 0.4s cubic-bezier(0.215, 0.61, 0.355, 1) both;
 }

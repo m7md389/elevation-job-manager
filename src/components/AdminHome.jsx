@@ -26,7 +26,6 @@ function AdminHome() {
   const [selectedCourseToEdit, setSelectedCourseToEdit] = useState("");
 
   useEffect(async () => {
-    console.log("hello");
     let res = (await http.get(`/courses/names`)).data;
     if (res.error) {
       return setCourses([]);
@@ -50,10 +49,10 @@ function AdminHome() {
     if (!courseTitle) return;
 
     let updatedCourses = await http.post(`/courses`, { title: courseTitle });
-    if (updatedCourses.error) {
+    if (updatedCourses.data.error) {
       toast.error("Error adding course.")
     }
-    toast.success("Course added successfully.")
+    else{toast.success("Course added successfully.")}
     setRefresh(refresh + 1);
     setOpen(false);
   };

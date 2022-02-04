@@ -327,7 +327,8 @@ router.post("/courses", async (req, res) => {
     cohorts: []
   });
   await newCourse.save();
-  res.redirect("/courses/names");
+  res.end();
+  // res.redirect("/courses/names");
 });
 
 router.delete("/courses", (req, res) => {

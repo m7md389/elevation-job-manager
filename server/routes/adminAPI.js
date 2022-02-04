@@ -257,11 +257,25 @@ router.put("/jobs", async function (req, res) {
 
 router.delete("/jobs", async function (req, res) {
   let jobId = req.body;
-  await Jobs.findByIdAndDelete({ _id: jobId.jobId }).exec((ex, user) => {
+  Jobs.findByIdAndDelete({ _id: jobId.jobId }).exec((ex, user) => {
     if (ex) {
       res.send({ error: "error deleting Job" });
     }
     res.send(user);
+  });
+});
+
+router.put("/jobs/Interviews/Passed", async function (req, res) {
+  let { interviewId } = req.body;
+  Interviews.findByIdAndUpdate(
+    { _id: interviewId },
+    { $set: { status: "passed" } },
+    { new: true }
+  ).exec(function (error, updatedInterview) {
+    if (error) {
+      res.send({ error: "error deleting Job" });
+    }
+    res.end();
   });
 });
 

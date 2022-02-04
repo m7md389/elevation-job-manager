@@ -1,10 +1,10 @@
-
-#navbar{
+#navbar {
   background-color: #f7f7f7;
 }
 
-#navbarNav .navbar-nav a{
+#navbarNav .navbar-nav a {
   display: inline-block;
+  font-size: 0.9rem;
 }
 
 .my-navbar-container {
@@ -29,19 +29,21 @@
 }
 
 @media only screen and (max-width: 1000px) {
-  
-  #navbarNav{
-    border-radius: 15px;    
+  #navbarNav {
+    border-radius: 15px;
   }
 
-  .navbar-nav{
+  .navbar-nav {
     direction: rtl;
-    background-color: none ;
+    background-color: none;
     position: absolute;
     right: 0;
   }
-  
-  .navbar-links-content-container{
+  .nav-link-tabs {
+    width: 100%;
+  }
+
+  .navbar-links-content-container {
     direction: rtl;
     position: relative;
     display: grid;
@@ -49,12 +51,12 @@
     width: 50vw;
     border-bottom-left-radius: 15px;
     margin-top: 8px;
-    background-color: rgb(255,214,222);
+    background-color: rgb(255, 214, 222);
     opacity: 1;
   }
-  
-  .navbar-nav a{
-    padding: 20px  10px;
+
+  .navbar-nav a {
+    padding: 20px 10px;
     font-weight: bold;
     width: 100%;
   }

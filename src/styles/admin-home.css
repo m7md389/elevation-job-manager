@@ -4,6 +4,11 @@
   text-decoration: none;
 }
 
+.edit-button {
+  position: relative;
+  margin-left: 300px;
+}
+
 .course-link:hover {
   transform: translateY(-10px);
   text-decoration: underline;

@@ -17,7 +17,7 @@ const Register = () => {
   const doSubmit = async () => {
     try {
       await user.addAdmin({ ...inputs });
-      toast.success("Admin added sucessfully");
+      toast.success("Admin added successfully");
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
         toast.error(ex.response.data);

@@ -18,16 +18,12 @@ import { toast } from "react-toastify";
 
 import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
 
-import Dropdown from "react-dropdown";
-import "react-dropdown/style.css";
-
 function AdminHome() {
   const [courses, setCourses] = useState([]);
-  const [coursesOptions, setCoursesOptions] = useState([]);
   const [open, setOpen] = useState(false);
   const [courseTitle, setCourseTitle] = useState("");
   const [refresh, setRefresh] = useState(1);
-  const [selectedCourse, setSelectedCourse] = useState("");
+  const [selectedCourseToEdit, setSelectedCourseToEdit] = useState("");
 
   useEffect(async () => {
     let res = (await http.get(`/courses/names`)).data;
@@ -36,16 +32,6 @@ function AdminHome() {
     }
     setCourses(res);
   }, [refresh]);
-
-  useEffect(async () => {
-    let coursesNames = [];
-    courses.forEach((course) => {
-      if (!coursesNames.includes(course.title)) {
-        coursesNames.push(course.title);
-      }
-    });
-    setCoursesOptions(coursesNames);
-  }, [courses]);
 
   const handleClose = () => {
     setOpen(false);
@@ -62,18 +48,19 @@ function AdminHome() {
   const handleAddCourse = async () => {
     if (!courseTitle) return;
 
-    let updatedCourses = (await http.post(`/courses`, { title: courseTitle }))
-      .data;
-    if (updatedCourses.error) {
-      return;
+    let updatedCourses = await http.post(`/courses`, { title: courseTitle });
+    if (updatedCourses.data.error) {
+      toast.error("Error adding course.")
     }
-    setCourses(updatedCourses);
+    else{toast.success("Course added successfully.")}
+    setRefresh(refresh + 1);
     setOpen(false);
   };
 
   const [openEditCourse, setOpenEditCourse] = useState(false);
 
-  const handleEditCourseOpen = () => {
+  const handleEditCourseOpen = (e) => {
+    setSelectedCourseToEdit(e.target.closest("div").className)
     setOpenEditCourse(true);
   };
 
@@ -85,18 +72,13 @@ function AdminHome() {
     setCourseTitle(event.target.value);
   };
 
-  const handleCourseOptionChange = (e) => {
-    setSelectedCourse(e.value);
-    setCourseTitle(e.value);
-  };
-
   const handleEditCourse = () => {
-    if (!selectedCourse || !courseTitle) {
+    if (!selectedCourseToEdit || !courseTitle) {
       return;
     }
     http
       .put(`/courses`, {
-        data: { title: selectedCourse, newTitle: courseTitle }
+        data: { title: selectedCourseToEdit, newTitle: courseTitle }
       })
       .then(() => {
         setRefresh(refresh + 1);
@@ -105,12 +87,12 @@ function AdminHome() {
   };
 
   const handleDeleteCourse = () => {
-    if (!coursesOptions) {
+    if (!selectedCourseToEdit) {
       return;
     }
-    http.delete(`/courses`, { data: { title: courseTitle } }).then((res) => {
+    http.delete(`/courses`, { data: { title: selectedCourseToEdit } }).then((res) => {
       if (res.data.error) {
-        toast.error("Current password not match the current password");
+        toast.error("Can't delete course.");
       }
       setRefresh(refresh + 1);
       setOpenEditCourse(false);
@@ -124,10 +106,6 @@ function AdminHome() {
 
       <div className="add-course-container">
         <AddIcon onClick={handleOpen} className="add-icon" />
-        <ModeEditOutlineOutlinedIcon
-          onClick={handleEditCourseOpen}
-          variant="outlined"
-        />
       </div>
 
       <Dialog open={open} onClose={handleClose}>
@@ -150,7 +128,7 @@ function AdminHome() {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleAddCourse}>Save</Button>
+          <Button onClick={handleAddCourse}>Add</Button>
         </DialogActions>
       </Dialog>
       <Dialog
@@ -160,14 +138,16 @@ function AdminHome() {
       >
         <DialogTitle>Edit Course :</DialogTitle>
         <DialogContent>
-          <Dropdown
-            options={coursesOptions}
-            onChange={(e) => {
-              handleCourseOptionChange(e);
-            }}
-            value={selectedCourse}
-            placeholder="Course"
-            required
+          <TextField
+            autoFocus
+            margin="dense"
+            value={selectedCourseToEdit}
+            id="title"
+            label="Course Title"
+            type="text"
+            fullWidth
+            variant="standard"
+            disabled= {true}
           />
           <TextField
             autoFocus
@@ -194,13 +174,24 @@ function AdminHome() {
 
       <div className="page-container">
         {courses.map((course, index) => (
-          <Link
-            className="course-link"
-            key={course.title + index}
-            to={`/courses/${course.title}`}
-          >
-            <Course course={course} />
-          </Link>
+          <div key={index} className="course-container">
+            <div key={index} className={`${course.title}`}>
+              <ModeEditOutlineOutlinedIcon
+               onClick={handleEditCourseOpen}
+               variant="outlined"
+               className="edit-button"
+              />
+            </div >
+            <div className="course-link">
+              <Link
+                className="course-link"
+                key={course.title + index}
+                to={`/courses/${course.title}`}
+              >
+                <Course course={course} />
+              </Link>
+              </div>
+          </div>
         ))}
       </div>
     </div>

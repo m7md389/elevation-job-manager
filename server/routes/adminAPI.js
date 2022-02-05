@@ -319,15 +319,14 @@ router.post("/courses", async (req, res) => {
 
   let checkExist = await Course.find({ title: courseName });
   if (checkExist.length) {
-    res.status(400).send({ error: "Course already Exist" });
-    return null;
+    return res.send({ error: "Course already Exist" });
   }
   let newCourse = new Course({
     title: courseName,
     cohorts: []
   });
   await newCourse.save();
-  res.redirect("/courses/names");
+  res.end();
 });
 
 router.delete("/courses", (req, res) => {

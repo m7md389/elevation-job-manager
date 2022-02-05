@@ -119,6 +119,7 @@ function AdminHome() {
 
   return (
     <div>
+      <ElevationButton />
       <Title text="Home Page" />
 
       <div className="add-course-container">

@@ -10,38 +10,40 @@
   font-weight: bold;
 }
 
-.box {
+/* .box {
   margin: 2.5rem auto;
-}
+} */
 
-.add-edit-cohort {
+/* .add-edit-cohort {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-}
+} */
 
-#box {
+/* #box {
   width: 40%;
   margin: 3rem auto 2.5rem;
-}
+} */
 
 .add-icon {
   border: 1px solid #2196f3;
   border-radius: 50%;
+  display: inline-block;
   color: #2196f3;
 }
 
 .add-course-container {
   width: 80%;
   margin: 0 auto;
-  /* font-size: 22px; */
+  position: relative;
+  z-index: 1;
   padding: 10px;
 }
 
 .add-icon {
   margin-left: 10%;
-  border: 1px solid #ff96aa;
+  border: 1px solid rgb(15 33 58 / 35%);
   border-radius: 50%;
-  color: #ff96aa;
+  color: rgb(15 33 58 / 35%);
   font-size: 2rem;
 }
 
@@ -51,4 +53,51 @@
   color: #2196f3;
   transition: 0.9s;
   transform: rotateY(180deg);
+  cursor: pointer;
 }
+
+.send-job-btn{
+  width: 80%;
+  margin: 0 auto;
+}
+
+.send-job-btn button{
+  margin: 20px 0;
+  color: rgb(255 152 171);
+  border: 1px solid rgb(255 152 171);
+}
+
+.send-job-btn button:hover{
+  background-color: rgb(255 152 171);
+  color: #0f213a;
+  border: 1px solid rgb(255 152 171);
+}
+
+
+
+.addd-edit{
+  display: grid;
+  padding: 10px;
+  margin: 5px 0;
+}
+
+.filters-detail{
+  width: 80%;
+  margin: 0 auto;
+}
+
+.cohort-div div{
+  display: grid;
+  /* align-content: space-between; */
+
+}
+
+/* .cohort-div-filter{
+  padding-right: 0;
+} */
+
+
+/* .filters-detail #box .cohort-div #box{
+  display: grid;
+  align-self: end;
+} */

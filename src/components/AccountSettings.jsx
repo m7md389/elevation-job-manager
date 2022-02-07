@@ -69,7 +69,10 @@ const AccountSettings = () => {
   const handleEditUser = () => {
     let tempUpdatedDataInputs = { ...updatedDataInputs };
     tempUpdatedDataInputs["userId"] = userId;
-    http.put(`${URL}`, tempUpdatedDataInputs);
+    http.put(`${URL}`, tempUpdatedDataInputs).then(res => {
+      if(res.error){toast.error("Error updating user.")}
+      else{toast.success("User updated successfully")}
+    })
   };
 
   const handlePasswordChange = () => {
@@ -79,6 +82,7 @@ const AccountSettings = () => {
       if (res.data.error) {
         toast.error("Current password not match the current password");
       }
+      else{toast.success("Password changed successfully")}
     });
   };
 

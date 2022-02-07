@@ -547,4 +547,29 @@ router.post("/notifications", async (req, res) => {
   res.end();
 });
 
+router.post("/notifications/admin", async (req, res) => {
+  let { userId, newInterview, job } = req.body;
+  if (!userId || !newInterview || !job) {
+    res.status(400).send({
+      error: "Error sending job for admin"
+    });
+  }
+  let admins = await Users.find({ role: "admin" });
+  if (!admins.length) {
+    res.status(400).send({
+      error: "There is no admins"
+    });
+  }
+  let student = await Users.findById({ _id: userId });
+  if (!student) {
+    res.status(400).send({
+      error: "User not found"
+    });
+  }
+  admins.forEach((admin) => {
+    mailService.sendJobNotificationForAdmin(admin, student, newInterview, job);
+  });
+  res.end();
+});
+
 module.exports = router;

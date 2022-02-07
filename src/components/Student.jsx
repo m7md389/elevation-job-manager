@@ -91,7 +91,6 @@ export default function Student() {
   React.useEffect(async () => {
     let URL = "/cohorts/courses";
     let cohort = (await http.get(`${URL}/${userId}`)).data;
-    console.log(cohort);
     setUserCohort(cohort);
   }, []);
 
@@ -354,6 +353,7 @@ export default function Student() {
             {filteredJobs.map((j, idx) => {
               return (
                 <Job
+                  userId={userId}
                   refresh={refresh}
                   setRefresh={setRefresh}
                   key={idx}

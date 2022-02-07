@@ -36,7 +36,7 @@ const Register = () => {
       const response = await user.register({ ...inputs });
       toast.success(response.data.msg);
       setTimeout(() => {
-        toast.info("check your email to verify your account.");
+        toast.info("Check your email to verify your account.");
       }, 500);
       navigate("/login");
       // const token = response.headers["x-auth-token"];
@@ -44,7 +44,7 @@ const Register = () => {
       // window.location = "/";
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
-        toast.error(ex.response.data);
+        toast.error(ex.response.data.error);
       }
     }
   };

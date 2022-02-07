@@ -126,10 +126,13 @@ const Course = () => {
       return null;
     }
 
-    http.post("/notifications", { sendJobEmails, jobsInputs }).then(res => {
-      if (res.error) { toast.error("Error sending job.") }
-      else { toast.success("Successfully sended job.") }
-    })
+    http.post("/notifications", { sendJobEmails, jobsInputs }).then((res) => {
+      if (res.error) {
+        toast.error("Error sending job.");
+      } else {
+        toast.success("Successfully sended job.");
+      }
+    });
     setSendJob(false);
   };
 
@@ -306,7 +309,6 @@ const Course = () => {
       <Title text={course.title} />
 
       <div className="filters-detail box">
-
         <div className="cohort-div">
           <Box className="cohort-div-filter" id="box" sx={{ minWidth: 120 }}>
             <FormControl fullWidth>
@@ -438,7 +440,6 @@ const Course = () => {
                     </DialogActions>
                   </Dialog>
                 </div>
-
               </div>
             </div>
           </div>
@@ -542,9 +543,6 @@ const Course = () => {
         </Dialog>
       </div>
 
-
-
-
       <TableContainer
         component={Paper}
         sx={{
@@ -560,6 +558,7 @@ const Course = () => {
               <TableCell align="center">
                 <input
                   type="checkbox"
+                  className="checkbox"
                   id="selectAll"
                   defaultChecked={selectAllCheckBox}
                   onClick={handleSelectAllCheckbox}
@@ -590,6 +589,7 @@ const Course = () => {
                 <TableCell align="center">
                   <input
                     type="checkbox"
+                    className="checkbox"
                     id={index}
                     defaultChecked={false}
                     value={row.email}

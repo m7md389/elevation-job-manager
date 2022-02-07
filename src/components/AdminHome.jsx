@@ -50,9 +50,10 @@ function AdminHome() {
 
     let updatedCourses = await http.post(`/courses`, { title: courseTitle });
     if (updatedCourses.data.error) {
-      toast.error("Error adding course.")
+      toast.error("Error adding course.");
+    } else {
+      toast.success("Course added successfully.");
     }
-    else{toast.success("Course added successfully.")}
     setRefresh(refresh + 1);
     setOpen(false);
   };
@@ -60,7 +61,7 @@ function AdminHome() {
   const [openEditCourse, setOpenEditCourse] = useState(false);
 
   const handleEditCourseOpen = (e) => {
-    setSelectedCourseToEdit(e.target.closest("div").className)
+    setSelectedCourseToEdit(e.target.closest("div").className);
     setOpenEditCourse(true);
   };
 
@@ -90,18 +91,19 @@ function AdminHome() {
     if (!selectedCourseToEdit) {
       return;
     }
-    http.delete(`/courses`, { data: { title: selectedCourseToEdit } }).then((res) => {
-      if (res.data.error) {
-        toast.error("Can't delete course.");
-      }
-      setRefresh(refresh + 1);
-      setOpenEditCourse(false);
-    });
+    http
+      .delete(`/courses`, { data: { title: selectedCourseToEdit } })
+      .then((res) => {
+        if (res.data.error) {
+          toast.error("Can't delete course.");
+        }
+        setRefresh(refresh + 1);
+        setOpenEditCourse(false);
+      });
   };
 
   return (
     <div>
-      <ElevationButton />
       <Title text="Home Page" />
 
       <div className="add-course-container">
@@ -147,7 +149,7 @@ function AdminHome() {
             type="text"
             fullWidth
             variant="standard"
-            disabled= {true}
+            disabled={true}
           />
           <TextField
             autoFocus
@@ -177,11 +179,11 @@ function AdminHome() {
           <div key={index} className="course-container">
             <div key={index} className={`${course.title}`}>
               <ModeEditOutlineOutlinedIcon
-               onClick={handleEditCourseOpen}
-               variant="outlined"
-               className="edit-button"
+                onClick={handleEditCourseOpen}
+                variant="outlined"
+                className="edit-button"
               />
-            </div >
+            </div>
             <div className="course-link">
               <Link
                 className="course-link"
@@ -190,7 +192,7 @@ function AdminHome() {
               >
                 <Course course={course} />
               </Link>
-              </div>
+            </div>
           </div>
         ))}
       </div>

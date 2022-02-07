@@ -2,19 +2,8 @@
   display: grid;
   grid-template-columns: 1fr;
   justify-items: center;
-  background-color: red;
   padding: 50px;
   margin: 0 0 40px 0;
   color: #0f213a;
   font-family: "Rowdies", cursive;
-  border-bottom-left-radius: 50%;
-  border-bottom-right-radius: 50%;
-  background: rgb(255, 152, 171);
-  background: linear-gradient(
-    180deg,
-    rgba(255, 152, 171, 1) 12%,
-    rgba(255, 233, 237, 1) 81%,
-    rgba(255, 255, 255, 1) 96%,
-    rgba(255, 255, 255, 1) 100%
-  );
 }

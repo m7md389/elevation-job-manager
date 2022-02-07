@@ -89,16 +89,11 @@
   margin: 0 auto;
 }
 
-.cohort-div div {
+.cohort-div {
   display: grid;
-  /* align-content: space-between; */
+  grid-template-columns: 1fr;
 }
 
-/* .cohort-div-filter{
-  padding-right: 0;
-} */
-
-/* .filters-detail #box .cohort-div #box{
-  display: grid;
-  align-self: end;
-} */
+.cohort-div div {
+  grid-template-columns: repeat(2, 1fr);
+}

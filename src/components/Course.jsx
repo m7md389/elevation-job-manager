@@ -9,13 +9,10 @@ function Course(props) {
     <div
       className="course"
       style={{
-        backgroundColor: `#ffc2cd`,
-        borderRadius: "16px",
         padding: "10px"
       }}
     >
-      {/* data should come from mobx */}
-      {/* <progress max="100" value="80"></progress> */}
+
       <div
         className="processBar"
         style={{ width: `${Math.round(course.working) || 0}%` }}

@@ -315,7 +315,7 @@ const Course = () => {
           <Box className="cohort-div-filter" id="box" sx={{ minWidth: 120 }}>
             <FormControl fullWidth>
               <InputLabel id="cohorts">Cohorts</InputLabel>
-              <Select
+              <Select 
                 labelId="select-cohort"
                 id="select-cohort"
                 value={cohort}

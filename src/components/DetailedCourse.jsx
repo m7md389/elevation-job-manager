@@ -71,7 +71,7 @@ const Course = () => {
   const [filteredCohorts, setFilteredCohorts] = useState();
   const [cohort, setCohort] = useState("");
   const [editCohort, setEditCohort] = useState("");
-  const [selectedStatus, setSelectedStatus] = useState("all-statuses");
+  const [selectedStatus, setSelectedStatus] = useState('All-statuses');
   const [cohortName, setCohortName] = useState("");
   const [cohortEditName, setCohortEditName] = useState("");
   const [sendJobEmails, setSendJobEmails] = useState([]);
@@ -80,7 +80,7 @@ const Course = () => {
 
   useEffect(async () => {
     if (!course) return null;
-    if (cohort === "all-cohorts" || cohort === "") {
+    if (cohort === "All-cohorts" || !cohort === "") {
       setFilteredCohorts(course.cohorts);
     } else {
       setFilteredCohorts([course.cohorts.find((c) => c.name === cohort)]);
@@ -138,7 +138,7 @@ const Course = () => {
     filteredCohorts.forEach((cohort) => {
       cohort.users.forEach((user) => {
         if (
-          selectedStatus === "all-statuses" ||
+          selectedStatus === "All-statuses" ||
           user.status === selectedStatus
         ) {
           users.push({
@@ -304,41 +304,42 @@ const Course = () => {
   return (
     <div className="course-container">
       <Title text={course.title} />
-      <div className="add-edit-cohort">
-        <div className="add-edit-cohort">
-          <div className="box">
-            <Stack direction="row" spacing={2}>
-              <AddIcon
-                onClick={handleClickOpen}
-                variant="outlined"
-                className="add-icon"
-              />
-            </Stack>
-            <Dialog open={open} onClose={handleClose}>
-              <DialogTitle>Add Cohort :</DialogTitle>
-              <DialogContent>
-                <TextField
-                  autoFocus
-                  margin="dense"
-                  onChange={(e) => {
-                    handleInputChange(e, "name");
-                  }}
-                  value={cohortName}
-                  id="cohortName"
-                  label="Cohort Name"
-                  type="text"
-                  fullWidth
-                  variant="standard"
-                  required
-                />
-                <div className="datePicker">
-                  <LocalizationProvider dateAdapter={DateAdapter}>
-                    <MobileDatePicker
-                      label="Date"
-                      inputFormat="DD/MM/yyyy"
-                      value={date}
-                      onChange={handleDateChange}
-                      renderInput={(params) => <TextField {...params} />}
+
+      <div className="filters-detail box">
+        <div className="cohort-div">
+          <Box className="cohort-div-filter" id="box" sx={{ minWidth: 120 }}>
+            <FormControl fullWidth>
+              <InputLabel id="cohorts">Cohorts</InputLabel>
+              <Select
+                labelId="select-cohort"
+                id="select-cohort"
+                value={cohort}
+                label="cohorts"
+                onChange={handleChange}
+              >
+                <MenuItem value={"All-cohorts"} key={"All-cohorts"}>
+                  {"All-cohorts"}
+                </MenuItem>
+                {cohorts.map((cohort, idx) => {
+                  return (
+                    <MenuItem value={cohort.name} key={idx}>
+                      {cohort.name}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
+          </Box>
+
+          <div className="addd-edit">
+            <div className="add-edit-cohort">
+              <div className="add-edit-cohort">
+                <div className="box">
+                  <Stack direction="row" spacing={2}>
+                    <AddIcon
+                      onClick={handleClickOpen}
+                      variant="outlined"
+                      className="add-icon spacer"
                     />
                   </LocalizationProvider>
                 </div>
@@ -399,7 +400,64 @@ const Course = () => {
                       onChange={handleEditDateChange}
                       renderInput={(params) => <TextField {...params} />}
                     />
+<<<<<<< Updated upstream
                   </LocalizationProvider>
+=======
+                  </Stack>
+                  <Dialog open={editOpen} onClose={handleEditCohortClose}>
+                    <DialogTitle>Edit Cohorts :</DialogTitle>
+                    <DialogContent>
+                      <InputLabel id="cohorts">Cohorts</InputLabel>
+                      <Select
+                        labelId="select-cohort"
+                        id="select-cohort"
+                        value={editCohort}
+                        label="cohorts"
+                        onChange={handleEditCohortChange}
+                        className="spacer"
+                      >
+                        {cohorts.map((cohort, idx) => {
+                          return (
+                            <MenuItem value={cohort.name} key={idx}>
+                              {cohort.name}
+                            </MenuItem>
+                          );
+                        })}
+                      </Select>
+                      <TextField
+                        autoFocus
+                        margin="dense"
+                        onChange={(e) => {
+                          handleEditCohortInputChange(e, "name");
+                        }}
+                        value={cohortEditName}
+                        id="cohortName"
+                        label="Cohort Name"
+                        type="text"
+                        fullWidth
+                        variant="standard"
+                        required
+                        className="spacer"
+                      />
+                      <div className="editDatePicker spacer">
+                        <LocalizationProvider dateAdapter={DateAdapter}>
+                          <MobileDatePicker
+                            label="edit Date"
+                            inputFormat="DD/MM/yyyy"
+                            value={editDate}
+                            onChange={handleEditDateChange}
+                            renderInput={(params) => <TextField {...params} />}
+                          />
+                        </LocalizationProvider>
+                      </div>
+                    </DialogContent>
+                    <DialogActions>
+                      <Button onClick={handleEditCohortClose}>Cancel</Button>
+                      <Button onClick={handleEditCohort}>Save</Button>
+                      <Button onClick={handleDeleteCohort}>Delete</Button>
+                    </DialogActions>
+                  </Dialog>
+>>>>>>> Stashed changes
                 </div>
               </DialogContent>
               <DialogActions>
@@ -514,11 +572,11 @@ const Course = () => {
               labelId="select-Status"
               id="select-Status"
               value={selectedStatus}
-              label="statuses"
+              label="Statuses"
               onChange={handleStatusChange}
             >
-              <MenuItem value={"all-statuses"} key={"all-statuses"}>
-                {"all-statuses"}
+              <MenuItem value={"All-statuses"} key={"All-statuses"}>
+                {"All-statuses"}
               </MenuItem>
               {statuses.map((status, idx) => {
                 return (
@@ -531,6 +589,83 @@ const Course = () => {
           </FormControl>
         </Box>
       </div>
+<<<<<<< Updated upstream
+=======
+
+      <div className="send-job-btn spacer">
+        <Stack direction="row" spacing={2}>
+          <Button onClick={handleSendJobOpen} variant="outlined">
+            Send Job
+          </Button>
+        </Stack>
+        <Dialog open={sendJob} onClose={handleSendJobClose}>
+          <DialogTitle>Send Job :</DialogTitle>
+          <DialogContent>
+            <TextField
+              autoFocus
+              margin="dense"
+              onChange={(e) => {
+                handleSendJobInputChange(e, "title");
+              }}
+              value={jobsInputs.title}
+              id="title"
+              label="Job Title"
+              type="text"
+              fullWidth
+              variant="standard"
+              required
+            />
+            <TextField
+              autoFocus
+              margin="dense"
+              onChange={(e) => {
+                handleSendJobInputChange(e, "link");
+              }}
+              value={jobsInputs.link}
+              id="link"
+              label="Job Link"
+              type="text"
+              fullWidth
+              variant="standard"
+              required
+            />
+            <TextField
+              autoFocus
+              margin="dense"
+              onChange={(e) => {
+                handleSendJobInputChange(e, "company");
+              }}
+              value={jobsInputs.company}
+              id="company"
+              label="Company"
+              type="text"
+              fullWidth
+              variant="standard"
+              required
+            />
+            <TextField
+              autoFocus
+              margin="dense"
+              onChange={(e) => {
+                handleSendJobInputChange(e, "description");
+              }}
+              value={jobsInputs.description}
+              id="description"
+              label="description"
+              type="text"
+              fullWidth
+              variant="standard"
+              required
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleSendJobClose}>Cancel</Button>
+            <Button onClick={handleSendJob}>Send</Button>
+          </DialogActions>
+        </Dialog>
+      </div>
+
+>>>>>>> Stashed changes
       <TableContainer
         component={Paper}
         sx={{

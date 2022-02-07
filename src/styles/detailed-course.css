@@ -10,7 +10,12 @@
   font-weight: bold;
 }
 
-.box {
+.spacer {
+  margin-bottom: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+/* .box {
   margin: 2.5rem auto;
 }
 
@@ -30,12 +35,16 @@
   color: #2196f3;
 }
 
+.cohort-div {
+  margin-right: 2rem;
+}
+
 .add-course-container {
   width: 80%;
   margin: 0 auto;
-  /* font-size: 22px; */
+  font-size: 22px; 
   padding: 10px;
-}
+}*/
 
 .add-icon {
   margin-left: 10%;

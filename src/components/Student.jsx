@@ -1,5 +1,13 @@
 import * as React from "react";
 import { useState } from "react";
+import { useParams } from "react-router-dom";
+import Dropdown from "react-dropdown";
+
+import auth from "../services/authService";
+import http from "../services/httpService";
+import Title from "./common/Title";
+import Job from "./Job";
+
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
@@ -8,7 +16,6 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import "../styles/Student.css";
-import InterviewRow from "./InterviewRow";
 import auth from "../services/authService";
 import http from "../services/httpService";
 import Title from "./common/Title";
@@ -194,19 +201,22 @@ export default function Student() {
 
         <div className="student-details">
           <p>
-            name: <span>{userInfo.name}</span>
+            Name: <span>{userInfo.name}</span>
           </p>
           <p>
-            cohort:<span>{userCohort.cohort}</span>{" "}
+            Course: <span>{userCohort.Course}</span>
           </p>
           <p>
-            email: <span>{userInfo.email}</span>
+            Cohort:<span>{userCohort.cohort}</span>{" "}
           </p>
           <p>
-            city: <span>{userInfo.city}</span>
+            Email: <span>{userInfo.email}</span>
           </p>
           <p>
-            phone: <span>{userInfo.phone}</span>
+            City: <span>{userInfo.city}</span>
+          </p>
+          <p>
+            Phone: <span>{userInfo.phone}</span>
           </p>
         </div>
         <div className="filters-detail">
@@ -262,7 +272,7 @@ export default function Student() {
           {" "}
           <hr />
           <div>
-            <Stack direction="row" spacing={2}>
+            <Stack direction="row" spacer={2}>
               <Button onClick={handleClickOpen} variant="outlined">
                 Add Job
               </Button>
@@ -283,6 +293,7 @@ export default function Student() {
                   fullWidth
                   variant="standard"
                   required
+                  className="spacer"
                 />
                 <TextField
                   autoFocus
@@ -297,8 +308,9 @@ export default function Student() {
                   fullWidth
                   variant="standard"
                   required
+                  className="job-link"
                 />
-                <div className="datePicker">
+                <div className="datePicker spacer">
                   <LocalizationProvider dateAdapter={DateAdapter}>
                     <MobileDatePicker
                       label="Date"
@@ -317,8 +329,8 @@ export default function Student() {
                   value={statusOption}
                   placeholder="Status"
                   required
+                  // className="spacer"
                 />
-                <br />
                 <TextField
                   autoFocus
                   margin="dense"
@@ -341,11 +353,11 @@ export default function Student() {
             </Dialog>
           </div>
           <div className="jobs-title">
-            <div>job name</div>
-            <div className="vLine">company</div>
-            <div className="vLine">date</div>
-            <div className="vLine">last interview</div>
-            <div className="vLine">status</div>
+            <div>Job Name</div>
+            <div className="vLine">Company</div>
+            <div className="vLine">Date</div>
+            <div className="vLine">Last Interview</div>
+            <div className="vLine">Status</div>
           </div>
           <div className="rows">
             {filteredJobs.map((j, idx) => {

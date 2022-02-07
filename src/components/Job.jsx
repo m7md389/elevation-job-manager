@@ -282,6 +282,7 @@ function Job(props) {
             fullWidth
             variant="standard"
             required
+            className="spacer"
           />
           <TextField
             autoFocus
@@ -296,6 +297,7 @@ function Job(props) {
             fullWidth
             variant="standard"
             required
+            className="spacer"
           />
           <Dropdown
             options={statusesForAddJob}
@@ -305,9 +307,9 @@ function Job(props) {
             value={editJobStatusOption}
             placeholder="Status"
             required
+            className="spacer"
           />
-          <br />
-          <div className="datePicker">
+          <div className="datePicker spacer">
             <LocalizationProvider dateAdapter={DateAdapter}>
               <MobileDatePicker
                 label="Date"
@@ -331,6 +333,7 @@ function Job(props) {
             fullWidth
             variant="standard"
             required
+            className="spacer"
           />
         </DialogContent>
         <DialogActions>
@@ -339,6 +342,74 @@ function Job(props) {
           <Button onClick={() => handleDeleteJob()}>Delete</Button>
         </DialogActions>
       </Dialog>
+      <Dialog open={openAddInterview} onClose={handleAddInterviewClickClose}>
+        <DialogTitle>Add Interview :</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            onChange={(e) => {
+              handleInterviewInputChange(e, "description");
+            }}
+            value={interviewInputs.description}
+            id="description"
+            label="description"
+            type="text"
+            fullWidth
+            variant="standard"
+            required
+            className="spacer"
+          />
+          <Dropdown
+            options={typeOptions}
+            onChange={(e) => {
+              handleTypeChange(e);
+            }}
+            value={typeOption}
+            placeholder="Type"
+            required
+            className="spacer"
+          />{" "}
+          <Dropdown
+            options={statusOptions}
+            onChange={(e) => {
+              handleStatusChange(e);
+            }}
+            value={statusOption}
+            placeholder="Status"
+            required
+            className="spacer"
+          />
+          <div className="datePicker spacer">
+            <LocalizationProvider dateAdapter={DateAdapter}>
+              <MobileDatePicker
+                label="Date mobile"
+                inputFormat="DD/MM/yyyy"
+                value={interviewDate}
+                onChange={handleDateChange}
+                renderInput={(params) => <TextField {...params} />}
+              />
+            </LocalizationProvider>
+          </div>
+          <TextField
+            autoFocus
+            margin="dense"
+            onChange={(e) => {
+              handleInterviewInputChange(e, "link");
+            }}
+            value={interviewInputs.link}
+            id="link"
+            label="Link(Invitation - Zoom)"
+            type="text"
+            fullWidth
+            variant="standard"
+            className="spacer"
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleAddInterviewClickClose}>Cancel</Button>
+          <Button onClick={() => handleAddInterview()}>Add</Button>
+        </DialogActions>
         <Dialog
           open={openAddInterview}
           onClose={handleAddInterviewClickClose}
@@ -429,6 +500,7 @@ function Job(props) {
             </DialogActions>
           </Dialog>
         </Dialog>
+      </Dialog>
       <div
         className={
           isActive
@@ -437,11 +509,11 @@ function Job(props) {
         }
       >
         <div className="interviews-header">
-          <p>type</p>
-          <p>date</p>
-          <p>status</p>
-          <p>description</p>
-          <p>link</p>
+          <p>Type</p>
+          <p>Date</p>
+          <p>Status</p>
+          <p>Description</p>
+          <p>Link</p>
         </div>
 
         <div>

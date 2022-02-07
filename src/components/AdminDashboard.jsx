@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import moment from "moment";
 
 import http from "../services/httpService";
-import "../styles/admin-dashboard.css";
+import auth from "../services/authService";
 import Title from "./common/Title";
 import Student from "./Student";
 
@@ -16,7 +16,7 @@ import TextField from "@mui/material/TextField";
 import DateRangePicker from "@mui/lab/DateRangePicker";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import MenuItem from "@mui/material/MenuItem";
-import auth from "../services/authService";
+import "../styles/admin-dashboard.css";
 
 function AdminDashboard() {
   const columns = [
@@ -92,7 +92,6 @@ function AdminDashboard() {
       <Title text="Interviews" />
 
       <div className="admin-dashboard-container">
-
         <div className="range-picker">
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DateRangePicker

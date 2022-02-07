@@ -1,5 +1,14 @@
 import * as React from "react";
 import { useState } from "react";
+import { useParams } from "react-router-dom";
+import Dropdown from "react-dropdown";
+
+import auth from "../services/authService";
+import http from "../services/httpService";
+import Title from "./common/Title";
+import InterviewRow from "./InterviewRow";
+import Job from "./Job";
+
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
@@ -7,13 +16,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import "../styles/Student.css";
-import InterviewRow from "./InterviewRow";
-import auth from "../services/authService";
-import http from "../services/httpService";
-import Title from "./common/Title";
 
-import Job from "./Job";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -22,9 +25,9 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DateAdapter from "@mui/lab/AdapterMoment";
 import MobileDatePicker from "@mui/lab/MobileDatePicker";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
-import { useParams } from "react-router-dom";
-import Dropdown from "react-dropdown";
+
 import "react-dropdown/style.css";
+import "../styles/Student.css";
 
 export default function Student() {
   let URL = "/jobs";
@@ -192,7 +195,6 @@ export default function Student() {
       <Title text="Home" />
 
       <div className="student-page-container">
-
         <div className="student-details">
           <p>
             name: <span>{userInfo.name}</span>
@@ -362,8 +364,6 @@ export default function Student() {
           </div>
         </div>
       </div>
-
-
     </div>
   );
 }

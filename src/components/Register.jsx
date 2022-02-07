@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+
 import auth from "../services/authService";
 import user from "../services/userService";
 import cohort from "../services/cohortService";
+
 import "../styles/login.css";
 
 const Register = () => {

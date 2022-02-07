@@ -14,7 +14,7 @@ require("dotenv").config();
 const app = express();
 const path = require("path");
 app.use(cookieParser());
-mongoose.connect(process.env.MONGODB_URL||process.env.LOCAL_MONGODB_URL);
+mongoose.connect(process.env.MONGODB_URI||process.env.LOCAL_MONGODB_URI);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

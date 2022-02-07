@@ -72,6 +72,18 @@
   height: 20px;
 }
 
+.student-page-container button {
+  margin: 20px 0;
+  color: rgb(255 152 171);
+  border: 1px solid rgb(255 152 171);
+}
+
+.student-page-container button:hover {
+  background-color: rgb(255 152 171);
+  color: #0f213a;
+  border: 1px solid rgb(255 152 171);
+}
+
 @media only screen and (max-width: 600px) {
   .student-details {
     font-size: 0.9rem;

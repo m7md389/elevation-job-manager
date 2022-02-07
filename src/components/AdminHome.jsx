@@ -7,7 +7,7 @@ import http from "../services/httpService";
 import Title from "./common/Title";
 import Course from "./Course";
 
-import AddIcon from "@mui/icons-material/Add";
+// import AddIcon from "@mui/icons-material/Add";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
@@ -15,6 +15,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
 import DialogTitle from "@mui/material/DialogTitle";
+import Stack from "@mui/material/Stack";
 
 import "../styles/admin-home.css";
 import "reactjs-popup/dist/index.css";
@@ -108,7 +109,13 @@ function AdminHome() {
       <Title text="Home Page" />
 
       <div className="add-course-container">
-        <AddIcon onClick={handleOpen} className="add-icon spacer" />
+        {/* <AddIcon onClick={handleOpen} className="add-icon" /> */}
+
+        <Stack  direction="row" spacing={2}>
+          <Button className="add-course-icon spacer" onClick={handleOpen} variant="outlined">
+            Add Course
+          </Button>
+        </Stack>
       </div>
 
       <Dialog open={open} onClose={handleClose}>
@@ -181,6 +188,7 @@ function AdminHome() {
       <div className="page-container">
         {courses.map((course, index) => (
           <div key={index} className="course-container">
+            <div className="course-link">
             <div key={index} className={`${course.title}`}>
               <ModeEditOutlineOutlinedIcon
                 onClick={handleEditCourseOpen}
@@ -188,7 +196,6 @@ function AdminHome() {
                 className="edit-button"
               />
             </div>
-            <div className="course-link">
               <Link
                 className="course-link"
                 key={course.title + index}

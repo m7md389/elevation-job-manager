@@ -2,16 +2,25 @@
   color: #0b3a7c !important;
   transition: transform 0.3s;
   text-decoration: none;
+  position: relative;
 }
 
 .edit-button {
-  position: relative;
-  margin-left: 300px;
+  position: absolute;
+  right: 34px;
+  z-index: 5;
+  top: 20px;
+  color: rgb(15 33 58 / 35%);
+}
+
+.edit-button:hover {
+  color: rgb(15 33 58 / 100%);
 }
 
 .course-link:hover {
   transform: translateY(-10px);
   text-decoration: underline;
+  width: 100%;
 }
 
 .Dropdown-control {
@@ -29,21 +38,30 @@
   grid-template-columns: repeat(3, 1fr);
   justify-items: center;
   margin: 20px auto;
+  position: relative;
 }
 
-.add-course-container .add-icon {
-  border: 1px solid #ff96aa;
-  border-radius: 50%;
-  color: #ff96aa;
-  font-size: 2rem;
+/* add-course-icon */
+
+.add-course-container button {
+  margin: 20px 0;
+  color: rgb(255 152 171);
+  border: 1px solid rgb(255 152 171);
 }
 
-.add-course-container .add-icon:hover {
-  border: 1px solid #2196f3;
-  border-radius: 50%;
-  color: #2196f3;
-  transition: 0.9s;
-  transform: rotateY(180deg);
+.add-course-container button:hover {
+  background-color: rgb(255 152 171);
+  color: #0f213a;
+  border: 1px solid rgb(255 152 171);
+}
+
+.course-container {
+  /* width: 100%; */
+  position: relative;
+}
+
+.page-container {
+  background-color: #fafcff;
 }
 
 @media only screen and (max-width: 1180px) {
@@ -59,6 +77,19 @@
   }
 
   .course-link {
+    width: 90%;
+    margin: 0 auto;
+  }
+
+  .course-container {
+    width: 100%;
+    position: relative;
+    margin: 0 auto;
+  }
+
+  .course-link:hover {
+    transform: translateY(0px);
+    text-decoration: underline;
     width: 90%;
   }
 }

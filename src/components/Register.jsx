@@ -21,7 +21,7 @@ const Register = () => {
   };
   let [inputs, setInputs] = useState(INITIAL_INPUTS);
   let [courses, setCourses] = useState([]);
-  const statusOptions = ["Studying", "Searching", "Working"];
+  const statusOptions = ["Studying", "Searching", "Working","no-info"];
   const navigate = useNavigate();
 
   useEffect(async () => {

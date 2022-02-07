@@ -37,10 +37,16 @@ const AccountSettings = () => {
     linkedin: "",
     status: ""
   });
+
   const [passwordChangeInput, setPasswordChangeInput] = useState({
     currentPassword: "",
     newPassword: ""
   });
+
+  const statusOptions = ["Studying", "Searching", "Working","no-info"];
+
+  const [selectedStatus, setSelectedStatus] = useState("")
+
   useEffect(() => {
     http.get(`${URL}${userId}`).then((res) => {
       let user = res.data;
@@ -50,8 +56,8 @@ const AccountSettings = () => {
         phone: user.phone,
         city: user.city,
         linkedin: user.linkedin,
-        status: user.status
       });
+      setSelectedStatus(user.status)
     });
   }, []);
   const handleInputChange = (e, key) => {
@@ -85,6 +91,10 @@ const AccountSettings = () => {
       else{toast.success("Password changed successfully")}
     });
   };
+
+  const handleChange = (e) =>{
+
+  }
 
   return (
     <div className="inputs-container">
@@ -130,6 +140,7 @@ const AccountSettings = () => {
             <span>phone:</span>
           </div>
           <Input
+            type="number"
             inputProps={{ className: classes.input }}
             style={{
               width: "100%",
@@ -180,7 +191,7 @@ const AccountSettings = () => {
           <div className="input-label">
             <span>status: </span>
           </div>
-          <Input
+          {/* <Input
             inputProps={{ className: classes.input }}
             style={{
               width: "100%",
@@ -191,7 +202,29 @@ const AccountSettings = () => {
             id="statusInputs"
             onChange={(event) => handleInputChange(event, "status")}
             value={updatedDataInputs.status}
-          />
+          /> */}
+           <select
+            style={{
+              width: "100%",
+              backgroundColor: "white",
+              padding: "10px",
+              borderRadius: "7px"
+            }}
+              className="input"
+              name="status"
+              onChange={handleChange}
+              id="status"
+              value={selectedStatus}
+            >
+              <option className="default-value" value="default" disabled>
+                Status
+              </option>
+              {statusOptions.map((status) => (
+                <option key={status} value={status}>
+                  {status}
+                </option>
+              ))}
+            </select>
 
           <div
             style={{ width: "100%", display: "grid", justifyContent: "center" }}

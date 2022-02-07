@@ -45,7 +45,7 @@ const Register = () => {
               className="input fadeIn second"
             />
             <input
-              type="text"
+              type="email"
               placeholder="Email"
               value={inputs.email}
               onChange={handleChange}

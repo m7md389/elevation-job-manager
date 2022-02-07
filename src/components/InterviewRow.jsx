@@ -1,22 +1,22 @@
-import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
 import React, { useEffect, useState } from "react";
-import "../styles/interview-row.css";
+import Dropdown from "react-dropdown";
+
+import http from "../services/httpService";
 
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
+import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
 import DialogTitle from "@mui/material/DialogTitle";
 import DateAdapter from "@mui/lab/AdapterMoment";
 import MobileDatePicker from "@mui/lab/MobileDatePicker";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
-import http from "../services/httpService";
-
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 
-import Dropdown from "react-dropdown";
 import "react-dropdown/style.css";
+import "../styles/interview-row.css";
 
 function ProcessRow(props) {
   let URL = "/jobs/Interviews";
@@ -30,7 +30,7 @@ function ProcessRow(props) {
     "Phone Interview",
     "Technical",
     "HomeWork",
-    "Contract",
+    "Contract"
   ];
   const [typeOption, setTypeOption] = useState(typeOptions[0]);
   const [statusOption, setStatusOption] = useState(statusOptions[0]);
@@ -38,7 +38,7 @@ function ProcessRow(props) {
   const [interviewInputs, setInterviewInputs] = useState({
     description: props.inter.description || "",
     date: props.inter.date,
-    link: props.inter.link || "",
+    link: props.inter.link || ""
   });
 
   const handleDateChange = (newValue) => {
@@ -77,7 +77,7 @@ function ProcessRow(props) {
       link: interviewInputs.link,
       status: statusOption,
       type: typeOption,
-      interviewId: interviewId,
+      interviewId: interviewId
     };
     http.put(`${URL}`, editedInterview).then(() => {
       setOpenAddInterview(false);
@@ -111,7 +111,8 @@ function ProcessRow(props) {
           <div>
             {/* handleAddInterviewClickOpen */}
             <Stack direction="row" spacing={2}>
-              <ModeEditOutlineOutlinedIcon className="edit-inter-hover"
+              <ModeEditOutlineOutlinedIcon
+                className="edit-inter-hover"
                 onClick={handleEditInterviewOpen}
                 variant="outlined"
               />

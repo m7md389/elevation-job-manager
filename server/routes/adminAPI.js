@@ -19,8 +19,7 @@ router.post("/temp-users", async function (req, res) {
 
   let user = await Users.findOne({ email });
   if (user) {
-    res.status(400).send({ error: "User already registered." });
-    return null;
+    return res.status(400).send({ error: "User already registered." });
   }
 
   const emailToken = crypto.randomUUID();
@@ -52,11 +51,12 @@ router.post("/temp-users", async function (req, res) {
     }
   });
 
-  const token = user.generateAuthToken();
-  res
-    .header("x-auth-token", token)
-    .header("access-control-expose-headers", "x-auth-token")
-    .send(_.pick(user, ["_id", "name"]));
+  res.send({ msg: "Registered Successfully." });
+
+  // const token = user.generateAuthToken();
+  // .header("x-auth-token", token)
+  // .header("access-control-expose-headers", "x-auth-token")
+  // .send(_.pick(user, ["_id", "name"]));
 });
 
 router.get("/courses", async (req, res) => {

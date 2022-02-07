@@ -1,14 +1,17 @@
 import React, { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
+
 import auth from "../services/authService";
+
 import "../styles/navbar.css";
 
 const NavBar = () => {
   const [isOpenedDropdown, setIsOpenedDropdown] = useState(false);
   const [isOpenedNavbar, setIsOpenedNavbar] = useState(false);
   const menuClass = `dropdown-menu${isOpenedDropdown ? " show" : ""}`;
-  const navbarClass = `collapse navbar-collapse${isOpenedNavbar ? " show" : ""
-    }`;
+  const navbarClass = `collapse navbar-collapse${
+    isOpenedNavbar ? " show" : ""
+  }`;
 
   const currentUser = auth.getCurrentUser();
 
@@ -44,7 +47,10 @@ const NavBar = () => {
         <div className="navbar-nav">
           <div className="navbar-links-content-container">
             {currentUser.role === "admin" && (
-              <NavLink className="nav-item nav-link nav-link-tabs" to="/courses">
+              <NavLink
+                className="nav-item nav-link nav-link-tabs"
+                to="/courses"
+              >
                 Courses
               </NavLink>
             )}

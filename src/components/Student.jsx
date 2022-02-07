@@ -24,8 +24,11 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DateAdapter from "@mui/lab/AdapterMoment";
 import MobileDatePicker from "@mui/lab/MobileDatePicker";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
+
 import Dropdown from "react-dropdown";
 import "react-dropdown/style.css";
+
+import "../styles/Student.css";
 
 export default function Student() {
   let URL = "/jobs";
@@ -192,7 +195,6 @@ export default function Student() {
       <Title text="Home" />
 
       <div className="student-page-container">
-
         <div className="student-details">
           <p>
             Name: <span>{userInfo.name}</span>
@@ -368,8 +370,6 @@ export default function Student() {
           </div>
         </div>
       </div>
-
-
     </div>
   );
 }

@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { toast } from "react-toastify";
+
 import auth from "../services/authService";
+
 import "../styles/login.css";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -14,11 +16,11 @@ const Login = () => {
 
   const doSubmit = async () => {
     try {
-      await auth.login(inputs.email, inputs.password);
+      const response = await auth.login(inputs.email, inputs.password);
       window.location = "/";
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
-        toast.error(ex.response.data);
+        toast.error(ex.response.data.error);
       }
     }
   };

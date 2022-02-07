@@ -325,7 +325,7 @@ export default function Student() {
                   value={statusOption}
                   placeholder="Status"
                   required
-                  // className="spacer"
+                  className="spacer"
                 />
                 <TextField
                   autoFocus

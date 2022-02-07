@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
+
 import user from "../services/userService";
 
 const VerifyUser = () => {

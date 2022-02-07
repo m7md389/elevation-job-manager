@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { Link, Navigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+
 import auth from "../services/authService";
 import user from "../services/userService";
 import cohort from "../services/cohortService";
+
 import "../styles/login.css";
 
 const Register = () => {
-  let [inputs, setInput] = useState({
+  const INITIAL_INPUTS = {
     name: "",
     email: "",
     password: "",
@@ -16,9 +18,11 @@ const Register = () => {
     linkedin: "",
     cohortId: "default",
     status: "default"
-  });
+  };
+  let [inputs, setInputs] = useState(INITIAL_INPUTS);
   let [courses, setCourses] = useState([]);
   const statusOptions = ["Studying", "Searching", "Working"];
+  const navigate = useNavigate();
 
   useEffect(async () => {
     const c = await cohort.getCohorts();
@@ -26,23 +30,28 @@ const Register = () => {
   }, []);
 
   const handleChange = (event) => {
-    setInput({ ...inputs, [event.target.id]: event.target.value });
+    setInputs({ ...inputs, [event.target.id]: event.target.value });
   };
 
   const doSubmit = async () => {
     try {
       const response = await user.register({ ...inputs });
-      const token = response.headers["x-auth-token"];
-      auth.loginWithToken(token);
-      window.location = "/";
+      toast.success(response.data.msg);
+      setTimeout(() => {
+        toast.info("Check your email to verify your account.");
+      }, 500);
+      navigate("/login");
+      // const token = response.headers["x-auth-token"];
+      // auth.loginWithToken(token);
+      // window.location = "/";
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
-        toast.error(ex.response.data);
+        toast.error(ex.response.data.error);
       }
     }
   };
 
-  if (auth.getCurrentUser()) return <Navigate to="/" />;
+  if (auth.getCurrentUser()) return navigate("/");
 
   return (
     <div className="wrapper fadeInDown">
@@ -109,7 +118,7 @@ const Register = () => {
               className="input fadeIn ninth"
               name="cohort"
               onChange={handleChange}
-              id="cohort"
+              id="cohortId"
               value={inputs.cohortId}
             >
               <option className="default-value" value="default" disabled>

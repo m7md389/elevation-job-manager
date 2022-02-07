@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { observer, inject } from "mobx-react";
+import { toast } from "react-toastify";
+import { toArray } from "lodash";
+
 import courseService from "../services/courseService";
+import http from "../services/httpService";
 import PageNotFound from "./PageNotFound";
 import Title from "./common/Title";
+
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -16,7 +21,6 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import "../styles/detailed-course.css";
 import AddIcon from "@mui/icons-material/Add";
 import Stack from "@mui/material/Stack";
 import Dialog from "@mui/material/Dialog";
@@ -28,11 +32,9 @@ import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import MobileDatePicker from "@mui/lab/MobileDatePicker";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
-import http from "../services/httpService";
-
 import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
-import { toast } from "react-toastify";
-import { toArray } from "lodash";
+
+import "../styles/detailed-course.css";
 
 const Course = () => {
   const params = useParams();
@@ -126,10 +128,13 @@ const Course = () => {
       return null;
     }
 
-    http.post("/notifications", { sendJobEmails, jobsInputs }).then(res => {
-      if (res.error) { toast.error("Error sending job.") }
-      else { toast.success("Successfully sended job.") }
-    })
+    http.post("/notifications", { sendJobEmails, jobsInputs }).then((res) => {
+      if (res.error) {
+        toast.error("Error sending job.");
+      } else {
+        toast.success("Successfully sended job.");
+      }
+    });
     setSendJob(false);
   };
 
@@ -306,7 +311,6 @@ const Course = () => {
       <Title text={course.title} />
 
       <div className="filters-detail box">
-
         <div className="cohort-div">
           <Box className="cohort-div-filter" id="box" sx={{ minWidth: 120 }}>
             <FormControl fullWidth>
@@ -438,7 +442,6 @@ const Course = () => {
                     </DialogActions>
                   </Dialog>
                 </div>
-
               </div>
             </div>
           </div>
@@ -542,9 +545,6 @@ const Course = () => {
         </Dialog>
       </div>
 
-
-
-
       <TableContainer
         component={Paper}
         sx={{
@@ -560,6 +560,7 @@ const Course = () => {
               <TableCell align="center">
                 <input
                   type="checkbox"
+                  className="checkbox"
                   id="selectAll"
                   defaultChecked={selectAllCheckBox}
                   onClick={handleSelectAllCheckbox}
@@ -590,6 +591,7 @@ const Course = () => {
                 <TableCell align="center">
                   <input
                     type="checkbox"
+                    className="checkbox"
                     id={index}
                     defaultChecked={false}
                     value={row.email}

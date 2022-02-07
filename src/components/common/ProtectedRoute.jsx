@@ -1,5 +1,6 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
+
 import auth from "../../services/authService";
 import ForbiddenPage from "./../ForbiddenPage";
 import VerifyAccount from "./../VerifyAccount";

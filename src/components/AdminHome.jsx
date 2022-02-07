@@ -1,22 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { observer, inject } from "mobx-react";
-import AddIcon from "@mui/icons-material/Add";
 import { Link } from "react-router-dom";
-import Course from "./Course";
-import "../styles/admin-home.css";
+import { toast } from "react-toastify";
+
 import http from "../services/httpService";
 import Title from "./common/Title";
-import "reactjs-popup/dist/index.css";
+import Course from "./Course";
+
+import AddIcon from "@mui/icons-material/Add";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogTitle from "@mui/material/DialogTitle";
-import ElevationButton from "./common/ElevationButton";
-import { toast } from "react-toastify";
-
 import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
+import DialogTitle from "@mui/material/DialogTitle";
+
+import "../styles/admin-home.css";
+import "reactjs-popup/dist/index.css";
 
 function AdminHome() {
   const [courses, setCourses] = useState([]);
@@ -50,9 +51,10 @@ function AdminHome() {
 
     let updatedCourses = await http.post(`/courses`, { title: courseTitle });
     if (updatedCourses.data.error) {
-      toast.error("Error adding course.")
+      toast.error("Error adding course.");
+    } else {
+      toast.success("Course added successfully.");
     }
-    else { toast.success("Course added successfully.") }
     setRefresh(refresh + 1);
     setOpen(false);
   };
@@ -60,7 +62,7 @@ function AdminHome() {
   const [openEditCourse, setOpenEditCourse] = useState(false);
 
   const handleEditCourseOpen = (e) => {
-    setSelectedCourseToEdit(e.target.closest("div").className)
+    setSelectedCourseToEdit(e.target.closest("div").className);
     setOpenEditCourse(true);
   };
 
@@ -90,13 +92,15 @@ function AdminHome() {
     if (!selectedCourseToEdit) {
       return;
     }
-    http.delete(`/courses`, { data: { title: selectedCourseToEdit } }).then((res) => {
-      if (res.data.error) {
-        toast.error("Can't delete course.");
-      }
-      setRefresh(refresh + 1);
-      setOpenEditCourse(false);
-    });
+    http
+      .delete(`/courses`, { data: { title: selectedCourseToEdit } })
+      .then((res) => {
+        if (res.data.error) {
+          toast.error("Can't delete course.");
+        }
+        setRefresh(refresh + 1);
+        setOpenEditCourse(false);
+      });
   };
 
   return (
@@ -180,7 +184,7 @@ function AdminHome() {
                 variant="outlined"
                 className="edit-button"
               />
-            </div >
+            </div>
             <div className="course-link">
               <Link
                 className="course-link"

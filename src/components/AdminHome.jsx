@@ -108,7 +108,7 @@ function AdminHome() {
       <Title text="Home Page" />
 
       <div className="add-course-container">
-        <AddIcon onClick={handleOpen} className="add-icon" />
+        <AddIcon onClick={handleOpen} className="add-icon spacer" />
       </div>
 
       <Dialog open={open} onClose={handleClose}>
@@ -127,6 +127,7 @@ function AdminHome() {
             fullWidth
             variant="standard"
             required
+            className="spacer"
           />
         </DialogContent>
         <DialogActions>
@@ -135,7 +136,7 @@ function AdminHome() {
         </DialogActions>
       </Dialog>
       <Dialog
-        className="editCourse"
+        className="editCourse spacer"
         open={openEditCourse}
         onClose={handleEditCourseClose}
       >
@@ -151,6 +152,7 @@ function AdminHome() {
             fullWidth
             variant="standard"
             disabled={true}
+            className="spacer"
           />
           <TextField
             autoFocus
@@ -165,6 +167,7 @@ function AdminHome() {
             fullWidth
             variant="standard"
             required
+            className="spacer"
           />
           <br />
         </DialogContent>

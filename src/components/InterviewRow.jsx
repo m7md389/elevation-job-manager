@@ -133,8 +133,8 @@ function ProcessRow(props) {
                   fullWidth
                   variant="standard"
                   required
+                  className="spacer"
                 />
-                <br />
                 <Dropdown
                   options={typeOptions}
                   onChange={(e) => {
@@ -143,8 +143,8 @@ function ProcessRow(props) {
                   value={typeOption}
                   placeholder="Type"
                   required
+                  className="spacer"
                 />{" "}
-                <br />
                 <Dropdown
                   options={statusOptions}
                   onChange={(e) => {
@@ -153,9 +153,9 @@ function ProcessRow(props) {
                   value={statusOption}
                   placeholder="Status"
                   required
+                  className="spacer"
                 />
-                <br />
-                <div className="datePicker">
+                <div className="datePicker spacer">
                   <LocalizationProvider dateAdapter={DateAdapter}>
                     <MobileDatePicker
                       label="Date mobile"
@@ -166,7 +166,6 @@ function ProcessRow(props) {
                     />
                   </LocalizationProvider>
                 </div>
-                <br />
                 <TextField
                   autoFocus
                   margin="dense"
@@ -179,6 +178,7 @@ function ProcessRow(props) {
                   type="text"
                   fullWidth
                   variant="standard"
+                  className="spacer"
                 />
               </DialogContent>
               <DialogActions>

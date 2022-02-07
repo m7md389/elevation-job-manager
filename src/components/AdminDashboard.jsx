@@ -91,8 +91,8 @@ function AdminDashboard() {
     <div>
       <Title text="Interviews" />
 
-      <div className="admin-dashboard-container">
-        <div className="range-picker">
+      <div className="admin-dashboard-container spacer">
+        <div className="range-picker spacer">
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DateRangePicker
               startText="From"
@@ -112,7 +112,7 @@ function AdminDashboard() {
           </LocalizationProvider>
         </div>
 
-        <div className="range-by-week">
+        <div className="range-by-week spacer">
           <Box sx={{ minWidth: 120 }}>
             <FormControl fullWidth>
               <InputLabel id="statuses">Select range :</InputLabel>
@@ -136,7 +136,7 @@ function AdminDashboard() {
           </Box>
         </div>
 
-        <div style={{ height: 400, width: "100%" }}>
+        <div style={{ height: 400, width: "100%" }} className="spacer">
           <DataGrid
             className="grid"
             rows={rows}

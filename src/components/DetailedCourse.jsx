@@ -344,7 +344,7 @@ const Course = () => {
                     <AddIcon
                       onClick={handleClickOpen}
                       variant="outlined"
-                      className="add-icon"
+                      className="add-icon spacer"
                     />
                   </Stack>
                   <Dialog open={open} onClose={handleClose}>
@@ -363,8 +363,9 @@ const Course = () => {
                         fullWidth
                         variant="standard"
                         required
+                        className="spacer"
                       />
-                      <div className="datePicker">
+                      <div className="datePicker spacer">
                         <LocalizationProvider dateAdapter={DateAdapter}>
                           <MobileDatePicker
                             label="Date"
@@ -399,6 +400,7 @@ const Course = () => {
                         id="select-cohort"
                         value={editCohort}
                         label="cohorts"
+                        className="spacer"
                         onChange={handleEditCohortChange}
                       >
                         {cohorts.map((cohort, idx) => {
@@ -422,8 +424,9 @@ const Course = () => {
                         fullWidth
                         variant="standard"
                         required
+                        className="spacer"
                       />
-                      <div className="editDatePicker">
+                      <div className="editDatePicker spacer">
                         <LocalizationProvider dateAdapter={DateAdapter}>
                           <MobileDatePicker
                             label="edit Date"

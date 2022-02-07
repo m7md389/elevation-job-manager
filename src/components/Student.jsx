@@ -267,9 +267,9 @@ export default function Student() {
         <div>
           {" "}
           <hr />
-          <div>
-            <Stack direction="row" spacer={2}>
-              <Button onClick={handleClickOpen} variant="outlined">
+          <div className="student-page-container">
+            <Stack direction="row" spacing={2}>
+              <Button className="add-job-btn" onClick={handleClickOpen} variant="outlined">
                 Add Job
               </Button>
             </Stack>

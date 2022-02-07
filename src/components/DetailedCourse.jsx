@@ -310,12 +310,12 @@ const Course = () => {
     <div className="course-container">
       <Title text={course.title} />
 
-      <div className="filters-detail box">
+      <div className="filters-detail">
         <div className="cohort-div">
           <Box className="cohort-div-filter" id="box" sx={{ minWidth: 120 }}>
             <FormControl fullWidth>
               <InputLabel id="cohorts">Cohorts</InputLabel>
-              <Select
+              <Select 
                 labelId="select-cohort"
                 id="select-cohort"
                 value={cohort}

@@ -52,7 +52,7 @@ function AdminHome() {
     if (updatedCourses.data.error) {
       toast.error("Error adding course.")
     }
-    else{toast.success("Course added successfully.")}
+    else { toast.success("Course added successfully.") }
     setRefresh(refresh + 1);
     setOpen(false);
   };
@@ -101,7 +101,6 @@ function AdminHome() {
 
   return (
     <div>
-      <ElevationButton />
       <Title text="Home Page" />
 
       <div className="add-course-container">
@@ -147,7 +146,7 @@ function AdminHome() {
             type="text"
             fullWidth
             variant="standard"
-            disabled= {true}
+            disabled={true}
           />
           <TextField
             autoFocus
@@ -177,9 +176,9 @@ function AdminHome() {
           <div key={index} className="course-container">
             <div key={index} className={`${course.title}`}>
               <ModeEditOutlineOutlinedIcon
-               onClick={handleEditCourseOpen}
-               variant="outlined"
-               className="edit-button"
+                onClick={handleEditCourseOpen}
+                variant="outlined"
+                className="edit-button"
               />
             </div >
             <div className="course-link">
@@ -190,7 +189,7 @@ function AdminHome() {
               >
                 <Course course={course} />
               </Link>
-              </div>
+            </div>
           </div>
         ))}
       </div>

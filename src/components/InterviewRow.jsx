@@ -24,9 +24,8 @@ function ProcessRow(props) {
 
   const [openAddInterview, setOpenAddInterview] = useState(false);
   const [interviewDate, setInterviewDate] = useState(new Date(Date.now()));
-  const statusOptions = ["", "Waiting", "Rejected", "Passed"];
+  const statusOptions = ["Waiting", "Rejected", "Passed"];
   const typeOptions = [
-    "",
     "HR",
     "Phone Interview",
     "Technical",

@@ -27,6 +27,7 @@ import { toast } from "react-toastify";
 function Job(props) {
   let URL = "/jobs";
   const jobId = props.job._id;
+  const userId = props.userId
   const [isActive, setActive] = useState(false);
   const [openAddInterview, setOpenAddInterview] = useState(false);
   const [openEditJob, setOpenEditJob] = useState(false);
@@ -112,6 +113,13 @@ function Job(props) {
 
     if(updateInterviewStatus || !flag){
       http.post(`${URL}/Interviews`, newInterview).then(() => {
+        if(!job || !userId || !newInterview){toast.error("Item didn't sent to admin please update the admin that you added job")}
+        else{
+          http.post("/notifications/admin", {userId, newInterview, job}).then(res => {
+            if(res.error){toast.error("Error sending job.")}
+            else{toast.success("Successfully sended job.")}
+          })
+        }
         props.setRefresh(props.refresh + 1);
         setOpenAddInterview(false);
       });
@@ -198,6 +206,13 @@ function Job(props) {
       jobId: jobId,
     };
     http.post(`${URL}/Interviews`, newInterview).then(() => {
+      if(!job || !userId || !newInterview){toast.error("Item didn't sent to admin please update the admin that you added job")}
+      else{
+        http.post("/notifications/admin", {userId, newInterview, job}).then(res => {
+          if(res.error){toast.error("Error sending job.")}
+          else{toast.success("Successfully sended job.")}
+        })
+      }
       props.setRefresh(props.refresh + 1);
     })
     setOpenAddInterview(false);

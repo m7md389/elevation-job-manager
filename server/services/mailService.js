@@ -70,4 +70,53 @@ const sendJobNotification = async (studentMail, job) => {
   return { result };
 };
 
-module.exports = { sendMail, sendVerificationEmail, sendJobNotification };
+const sendJobNotificationForAdmin = async (
+  admin,
+  userInfo,
+  newInterview,
+  job
+) => {
+  const mailSubject = `${userInfo.name} added interview`;
+  const mailText = `
+  Type: ${newInterview.type || " "}.
+
+  date: ${newInterview.date || " "}.
+  
+  status: ${newInterview.status || " "}.
+
+  Description: ${newInterview.description || " "}
+
+  Job title: ${job.title || " "}.
+
+  Job company: ${job.company || " "}.
+  
+  Job Link: ${job.link}.
+  `;
+  const mailHTML = `
+  <h1 style={text-align:center}>* Elevation *</h1>
+  <h4>Type: ${newInterview.type || " "}</h4>
+
+  <h5>Date: ${newInterview.date || " "} </h5>
+
+  <h5>Status: ${newInterview.status || " "} </h5>
+
+  <h5>Description: </h5> <p>${newInterview.description || " "}</p>
+
+  <h5>Job title: ${job.title || " "}</h5>
+
+  <h5>Job company: ${job.company || " "}.</h5>
+    
+  <h5>Link: <a href="${job.link || " "}"> Job Link </a></h5>
+  `;
+
+  const result = await sendMail(admin.email, mailSubject, mailText, mailHTML);
+
+  return { result };
+};
+
+module.exports = {
+  sendMail,
+  sendVerificationEmail,
+  sendJobNotification,
+  sendJobNotificationForAdmin
+};

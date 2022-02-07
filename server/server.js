@@ -14,7 +14,7 @@ require("dotenv").config();
 const app = express();
 const path = require("path");
 app.use(cookieParser());
-mongoose.connect(process.env.MONGODB_URI);
+mongoose.connect(process.env.MONGODB_URL||'mongodb://localhost/elevationJobManager');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -39,6 +39,6 @@ app.use("/api/users", users);
 // app.use('/api/interviews', interviews);
 app.use("/api", api);
 
-app.listen(process.env.PORT, function () {
+app.listen(process.env.PORT || '3001', function () {
   console.log("server is listening");
 });

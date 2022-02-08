@@ -1,6 +1,7 @@
 import http from "./httpService";
 
 export const register = async (user) => {
+  console.log(user);
   const apiEndpoint = "/temp-users";
   return http.post(apiEndpoint, {
     name: user.name,
@@ -10,7 +11,7 @@ export const register = async (user) => {
     city: user.city,
     linkedin: user.linkedin,
     status: user.status,
-    cohortId: user.cohort
+    cohortId: user.cohortId
   });
 };
 
@@ -25,6 +26,7 @@ export const addAdmin = async (admin) => {
 
 export const verifyUser = async (emailToken) => {
   const apiEndpoint = "/users/verify";
+  console.log(emailToken);  
   return http.put(apiEndpoint + `/${emailToken}`);
 };
 

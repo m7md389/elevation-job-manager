@@ -200,10 +200,10 @@ export default function Student() {
             Name: <span>{userInfo.name}</span>
           </p>
           <p>
-            Course: <span>{userCohort.Course}</span>
+            Course: <span>{userCohort.course}</span>
           </p>
           <p>
-            Cohort:<span>{userCohort.cohort}</span>{" "}
+            Cohort: <span>{userCohort.cohort}</span>{" "}
           </p>
           <p>
             Email: <span>{userInfo.email}</span>

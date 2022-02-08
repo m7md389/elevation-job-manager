@@ -3,15 +3,16 @@
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 0.5fr;
   margin: 10px 0;
   align-items: center;
-  background-color: #ffcbd5;
+  background-color: #ff5777;
   padding: 10px;
-  color: #0f213a;
+  color: white;
+  font-weight: bold;
   border-radius: 7px;
   border-bottom: 1px solid #ccc;
 }
 
 .job:hover {
-  background-color: #ffe2e7;
+  background-color: #ff7992;
 }
 
 .job-edit-btns {
@@ -33,7 +34,6 @@
   /* background-color: #fee3ec; */
   font-weight: bold;
   border-bottom: 1px solid black;
-  border-radius: 7px;
   padding: 5px;
 }
 

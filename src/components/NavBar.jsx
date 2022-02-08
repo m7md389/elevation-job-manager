@@ -73,42 +73,6 @@ const NavBar = () => {
             <NavLink className="nav-item nav-link nav-link-tabs" to="logout">
               Logout
             </NavLink>
-            {/*           
-          <span
-            id="user-settings-icon"
-            className="nav-item dropdown"
-            onClick={() => setIsOpenedDropdown(!isOpenedDropdown)}
-          >
-            <Link
-              className="nav-link dropdown-toggle"
-              to="#"
-              id="navbarDropdown"
-              role="button"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              <img
-                src="https://www.pngfind.com/pngs/m/34-349693_circled-user-icon-transparent-background-username-icon-hd.png"
-                width="30"
-                height="30"
-                alt=""
-              />
-            </Link>
-
-            <div
-              id="user-settings-dropdown"
-              className={menuClass}
-              aria-labelledby="navbarDropdown"
-            >
-              <NavLink className="dropdown-item" to="settings">
-                Settings
-              </NavLink>
-              <NavLink className="dropdown-item" to="logout">
-                Logout
-              </NavLink>
-            </div>
-          </span> */}
           </div>
         </div>
       </div>

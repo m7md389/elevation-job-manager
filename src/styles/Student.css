@@ -26,8 +26,10 @@
   justify-content: end;
   border-radius: 8px;
   grid-template-columns: repeat(2, 1fr);
-  box-shadow: 0 2px 5px #ff96aa;
-  transition: box-shadow 0.3s ease-in-out;
+  /* box-shadow: 0 2px 5px black; */
+  -webkit-box-shadow: 5px 5px 15px -1px rgba(0, 0, 0, 0.16);
+  box-shadow: 5px 5px 15px -1px rgba(0, 0, 0, 0.16);
+  /* transition: box-shadow 0.3s ease-in-out; */
 }
 
 .student-details p {
@@ -41,30 +43,28 @@
   font-weight: 200;
 }
 
-.student-details:hover {
-  box-shadow: 0 10px 20px #ff96aa;
-}
-
 .jobs-title {
   width: 80%;
-  margin: 0 auto;
+  margin: 23px auto;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 0.5fr;
-
-  /* border: 1px solid black; */
   text-align: center;
   padding: 10px;
   font-weight: bold;
   font-size: 17px;
-
   -webkit-box-shadow: 16px 12px 6px -2px rgba(0, 0, 0, 0.05);
   box-shadow: 16px 12px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
 .rows {
   width: 80%;
-  margin: 0 auto;
+  margin: 25px auto;
   text-align: center;
+}
+
+.job-container {
+  -webkit-box-shadow: 5px 5px 15px 5px rgba(0, 0, 0, 0.16);
+  box-shadow: 5px 5px 15px 5px rgba(0, 0, 0, 0.16);
 }
 
 .vLine {

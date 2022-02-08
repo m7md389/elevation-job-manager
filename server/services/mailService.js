@@ -24,7 +24,8 @@ const sendMail = async (to, subject, text, html) => {
 
 const sendVerificationEmail = async (req, user, emailToken) => {
   const mailSubject = "Confirm Your Account";
-  const verificationLink = `http://${CLIENT_URI}/verify-user?emailToken=${emailToken}`;
+  // const verificationLink = `http://${CLIENT_URI}/verify-user?emailToken=${emailToken}`;
+  const verificationLink = `https://elevationjobmanager.herokuapp.com/api/verify-user?emailToken=${emailToken}`;
   const mailText = `
     Hello ${user.name},
 

@@ -1,5 +1,6 @@
 const express = require("express");
-// const api = require("./routes/adminAPI");
+const api = require("./server/routes/adminAPI");
+// const api = require("./server/routes/adminAPI");
 // const auth = require("./routes/auth");
 // const courses = require("./routes/courses");
 // const cohorts = require("./routes/cohorts");
@@ -39,7 +40,7 @@ app.use(cors());
 // app.use("/api/users", users);
 // app.use("/api/jobs", jobs);
 // app.use('/api/interviews', interviews);
-// app.use("/api", api);
+app.use("/api", api);
 
 
 app.get('*', function (req, res) {

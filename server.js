@@ -1,11 +1,10 @@
 const express = require("express");
 const api = require("./server/routes/adminAPI");
-const api = require("./server/routes/adminAPI");
 const auth = require("./server/routes/auth");
 const courses = require("./server/routes/courses");
 const cohorts = require("./server/routes/cohorts");
 const users = require("./server/routes/users");
-const mail = require("./server/routes/mail");
+// const mail = require("./server/routes/mail");
 const interviews = require("./server/routes/interviews");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
@@ -35,11 +34,8 @@ app.use(express.static(path.join(__dirname, 'build')));
 
 app.use(cors());
 app.use("/api/auth", auth);
-// app.use('/api/courses', courses);
-// app.use("/api/cohorts", cohorts);
+app.use("/api/cohorts", cohorts);
 app.use("/api/users", users);
-app.use("/api/jobs", jobs);
-// app.use('/api/interviews', interviews);
 app.use("/api", api);
 
 
@@ -47,6 +43,6 @@ app.get('*', function (req, res) {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
-app.listen(process.env.PORT || process.env.LOCAL_PORT , function () {
+app.listen(process.env.PORT || '3001' , function () {
   console.log("server is listening");
 });

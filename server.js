@@ -1,12 +1,12 @@
 const express = require("express");
 const api = require("./server/routes/adminAPI");
-// const api = require("./server/routes/adminAPI");
-// const auth = require("./routes/auth");
-// const courses = require("./routes/courses");
-// const cohorts = require("./routes/cohorts");
-// const users = require("./routes/users");
-// const mail = require("./routes/mail");
-// const interviews = require("./routes/interviews");
+const api = require("./server/routes/adminAPI");
+const auth = require("./server/routes/auth");
+const courses = require("./server/routes/courses");
+const cohorts = require("./server/routes/cohorts");
+const users = require("./server/routes/users");
+const mail = require("./server/routes/mail");
+const interviews = require("./server/routes/interviews");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
@@ -34,11 +34,11 @@ app.use(function (req, res, next) {
 app.use(express.static(path.join(__dirname, 'build')));
 
 app.use(cors());
-// app.use("/api/auth", auth);
+app.use("/api/auth", auth);
 // app.use('/api/courses', courses);
 // app.use("/api/cohorts", cohorts);
-// app.use("/api/users", users);
-// app.use("/api/jobs", jobs);
+app.use("/api/users", users);
+app.use("/api/jobs", jobs);
 // app.use('/api/interviews', interviews);
 app.use("/api", api);
 

@@ -20,93 +20,93 @@ import ProtectedRoute from "./components/common/ProtectedRoute";
 import "./App.css";
 
 const App = () => {
-  // let [user, setUser] = useState(undefined);
+  let [user, setUser] = useState(undefined);
 
-  // useEffect(() => {
-  //   const user = auth.getCurrentUser();
-  //   setUser(user);
-  // }, []);
+  useEffect(() => {
+    const user = auth.getCurrentUser();
+    setUser(user);
+  }, []);
 
   return (
-    // <BrowserRouter>
-    //   {user && <NavBar />}
+    <BrowserRouter>
+      {user && <NavBar />}
 
-    //   <Routes>
-    //     <Route path="*" element={<PageNotFound />} />
-    //     <Route path="/login" element={<Login />} />
-    //     <Route path="/register" element={<Register />} />
-    //     <Route path="/logout" element={<Logout setUser={setUser} />} />
-    //     <Route path="/verify-user" element={<VerifyUser />} />
-    //     <Route
-    //       path="/courses/:courseName"
-    //       element={
-    //         <ProtectedRoute isAdminPage>
-    //           <DetailedCourse />
-    //         </ProtectedRoute>
-    //       }
-    //     />
-    //     <Route
-    //       path="/courses"
-    //       element={
-    //         <ProtectedRoute isAdminPage>
-    //           <AdminHome />
-    //         </ProtectedRoute>
-    //       }
-    //     />
-    //     <Route
-    //       path="/settings"
-    //       element={
-    //         <ProtectedRoute>
-    //           <AccountSettings />
-    //         </ProtectedRoute>
-    //       }
-    //     />
-    //     <Route
-    //       path="/add-admin"
-    //       element={
-    //         <ProtectedRoute isAdminPage>
-    //           <AddAdmin />
-    //         </ProtectedRoute>
-    //       }
-    //     />
-    //     <Route
-    //       path="/student/:id"
-    //       element={
-    //         <ProtectedRoute isAdminPage>
-    //           <Student />
-    //         </ProtectedRoute>
-    //       }
-    //     />
-    //     <Route
-    //       path="/student"
-    //       element={
-    //         <ProtectedRoute isStudentPage>
-    //           <Student />
-    //         </ProtectedRoute>
-    //       }
-    //     />
-    //     <Route
-    //       path="/charts"
-    //       element={
-    //         <ProtectedRoute isAdminPage>
-    //           <Charts />
-    //         </ProtectedRoute>
-    //       }
-    //     />
-    //     <Route
-    //       path="/"
-    //       element={
-    //         <ProtectedRoute>
-    //           <AdminDashboard />
-    //         </ProtectedRoute>
-    //       }
-    //     />
-    //   </Routes>
+      <Routes>
+        <Route path="*" element={<PageNotFound />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/logout" element={<Logout setUser={setUser} />} />
+        <Route path="/verify-user" element={<VerifyUser />} />
+        <Route
+          path="/courses/:courseName"
+          element={
+            <ProtectedRoute isAdminPage>
+              <DetailedCourse />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/courses"
+          element={
+            <ProtectedRoute isAdminPage>
+              <AdminHome />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/settings"
+          element={
+            <ProtectedRoute>
+              <AccountSettings />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/add-admin"
+          element={
+            <ProtectedRoute isAdminPage>
+              <AddAdmin />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/student/:id"
+          element={
+            <ProtectedRoute isAdminPage>
+              <Student />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/student"
+          element={
+            <ProtectedRoute isStudentPage>
+              <Student />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/charts"
+          element={
+            <ProtectedRoute isAdminPage>
+              <Charts />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <AdminDashboard />
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
 
-    //   <ToastContainer />
-    //   <Footer />
-    // </BrowserRouter>
-    <div><h1>Hello</h1></div>
+      <ToastContainer />
+      <Footer />
+    </BrowserRouter>
+    // <div><h1>Hello</h1></div>
   );
 };
 

@@ -41,7 +41,7 @@ router.post("/temp-users", async function (req, res) {
   await user.save();
 
   await mailService.sendVerificationEmail(req, user, emailToken);
-
+  console.log(req.body);
   Cohort.findByIdAndUpdate(
     { _id: cohortId },
     { $push: { users: user } },

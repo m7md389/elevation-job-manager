@@ -14,17 +14,17 @@ router.get("/me", auth, async (req, res) => {
 
 router.put("/verify/:emailToken", async (req, res) => {
   const { emailToken } = req.params;
-
-  if (!emailToken) return res.status(400).send("No email token provided.");
+console.log(req.params);  
+  if (!emailToken) return res.status(400).send({error: "No email token provided."});
 
   const user = await User.findOne({ emailToken }).exec();
-  if (!user) return res.status(400).send({ error: "Unvalid link." });
+  if (!user) return res.status(400).send({ error: "Not valid link." });
   await User.findByIdAndUpdate(
     { _id: user._id },
     { $set: { isVerified: true } }
-  ).exec((ex, result) => {
-    if (ex) {
-      return res.send({ error: ex });
+  ).exec((err, result) => {
+    if (err) {
+      return res.send({ error: err.message });
     }
     res.send({ msg: "User verified successfully." });
   });

@@ -19,7 +19,7 @@ router.post("/temp-users", async function (req, res) {
 
   let user = await Users.findOne({ email });
   if (user) {
-    return res.status(400).send({ error: "User already registered." });
+    return res.send({ error: "User already registered." });
   }
 
   const emailToken = crypto.randomUUID();
@@ -52,11 +52,6 @@ router.post("/temp-users", async function (req, res) {
   });
 
   res.send({ msg: "Registered Successfully." });
-
-  // const token = user.generateAuthToken();
-  // .header("x-auth-token", token)
-  // .header("access-control-expose-headers", "x-auth-token")
-  // .send(_.pick(user, ["_id", "name"]));
 });
 
 router.get("/courses", async (req, res) => {
@@ -75,7 +70,7 @@ router.get("/courses", async (req, res) => {
     })
     .exec(function (err, courses) {
       if (err) {
-        res.status(400).send({ error: "error getting data" });
+        res.send({ error: "error getting data" });
         return null;
       }
       res.send(courses);
@@ -140,7 +135,7 @@ router.get("/courses/:startDate/:endDate", async (req, res) => {
     .exec(async function (err, courses) {
       let data;
       if (err) {
-        res.status(400).send({ error: "error getting data" });
+        res.send({ error: "error getting data" });
         return null;
       } else {
         data = await findInterviewsInRange(startDate, endDate, courses);
@@ -165,7 +160,7 @@ router.get("/courses/names", async function (req, res) {
     c.cohorts.map((cohort) => {
       studNum += cohort.users.length;
       cohort.users.map((s) => {
-        if (s.status == "working") workingStudCount++;
+        if (s.status.toLowerCase() == "working") workingStudCount++;
       });
     });
     course["studNum"] = studNum;
@@ -178,7 +173,7 @@ router.get("/courses/names", async function (req, res) {
 router.get("/courses/:courseName", (req, res) => {
   const { courseName } = req.params;
   if (!courseName) {
-    res.status(400).send({ error: "Missing ID" });
+    res.send({ error: "Missing ID" });
     return null;
   }
   Course.findOne({ title: courseName })
@@ -222,7 +217,7 @@ router.post("/jobs", async function (req, res) {
     })
     .exec(function (err, user) {
       if (err) {
-        res.status(400).send({ error: "error adding job" });
+        res.send({ error: "error adding job" });
         return null;
       }
       res.send(user);
@@ -248,7 +243,7 @@ router.put("/jobs", async function (req, res) {
     { new: true }
   ).exec(function (err, user) {
     if (err) {
-      res.status(400).send({ error: "error updating job" });
+      res.send({ error: "error updating job" });
       return null;
     }
     res.send(user);
@@ -303,7 +298,7 @@ router.post("/jobs/Interviews", async function (req, res) {
     })
     .exec(function (err, job) {
       if (err) {
-        res.status(400).send({ error: "error adding job" });
+        res.send({ error: "error adding job" });
         return null;
       }
       res.send(job);
@@ -313,7 +308,7 @@ router.post("/jobs/Interviews", async function (req, res) {
 router.post("/courses", async (req, res) => {
   let courseName = req.body.title;
   if (!courseName) {
-    res.status(400).send({ error: "Missing Name" });
+    res.send({ error: "Missing Name" });
     return null;
   }
 
@@ -332,13 +327,13 @@ router.post("/courses", async (req, res) => {
 router.delete("/courses", (req, res) => {
   let courseName = req.body.title;
   if (!courseName) {
-    res.status(400).send({ error: "missed name" });
+    res.send({ error: "missed name" });
     return null;
   }
 
   Course.findOneAndDelete({ title: courseName }).exec((ex, result) => {
     if (ex) {
-      res.status(400).send({ error: "missed name" });
+      res.send({ error: "missed name" });
       return null;
     }
   });
@@ -363,7 +358,7 @@ router.put("/jobs/Interviews", async function (req, res) {
     { new: true }
   ).exec(function (err, interView) {
     if (err) {
-      res.status(400).send({ error: "error updating interview" });
+      res.send({ error: "error updating interview" });
       return null;
     }
     res.send(interView);
@@ -399,7 +394,7 @@ router.get("/jobs/:userId?", function (req, res) {
 router.get("/users/:userId", async function (req, res) {
   Users.findById({ _id: req.params.userId }).exec(function (err, user) {
     if (err) {
-      res.status(400).send({ error: "error getting user" });
+      res.send({ error: "error getting user" });
       return null;
     }
     res.send(user);
@@ -424,7 +419,7 @@ router.put("/users", async function (req, res) {
     { new: true }
   ).exec(function (err, newUser) {
     if (err) {
-      res.status(400).send({ error: "error updating user" });
+      res.send({ error: "error updating user" });
       return null;
     }
     res.send(newUser);
@@ -441,7 +436,7 @@ router.post("/users", async function (req, res) {
 router.post("/courses/cohort", async (req, res) => {
   let cohortToAdd = req.body;
   if (!cohortToAdd.courseId) {
-    res.status(400).send({ error: "Cant find course" });
+    res.send({ error: "Cant find course" });
     return null;
   }
 
@@ -489,7 +484,7 @@ router.put("/courses/cohorts", async function (req, res) {
     })
     .exec((err, course) => {
       if (err) {
-        res.status(400).send({ error: "Course not Exist" });
+        res.send({ error: "Course not Exist" });
         return null;
       }
     });
@@ -515,7 +510,7 @@ router.put("/courses", async function (req, res) {
   let { title, newTitle } = req.body.data;
   let checkExist = await Course.find({ title: newTitle });
   if (checkExist.length > 0) {
-    res.status(400).send({ error: "Course already Exist" });
+    res.send({ error: "Course already Exist" });
     return null;
   }
   Course.findOneAndUpdate(
@@ -528,7 +523,7 @@ router.put("/courses", async function (req, res) {
     { new: true }
   ).exec(function (err, newCourse) {
     if (err) {
-      res.status(400).send({ error: "Error updating course" });
+      res.send({ error: "Error updating course" });
     }
     res.send(newCourse);
   });
@@ -537,7 +532,7 @@ router.put("/courses", async function (req, res) {
 router.post("/notifications", async (req, res) => {
   let { sendJobEmails, jobsInputs } = req.body;
   if (!sendJobEmails.length || !jobsInputs.link) {
-    res.status(400).send({
+    res.send({
       error: "Error sending job please check link and selected users emails"
     });
   }
@@ -550,19 +545,19 @@ router.post("/notifications", async (req, res) => {
 router.post("/notifications/admin", async (req, res) => {
   let { userId, newInterview, job } = req.body;
   if (!userId || !newInterview || !job) {
-    res.status(400).send({
+    res.send({
       error: "Error sending job for admin"
     });
   }
   let admins = await Users.find({ role: "admin" });
   if (!admins.length) {
-    res.status(400).send({
+    res.send({
       error: "There is no admins"
     });
   }
   let student = await Users.findById({ _id: userId });
   if (!student) {
-    res.status(400).send({
+    res.send({
       error: "User not found"
     });
   }

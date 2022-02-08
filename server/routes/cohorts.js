@@ -5,16 +5,16 @@ const Cohort = require("../models/cohort");
 
 router.get("/courses/:id", async (req, res) => {
   let userId = req.params.id;
-  await Course.find()
+  Course.find()
     .populate({
       path: "cohorts",
       populate: {
-        path: "users",
-      },
+        path: "users"
+      }
     })
     .exec(function (err, courses) {
       if (err) {
-        console.log(err);
+        return res.send({ error: "user id not found" });
       }
 
       let userInfo;
@@ -24,7 +24,7 @@ router.get("/courses/:id", async (req, res) => {
             if (user._id == userId) {
               userInfo = {
                 course: course.title,
-                cohort: cohort.name,
+                cohort: cohort.name
               };
             }
           });
@@ -40,7 +40,7 @@ router.get("/", (req, res) => {
     .populate({ path: "cohorts" })
     .exec(function (err, courses) {
       if (err) {
-        res.send("err");
+        return res.send({ error: "user id not found" });
       }
       res.send(courses);
     });

@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Link, NavLink } from "react-router-dom";
 import { toast } from "react-toastify";
 
 import http from "../services/httpService";
 import auth from "../services/authService";
 import Title from "./common/Title";
-import { color } from "../colors";
 
 import { Input } from "@mui/material";
 import { makeStyles } from "@material-ui/core/styles";
@@ -34,8 +32,7 @@ const AccountSettings = () => {
     email: "",
     phone: "",
     city: "",
-    linkedin: "",
-    status: ""
+    linkedin: ""
   });
 
   const [passwordChangeInput, setPasswordChangeInput] = useState({
@@ -49,15 +46,18 @@ const AccountSettings = () => {
 
   useEffect(() => {
     http.get(`${URL}${userId}`).then((res) => {
-      let user = res.data;
-      setUpdatedDataInputs({
-        name: user.name,
-        email: user.email,
-        phone: user.phone,
-        city: user.city,
-        linkedin: user.linkedin,
-      });
-      setSelectedStatus(user.status)
+      if(res.data.error){toast.error("Can't find user")}
+      else{
+        let user = res.data;
+        setUpdatedDataInputs({
+          name: user.name,
+          email: user.email,
+          phone: user.phone,
+          city: user.city,
+          linkedin: user.linkedin,
+        });
+        setSelectedStatus(user.status)
+      }
     });
   }, []);
   const handleInputChange = (e, key) => {
@@ -73,27 +73,34 @@ const AccountSettings = () => {
   };
 
   const handleEditUser = () => {
-    let tempUpdatedDataInputs = { ...updatedDataInputs };
-    tempUpdatedDataInputs["userId"] = userId;
-    http.put(`${URL}`, tempUpdatedDataInputs).then(res => {
-      if(res.error){toast.error("Error updating user.")}
-      else{toast.success("User updated successfully")}
-    })
+    if(!updatedDataInputs.name || !updatedDataInputs.email || !updatedDataInputs.phone || !updatedDataInputs.linkedin || !updatedDataInputs.city || !selectedStatus){toast.error("All fields are required please fill all the data.")}
+    else{
+      let tempUpdatedDataInputs = { ...updatedDataInputs };
+      tempUpdatedDataInputs["userId"] = userId;
+      tempUpdatedDataInputs["status"] = selectedStatus;
+      http.put(`${URL}`, tempUpdatedDataInputs).then(res => {
+        if(res.error){toast.error("Error updating user.")}
+        else{toast.success("User updated successfully")}
+      })
+    }
   };
 
   const handlePasswordChange = () => {
-    let tempPasswordChangeInput = { ...passwordChangeInput };
-    tempPasswordChangeInput["userId"] = userId;
-    http.put(`${URL}password`, tempPasswordChangeInput).then((res) => {
-      if (res.data.error) {
-        toast.error("Current password not match the current password");
-      }
-      else{toast.success("Password changed successfully")}
-    });
+    if(!passwordChangeInput.currentPassword || !passwordChangeInput.newPassword){ toast.error("Please fill both fields.")}
+    else{
+      let tempPasswordChangeInput = { ...passwordChangeInput };
+      tempPasswordChangeInput["userId"] = userId;
+      http.put(`${URL}password`, tempPasswordChangeInput).then((res) => {
+        if (res.data.error) {
+          toast.error("Current password not match the current password.");
+        }
+        else{toast.success("Password changed successfully.")}
+      });
+    }
   };
 
   const handleChange = (e) =>{
-
+    setSelectedStatus(e.target.value);
   }
 
   return (
@@ -140,7 +147,7 @@ const AccountSettings = () => {
             <span>phone:</span>
           </div>
           <Input
-            type="number"
+            type="tel"
             inputProps={{ className: classes.input }}
             style={{
               width: "100%",
@@ -191,18 +198,6 @@ const AccountSettings = () => {
           <div className="input-label">
             <span>status: </span>
           </div>
-          {/* <Input
-            inputProps={{ className: classes.input }}
-            style={{
-              width: "100%",
-              backgroundColor: "white",
-              padding: "10px",
-              borderRadius: "7px"
-            }}
-            id="statusInputs"
-            onChange={(event) => handleInputChange(event, "status")}
-            value={updatedDataInputs.status}
-          /> */}
            <select
             style={{
               width: "100%",

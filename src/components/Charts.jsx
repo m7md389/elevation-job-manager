@@ -13,8 +13,6 @@ import MenuItem from "@mui/material/MenuItem";
 function Charts() {
   let URL = "/courses";
 
-  const charTitles = ["Working Students", "Courses", "Cohorts"];
-  const [chosenChart, setChosenChart] = useState("");
   const [allData, setAllData] = useState([]);
   const [workingStudentsTitle, setWorkingStudentsTitle] = useState({
     title: "Working students in all courses"
@@ -27,28 +25,21 @@ function Charts() {
   const [selectedCourse, setSelectedCourse] = useState("");
 
   const [data, setData] = useState([]);
-  // const [refresh, setRefresh] = useState(1);
-  // const [showCohorts, setShowCohorts] = useState("none");
+
   const [chosenCohort, setChosenCohort] = useState("All Cohorts");
   const [cohorts, setCohorts] = useState([]);
   const [showCohort, setShowCohort] = useState([]);
   const [courses, setCourses] = useState([]);
 
-  // ['all cohorts', 'working']
-  // ['searching', 5]
-  // ['working', 3]
-  // ['studding', 1]
-
   const getCohortByCourse = (selectedCourse) => {
     let [course] = allData.filter((c) => c.title === selectedCourse);
     let cohort = course.cohorts.map((c) => c.name);
-    setCohorts(["All Cohorts", ...cohort]); //put selected course cohort into the cohorts
+    setCohorts(["All Cohorts", ...cohort]);
   };
 
   useEffect(async () => {
     if (selectedCourse) {
       getCohortByCourse(selectedCourse);
-      // owCohort
       setShowCohort(showCohortOnChart(chosenCohort));
     }
   }, [selectedCourse]);
@@ -66,7 +57,7 @@ function Charts() {
     courses.forEach((course) => {
       course.cohorts.forEach((cohort) => {
         cohort.users.forEach((user) => {
-          if (user.role !== "admin" && user.status === "working") {
+          if (user.role !== "admin" && user.status.toLowerCase() === "working") {
             working++;
           } else if (user.role !== "admin") {
             searching++;
@@ -104,12 +95,11 @@ function Charts() {
 
     if (cohortName === "All Cohorts") {
       result.push(["All Cohorts", "status"]);
-      // search by all cohorts
       course.cohorts.map((c) => {
         c.users.map((u) => {
-          if (u.role != "admin" && u.status === "searching") searching++;
-          else if (u.role != "admin" && u.status === "working") working++;
-          else if (u.role != "admin" && u.status === "studying") studding++;
+          if (u.role != "admin" && u.status.toLowerCase() === "searching") searching++;
+          else if (u.role != "admin" && u.status.toLowerCase() === "working") working++;
+          else if (u.role != "admin" && u.status.toLowerCase() === "studying") studding++;
           else if (u.role != "admin") noInfo++;
         });
       });
@@ -125,9 +115,9 @@ function Charts() {
         (c) => c.name === cohortName
       );
       specificCohort.users.map((u) => {
-        if (u.role != "admin" && u.status === "searching") searching++;
-        else if (u.role != "admin" && u.status === "working") working++;
-        else if (u.role != "admin" && u.status === "studying") studding++;
+        if (u.role != "admin" && u.status.toLowerCase() === "searching") searching++;
+        else if (u.role != "admin" && u.status.toLowerCase() === "working") working++;
+        else if (u.role != "admin" && u.status.toLowerCase() === "studying") studding++;
         else if (u.role != "admin") noInfo++;
       });
       result.push(
@@ -169,6 +159,8 @@ function Charts() {
             callback: ({ chartWrapper, google }) => {
               const chart = chartWrapper.getChart();
               google.visualization.events.addListener(chart, "click", (e) => {
+                if(!chart.ha.C[Number.parseInt(e.targetID.split("#")[1])])
+                return 
                 setSelectedCourse(
                   chart.ha.C[Number.parseInt(e.targetID.split("#")[1])].title
                 );

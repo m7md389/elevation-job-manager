@@ -1,11 +1,8 @@
 const express = require("express");
 const api = require("./server/routes/adminAPI");
 const auth = require("./server/routes/auth");
-const courses = require("./server/routes/courses");
 const cohorts = require("./server/routes/cohorts");
 const users = require("./server/routes/users");
-// const mail = require("./server/routes/mail");
-const interviews = require("./server/routes/interviews");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
@@ -30,7 +27,7 @@ app.use(function (req, res, next) {
   next();
 });
 
-app.use(express.static(path.join(__dirname, 'build')));
+app.use(express.static(path.join(__dirname, "build")));
 
 app.use(cors());
 app.use("/api/auth", auth);
@@ -38,11 +35,10 @@ app.use("/api/cohorts", cohorts);
 app.use("/api/users", users);
 app.use("/api", api);
 
-
-app.get('*', function (req, res) {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+app.get("*", function (req, res) {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
 });
 
-app.listen(process.env.PORT || '3001' , function () {
+app.listen(process.env.PORT || "3001", function () {
   console.log("server is listening");
 });

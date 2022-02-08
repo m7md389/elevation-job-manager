@@ -14,12 +14,11 @@ router.get("/me", auth, async (req, res) => {
 
 router.put("/verify/:emailToken", async (req, res) => {
   const { emailToken } = req.params;
-console.log(req.params);  
-  if (!emailToken) return res.status(400).send({error: "No email token provided."});
+  if (!emailToken) return res.send({ error: "No email token provided." });
 
   const user = await User.findOne({ emailToken }).exec();
-  if (!user) return res.status(400).send({ error: "Not valid link." });
-  await User.findByIdAndUpdate(
+  if (!user) return res.send({ error: "Not valid link." });
+  User.findByIdAndUpdate(
     { _id: user._id },
     { $set: { isVerified: true } }
   ).exec((err, result) => {
@@ -36,7 +35,7 @@ router.post("/", async function (req, res) {
 
   let user = await User.findOne({ email });
   if (user) {
-    res.status(400).send({ error: "User already registered." });
+    res.send({ error: "User already registered." });
     return null;
   }
 
@@ -51,6 +50,7 @@ router.post("/", async function (req, res) {
     role: "student",
     jobs: []
   });
+
   const salt = await bcrypt.genSalt(10);
   user.password = await bcrypt.hash(password, salt);
   await user.save();
@@ -67,7 +67,7 @@ router.post("/admin", auth, admin, async function (req, res) {
 
   let admin = await User.findOne({ email });
   if (admin) {
-    res.status(400).send({ error: "User already registered." });
+    res.send({ error: "User already registered." });
     return null;
   }
 
@@ -82,6 +82,7 @@ router.post("/admin", auth, admin, async function (req, res) {
   admin.password = await bcrypt.hash(password, salt);
   await admin.save();
 
+  //mohammad check if needed
   const token = admin.generateAuthToken();
   res.send({ msg: "Admin added successfully" });
 });
@@ -90,11 +91,10 @@ router.put("/password", async function (req, res) {
   const { userId, currentPassword, newPassword } = req.body;
   let user = await User.findById({ _id: userId });
   const validPassword = await bcrypt.compare(currentPassword, user.password);
-
   if (!validPassword) {
-    return res
-      .status(400)
-      .send({ error: "Current password not match the current password" });
+    return res.send({
+      error: "Current password not match the current password"
+    });
   }
 
   const salt = await bcrypt.genSalt(10);

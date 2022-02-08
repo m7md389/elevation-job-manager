@@ -41,9 +41,6 @@ const Register = () => {
         toast.info("Check your email to verify your account.");
       }, 500);
       navigate("/login");
-      // const token = response.headers["x-auth-token"];
-      // auth.loginWithToken(token);
-      // window.location = "/";
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
         toast.error(ex.response.data.error);
@@ -90,7 +87,7 @@ const Register = () => {
               required
             />
             <input
-              type="text"
+              type="Number"
               placeholder="Phone"
               value={inputs.phone}
               onChange={handleChange}

@@ -1,11 +1,10 @@
 #navbar {
-  background-color: #f7f7f7;
-  overflow: hidden;
-  /* background-color: #333; */
-  position: fixed !important; /* Set the navbar to fixed position */
-  top: 0 !important; /* Position the navbar at the top of the page */
+  background-color: #ff5777;
+  position: fixed !important;
+  top: 0 !important;
   z-index: 29;
-  width: 100%; /* Full width */
+
+  width: 100%;
 }
 
 #navbarNav .navbar-nav a {
@@ -34,8 +33,25 @@
   transform: translateY(-4px);
 }
 
-.navbar-links-content-container a {
+.navbar-links-content-container-black a {
   font-weight: bold;
+}
+
+.navbar-links-content-container a {
+  color: white !important;
+}
+
+.nav-link-tabs {
+  font-weight: bold;
+}
+
+.nv-pink {
+  transition: background-color transform 1s ease-in;
+}
+
+.nv-white {
+  background-color: white !important;
+  transition: background-color transform 2s ease-out;
 }
 
 @media only screen and (max-width: 1000px) {
@@ -51,9 +67,25 @@
   }
   .nav-link-tabs {
     width: 100%;
+    font-weight: bold;
+
+    color: white;
   }
 
   .navbar-links-content-container {
+    direction: rtl;
+    position: relative;
+    display: grid;
+    justify-content: center;
+    width: 50vw;
+    border-bottom-left-radius: 15px;
+    margin-top: 8px;
+    background-color: rgb(255, 214, 222);
+    opacity: 1;
+    z-index: 15;
+  }
+
+  .navbar-links-content-container-black {
     direction: rtl;
     position: relative;
     display: grid;

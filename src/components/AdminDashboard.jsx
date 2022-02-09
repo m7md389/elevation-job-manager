@@ -24,7 +24,7 @@ function AdminDashboard() {
     { field: "name", headerName: "Name", width: 100 },
     { field: "type", headerName: "Interviews Type", width: 150 },
     { field: "course", headerName: "Course Name", width: 150 },
-    { field: "email", headerName: "Email", width: 100 },
+    { field: "email", headerName: "Email", width: 200 },
     { field: "phone", headerName: "Phone", width: 100 },
     { field: "date", headerName: "Date", type: "date", width: 100 },
     { field: "user_id", headerName: "user_id", hide: true, width: 100 }

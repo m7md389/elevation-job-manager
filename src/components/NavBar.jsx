@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 
 import auth from "../services/authService";
@@ -15,10 +15,22 @@ const NavBar = () => {
 
   const currentUser = auth.getCurrentUser();
 
+  
+  const [scrollPosition , setScrollPosition]= useState(0)
+
+  const handleScroll = () =>{
+    setScrollPosition(document.documentElement.scrollTop)
+  }
+
+  useEffect(()=> {
+  window.addEventListener('scroll',handleScroll);
+  },[])
+
   return (
     <nav
       id="navbar"
-      className="navbar navbar-expand-lg navbar-light  my-navbar-container"
+      className= {scrollPosition === 0 ? "navbar navbar-expand-lg navbar-light  my-navbar-container nv-white" :"navbar navbar-expand-lg navbar-light  my-navbar-container nv-pink"} 
+      // style={scrollPosition === 0 ? {backgroundColor: 'white'}: null}
     >
       <NavLink className="navbar-brand" to="/">
         <img
@@ -45,7 +57,7 @@ const NavBar = () => {
 
       <div className={navbarClass} id="navbarNav">
         <div className="navbar-nav">
-          <div className="navbar-links-content-container">
+          <div className={ scrollPosition === 0 ? "navbar-links-content-container-black" : "navbar-links-content-container"}>
             {currentUser.role === "admin" && (
               <NavLink
                 className="nav-item nav-link nav-link-tabs"

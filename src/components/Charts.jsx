@@ -17,12 +17,17 @@ function Charts() {
 
   const [allData, setAllData] = useState([]);
   const [workingStudentsTitle, setWorkingStudentsTitle] = useState({
-    title: "Working students in all courses"
+    title: "Working students in all courses",
+    colors: ['#3366CC','green']
   });
   const [coursesTitle, setCoursesTitle] = useState({
     title: "Working students by course"
   });
-  const [cohortTitle, setCohortTitle] = useState({ title: "Data by cohort" });
+  const [cohortTitle, setCohortTitle] = useState({
+     title: "Data by cohort",
+    colors: ['#3366CC','green','#FF9900','gray']
+
+    });
 
   const [selectedCourse, setSelectedCourse] = useState("");
 

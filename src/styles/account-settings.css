@@ -1,33 +1,27 @@
-.intern-inputs{
-    width: 80%;
-    margin: 0 auto;
-    background-color: #ffe2e7;
-    padding: 30px;
+.intern-inputs {
+  width: 80%;
+  margin: 0 auto;
+  background-color: #efefef;
+  padding: 30px;
   font-family: "IBM Plex Sans Thai Looped", sans-serif;
   border-radius: 12px;
-  -webkit-box-shadow: 5px 1px 15px -3px rgba(0,0,0,0.78); 
-box-shadow: 5px 1px 15px -3px rgba(0,0,0,0.78);
+  -webkit-box-shadow: 5px 1px 15px -3px rgba(0, 0, 0, 0.78);
+  box-shadow: 5px 1px 15px -3px rgba(0, 0, 0, 0.78);
 }
 
-
-
-.intern-div Input{
-    /* text-align: center; */
-    width: 100%;
-    
+.intern-div Input {
+  /* text-align: center; */
+  width: 100%;
 }
 
-.input-label{
-    color: #0f213a;
-    margin: 20px 0 5px 0;
-    font-size: 17px;
-    font-weight: bold;
+.input-label {
+  color: #0f213a;
+  margin: 20px 0 5px 0;
+  font-size: 17px;
+  font-weight: bold;
 }
 
-
-.intern-div{
-    width: 80%;
-    margin: 20px auto;
+.intern-div {
+  width: 80%;
+  margin: 20px auto;
 }
-
-

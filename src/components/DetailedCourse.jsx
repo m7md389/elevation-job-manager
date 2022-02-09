@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { observer, inject } from "mobx-react";
 import { toast } from "react-toastify";
-import { toArray } from "lodash";
+import { after, toArray } from "lodash";
 
 import courseService from "../services/courseService";
 import http from "../services/httpService";
@@ -35,6 +35,7 @@ import Button from "@mui/material/Button";
 import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
 
 import "../styles/detailed-course.css";
+import { makeStyles } from "@mui/material";
 
 const Course = () => {
   const params = useParams();
@@ -306,6 +307,21 @@ const Course = () => {
 
   const statuses = getStatuses();
 
+
+  const styles = theme => ({
+    select: {
+        '&:before': {
+            borderColor: 'red',
+        },
+        '&:after': {
+            borderColor: 'red',
+        }
+    },
+    icon: {
+        fill: 'red',
+    },
+});
+
   return (
     <div className="course-container">
       <Title text={course.title} />
@@ -316,6 +332,7 @@ const Course = () => {
             <FormControl fullWidth>
               <InputLabel id="cohorts">Cohorts</InputLabel>
               <Select 
+                className='select-design'
                 labelId="select-cohort"
                 id="select-cohort"
                 value={cohort}

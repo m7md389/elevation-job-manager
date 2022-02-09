@@ -13,7 +13,7 @@ import "../styles/account-settings.css";
 const useStyles = makeStyles({
   input: {
     color: "#0f213a",
-    backgroundColor: "white",
+    backgroundColor: "#EFEFEF",
     width: "80%",
     padding: "10px",
     borderRadius: "7px",
@@ -110,7 +110,7 @@ const AccountSettings = () => {
       <div className="intern-inputs">
         <div className="intern-div">
           <div className="input-label">
-            <span>name:</span>
+            <span>Name:</span>
           </div>
           <Input
             inputProps={{ className: classes.input }}
@@ -127,7 +127,7 @@ const AccountSettings = () => {
           <br />
 
           <div className="input-label">
-            <span>email:</span>
+            <span>Email:</span>
           </div>
           <Input
             inputProps={{ className: classes.input }}
@@ -144,7 +144,7 @@ const AccountSettings = () => {
           <br />
 
           <div className="input-label">
-            <span>phone:</span>
+            <span>Phone:</span>
           </div>
           <Input
             type="tel"
@@ -162,7 +162,7 @@ const AccountSettings = () => {
           <br />
 
           <div className="input-label">
-            <span>city:</span>
+            <span>City:</span>
           </div>
           <Input
             inputProps={{ className: classes.input }}
@@ -179,7 +179,7 @@ const AccountSettings = () => {
           <br />
 
           <div className="input-label">
-            <span>linkedin: </span>
+            <span>Linkedin: </span>
           </div>
           <Input
             inputProps={{ className: classes.input }}
@@ -196,7 +196,7 @@ const AccountSettings = () => {
           <br />
 
           <div className="input-label">
-            <span>status: </span>
+            <span>Status: </span>
           </div>
            <select
             style={{
@@ -227,12 +227,12 @@ const AccountSettings = () => {
             <button
               style={{
                 transform: "translateY(1.276px)",
-                backgroundColor: "rgb(255 152 171)",
+                backgroundColor: "#FF5777",
                 margin: "10px 0",
                 padding: "10px 30px",
                 border: "1px solid white",
-                borderRadius: "15px",
-                color: "#0f213a",
+                borderRadius: "7px",
+                color: "white",
                 fontWeight: "bold"
               }}
               onClick={handleEditUser}
@@ -246,7 +246,7 @@ const AccountSettings = () => {
           </div>
 
           <div className="input-label">
-            <span>current password: </span>
+            <span>Current password: </span>
           </div>
           <Input
             inputProps={{ className: classes.input }}
@@ -266,7 +266,7 @@ const AccountSettings = () => {
           <br />
 
           <div className="input-label">
-            <span>new password: </span>
+            <span>New password: </span>
           </div>
           <Input
             inputProps={{ className: classes.input }}
@@ -290,12 +290,12 @@ const AccountSettings = () => {
           >
             <button
               style={{
-                backgroundColor: "rgb(255 152 171)",
+                backgroundColor: "#FF5777",
                 margin: "10px 0",
                 padding: "10px 30px",
                 border: "1px solid white",
-                borderRadius: "15px",
-                color: "#0f213a",
+                borderRadius: "7px",
+                color: "white",
                 fontWeight: "bold"
               }}
               onClick={handlePasswordChange}

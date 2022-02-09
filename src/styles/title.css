@@ -3,7 +3,8 @@
   grid-template-columns: 1fr;
   justify-items: center;
   padding: 50px;
-  margin: 0 0 40px 0;
+  margin: 20px 0 40px 0;
   color: #0f213a;
   font-family: "Rowdies", cursive;
+  text-shadow: 2px 3px 2px rgba(0, 0, 0, 0.12);
 }

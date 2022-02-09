@@ -266,7 +266,6 @@ export default function Student() {
 
         <div>
           {" "}
-          <hr />
           <div className="student-page-container">
             <Stack direction="row" spacing={2}>
               <Button className="add-job-btn" onClick={handleClickOpen} variant="outlined">
@@ -348,6 +347,10 @@ export default function Student() {
               </DialogActions>
             </Dialog>
           </div>
+
+          <hr />
+
+
           <div className="jobs-title">
             <div>Job Name</div>
             <div className="vLine">Company</div>

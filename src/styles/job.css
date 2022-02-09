@@ -10,6 +10,10 @@
   border-radius: 7px;
   border-bottom: 1px solid #ccc;
 }
+/* 
+.job:first-child {
+  margin-top: 0;
+} */
 
 .job:hover {
   background-color: #ff7992;
@@ -26,15 +30,30 @@
 .interviews,
 .interviews-header {
   display: grid;
-
   grid-template-columns: repeat(5, 1fr);
+}
+
+.interviews-header p {
+  border-right: 1px solid black;
+}
+/* 
+.border-none {
+  border-right: 0 !important;
+} */
+
+.interviews-header p:last-of-type {
+  border-right: 0;
 }
 
 .interviews-header {
   /* background-color: #fee3ec; */
   font-weight: bold;
-  border-bottom: 1px solid black;
+  /* border-bottom: 1px solid black; */
   padding: 5px;
+}
+
+.vLine {
+  border-left: 1px solid black;
 }
 
 .interviews-container {

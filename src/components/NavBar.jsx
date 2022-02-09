@@ -30,7 +30,6 @@ const NavBar = () => {
     <nav
       id="navbar"
       className= {scrollPosition === 0 ? "navbar navbar-expand-lg navbar-light  my-navbar-container nv-white" :"navbar navbar-expand-lg navbar-light  my-navbar-container nv-pink"} 
-      // style={scrollPosition === 0 ? {backgroundColor: 'white'}: null}
     >
       <NavLink className="navbar-brand" to="/">
         <img
@@ -52,7 +51,7 @@ const NavBar = () => {
         aria-expanded="false"
         aria-label="Toggle navigation"
       >
-        <span className="navbar-toggler-icon" />
+        <span className="navbar-toggler-icon shadow-none" />
       </button>
 
       <div className={navbarClass} id="navbarNav">

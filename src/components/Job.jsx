@@ -444,8 +444,8 @@ function Job(props) {
         }
       >
         <div className="interviews-header">
-          <p>Type</p>
-          <p>Date</p>
+          <p >Type</p>
+          <p >Date</p>
           <p>Status</p>
           <p>Description</p>
           <p>Link</p>

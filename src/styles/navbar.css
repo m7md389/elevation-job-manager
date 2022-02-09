@@ -54,9 +54,17 @@
   transition: background-color transform 2s ease-out;
 }
 
+.navbar-toggler {
+  border: 1px solid white;
+}
+
 @media only screen and (max-width: 1000px) {
   #navbarNav {
     border-radius: 15px;
+  }
+
+  .navbar-toggler {
+    border: 1px solid black;
   }
 
   .navbar-nav {
@@ -68,7 +76,6 @@
   .nav-link-tabs {
     width: 100%;
     font-weight: bold;
-
     color: white;
   }
 
@@ -83,6 +90,7 @@
     background-color: rgb(255, 214, 222);
     opacity: 1;
     z-index: 15;
+    background-color: #ff5777;
   }
 
   .navbar-links-content-container-black {

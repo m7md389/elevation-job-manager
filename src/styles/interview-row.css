@@ -1,37 +1,37 @@
-.interviews{
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 0.5fr ;
-
+.interviews {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 0.5fr;
 }
 
-.interviews p{
-    display: grid;
-    align-items: center;
+.interviews p {
+  display: grid;
+  align-items: center;
 }
 
-.link{
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    align-items: center;
-    height: 100%;
+.link {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  align-items: center;
+  height: 100%;
 }
 
- 
-.edit-inter-hover{
-    color: rgb(15 33 58 / 35%)
+.edit-inter-hover {
+  color: rgb(15 33 58 / 35%);
 }
 
-.edit-inter-hover:hover{
-    color: rgb(15 33 58 / 100%);
-    cursor: pointer;
-
+.edit-inter-hover:hover {
+  color: rgb(15 33 58 / 100%);
+  cursor: pointer;
 }
 
+.hidden-long-description {
+  overflow: hidden;
+}
 
 @media only screen and (max-width: 600px) {
-    .interviews p{
-        display: grid;
-        align-items: center;
-        font-size: 0.7rem;
-    }
+  .interviews p {
+    display: grid;
+    align-items: center;
+    font-size: 0.7rem;
+  }
 }

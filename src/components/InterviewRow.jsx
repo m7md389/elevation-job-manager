@@ -14,6 +14,7 @@ import MobileDatePicker from "@mui/lab/MobileDatePicker";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 
 import "react-dropdown/style.css";
 import "../styles/interview-row.css";
@@ -104,9 +105,12 @@ function ProcessRow(props) {
       <p>{interview.type}</p>
       <p>{interview.date}</p>
       <p>{interview.status}</p>
-      <p>{interview.description}</p>
+      <p className="hidden-long-description">{interview.description}</p>
       <div className="link">
-        <a href="">link</a>
+
+        
+        {interview.link ? <a target='_blank' href={interview.link}><OpenInNewIcon /></a> : <a></a>}
+        
         <div className="edit-icon">
           <div>
             {/* handleAddInterviewClickOpen */}

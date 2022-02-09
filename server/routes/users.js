@@ -82,8 +82,6 @@ router.post("/admin", auth, admin, async function (req, res) {
   admin.password = await bcrypt.hash(password, salt);
   await admin.save();
 
-  //mohammad check if needed
-  const token = admin.generateAuthToken();
   res.send({ msg: "Admin added successfully" });
 });
 

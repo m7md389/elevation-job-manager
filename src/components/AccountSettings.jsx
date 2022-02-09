@@ -13,7 +13,7 @@ import "../styles/account-settings.css";
 const useStyles = makeStyles({
   input: {
     color: "#0f213a",
-    backgroundColor: "#EFEFEF",
+    backgroundColor: "white",
     width: "80%",
     padding: "10px",
     borderRadius: "7px",

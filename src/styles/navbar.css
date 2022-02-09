@@ -1,5 +1,11 @@
 #navbar {
   background-color: #f7f7f7;
+  overflow: hidden;
+  /* background-color: #333; */
+  position: fixed !important; /* Set the navbar to fixed position */
+  top: 0 !important; /* Position the navbar at the top of the page */
+  z-index: 29;
+  width: 100%; /* Full width */
 }
 
 #navbarNav .navbar-nav a {
@@ -26,6 +32,10 @@
 
 .navbar-brand:hover {
   transform: translateY(-4px);
+}
+
+.navbar-links-content-container a {
+  font-weight: bold;
 }
 
 @media only screen and (max-width: 1000px) {
@@ -58,7 +68,7 @@
 
   .navbar-nav a {
     padding: 20px 10px;
-    font-weight: bold;
+    /* font-weight: bold; */
     width: 100%;
   }
 }

@@ -10,6 +10,8 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 
+import '../styles/charts.css'
+
 function Charts() {
   let URL = "/courses";
 
@@ -106,7 +108,7 @@ function Charts() {
       result.push(
         ["searching", searching],
         ["working", working],
-        ["studding", studding],
+        ["studying", studding],
         ["no info", noInfo]
       );
     } else {
@@ -136,17 +138,20 @@ function Charts() {
   };
 
   return (
-    <div>
+    <div >
       <Title text="Charts" />
 
-      <Chart
+     <div className="chart-container">
+     <Chart
         chartType="PieChart"
         data={data}
         options={workingStudentsTitle}
         width={"100%"}
         height={"400px"}
       />
+     </div>
 
+      <div className="chart-container">
       <Chart
         chartType="PieChart"
         data={courses}
@@ -170,11 +175,15 @@ function Charts() {
           }
         ]}
       />
+      </div>
 
       {selectedCourse ? (
         <div style={{ display: "grid", justifyItems: "center" }}>
-          {/* <hr /> */}
-          <div style={{ width: "30%", margin: "30px 0" }}>
+          
+          <div className="chart-container">
+
+
+          <div style={{ width: "40%", margin: "30px auto" }}>
             <Box sx={{ minWidth: 120 }}>
               <FormControl fullWidth>
                 <InputLabel id="statuses">Select Chart :</InputLabel>
@@ -197,6 +206,7 @@ function Charts() {
             </Box>
           </div>
 
+            
           <Chart
             chartType="PieChart"
             data={showCohort}
@@ -204,6 +214,8 @@ function Charts() {
             width={"100%"}
             height={"400px"}
           />
+          </div>
+
         </div>
       ) : null}
     </div>

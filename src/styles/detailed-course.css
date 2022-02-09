@@ -61,6 +61,8 @@
 
 .send-job-btn button {
   margin: 20px 0;
+  margin-top: 0;
+
   color: rgb(255 152 171);
   border: 1px solid rgb(255 152 171);
 }

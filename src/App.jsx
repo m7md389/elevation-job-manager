@@ -106,7 +106,6 @@ const App = () => {
       <ToastContainer />
       <Footer />
     </BrowserRouter>
-    // <div><h1>Hello</h1></div>
   );
 };
 
